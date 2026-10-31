@@ -4,10 +4,11 @@ import {go} from '../../../../lib/http';
 import {savePost,deletePost,getPost,type Post} from '../../../../lib/store';
 import {builtInSlugs,allArticles} from '../../../../lib/blog-store';
 import {slugify} from '../../../../lib/pakistan';
+import {pingIndexNow} from '../../../../lib/indexnow';
 
 export const dynamic='force-dynamic';
 const s=(f:FormData,k:string,max=300)=>String(f.get(k)??'').trim().slice(0,max);
-const refresh=(...slugs:string[])=>{revalidatePath('/blog');revalidatePath('/sitemap.xml');for(const x of slugs)if(x)revalidatePath('/blog/'+x);};
+const refresh=(...slugs:string[])=>{revalidatePath('/blog');revalidatePath('/sitemap.xml');for(const x of slugs)if(x)revalidatePath('/blog/'+x);void pingIndexNow(['/blog',...slugs.filter(Boolean).map(x=>'/blog/'+x)]);};
 
 export async function POST(req:Request){
   const deny=await denyIfNotAdmin();if(deny)return deny;

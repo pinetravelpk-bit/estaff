@@ -347,3 +347,8 @@ ul.check-list:not(:has(svg)) li::before{content:"";flex:0 0 9px;height:9px;margi
 .agency-contact svg{color:var(--green);flex-shrink:0;margin-top:3px}
 .agency-contact a{color:var(--green);font-weight:700}
 .utility-account{font-weight:700}
+
+/* Former menu/footer headings, now styled labels */
+.mega-title{display:block;font-family:Manrope,Arial,sans-serif;font-weight:750;color:var(--ink);margin:0}
+.mega-col-title{display:block}
+.footer-h{display:block;color:#fff}

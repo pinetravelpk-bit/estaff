@@ -13,6 +13,8 @@ import {listJobs} from '../lib/store';
 import {listAgencies} from '../lib/users';
 
 export const revalidate=3600;
+// Bump when the site's built-in page content changes.
+const CONTENT_UPDATED='2026-11-02';
 
 export default async function sitemap():Promise<MetadataRoute.Sitemap>{
   const openJobs=await listJobs();const articles=await allArticles();const agencies=await listAgencies('approved');
@@ -29,7 +31,16 @@ export default async function sitemap():Promise<MetadataRoute.Sitemap>{
     ...articles.map(a=>'/blog/'+a.slug),
     ...cityServices.flatMap(sv=>allCities.map(c=>serviceCityPath(sv.slug,c.slug))),
   ];
-  const lastModified=new Date();
+  // Real "last changed" dates: content pages use the date their content last changed;
+  // job, blog and agency pages use their own dates; listing pages use their newest item.
+  const newest=(d:string[])=>d.filter(Boolean).sort().pop()||CONTENT_UPDATED;
+  const dates=new Map<string,string>();
+  for(const j of openJobs)dates.set('/jobs/'+j.id,j.updatedAt);
+  for(const a of articles)dates.set('/blog/'+a.slug,a.date);
+  for(const a of agencies)dates.set('/agencies/'+a.slug,a.updatedAt);
+  dates.set('/jobs',newest([CONTENT_UPDATED,...openJobs.map(j=>j.updatedAt)]));
+  dates.set('/blog',newest([CONTENT_UPDATED,...articles.map(a=>a.date)]));
+  dates.set('/agencies',newest([CONTENT_UPDATED,...agencies.map(a=>a.updatedAt)]));
   const depth=(p:string)=>p.split('/').length;
-  return [...new Set(paths)].map(path=>({url:absolute(path),lastModified,changeFrequency:path==='/'||path==='/blog'?'weekly':'monthly',priority:path==='/'?1:depth(path)<=2?0.8:depth(path)===3?0.7:0.6}));
+  return [...new Set(paths)].map(path=>({url:absolute(path),lastModified:new Date(dates.get(path)||CONTENT_UPDATED),changeFrequency:path==='/'||path==='/blog'||path==='/jobs'?'daily':path.startsWith('/jobs/')||path==='/agencies'?'weekly':'monthly',priority:path==='/'?1:depth(path)<=2?0.8:depth(path)===3?0.7:0.6}));
 }

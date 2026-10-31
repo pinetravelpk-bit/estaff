@@ -7,13 +7,22 @@ export const indexingEnabled=process.env.SITE_INDEXING_ENABLED==='true'&&new URL
 export const absolute=(path:string)=>new URL(path,siteOrigin).toString();
 // Business contact details come from the admin dashboard (Content → Contact), with env as fallback.
 export function getBusiness(){const c=getSettings().contact;return {phone:c.phone,email:c.email,street:c.street,locality:c.locality,postalCode:c.postalCode,gbp:c.gbp,whatsapp:c.whatsapp,hours:c.hours,sameAs:[c.gbp,c.facebook,c.instagram,c.linkedin].filter(Boolean)};}
+// Keeps search-result titles within ~65 characters so Google shows them in full:
+// add the brand suffix only when it fits; otherwise keep the strongest part of the title.
+const MAXT=65;
+export function fitTitle(t:string,suffix:string):Metadata['title']{
+  if((t+' | '+suffix).length<=MAXT)return t;
+  if(t.length<=MAXT)return {absolute:t};
+  for(const sep of [' – ',': ',' | ',' - ']){const head=t.split(sep)[0];if(head!==t&&head.length>=20){return (head+' | '+suffix).length<=MAXT?head:{absolute:head.length<=MAXT?head:head.slice(0,MAXT-1).replace(/\s+\S*$/,'')+'…'};}}
+  return {absolute:t.slice(0,MAXT-1).replace(/\s+\S*$/,'')+'…'};
+}
 // Page metadata. Any title, description, image or noindex set in the dashboard (SEO → Page overrides) wins.
 export function pageMetadata(title:string,description:string,path:string,allowIndex=true):Metadata{
   const o=getSeoOverride(path);const s=getSettings().seo;
   if(o?.title)title=o.title;if(o?.description)description=o.description;
   description=description.length>170?description.slice(0,167).replace(/\s+\S*$/,'')+'…':description;
   const img=absolute(o?.image||s.defaultImage||'/images/hero-reference.webp');
-  return {title,description,alternates:{canonical:absolute(path)},robots:{index:indexingEnabled&&allowIndex&&!o?.noindex,follow:true,'max-image-preview':'large','max-snippet':-1,'max-video-preview':-1},openGraph:{type:'website',siteName:'estaff.pk',locale:'en_PK',title,description,url:absolute(path),images:[{url:img,alt:title}]},twitter:{card:'summary_large_image',title,description,images:[img]}};
+  return {title:fitTitle(title,s.titleSuffix||'estaff.pk'),description,alternates:{canonical:absolute(path)},robots:{index:indexingEnabled&&allowIndex&&!o?.noindex,follow:true,'max-image-preview':'large','max-snippet':-1,'max-video-preview':-1},openGraph:{type:'website',siteName:'estaff.pk',locale:'en_PK',title,description,url:absolute(path),images:[{url:img,alt:title}]},twitter:{card:'summary_large_image',title,description,images:[img]}};
 }
 export const orgId=absolute('/#organization');
 export function organisationSchema(){const business=getBusiness();const local=Boolean(business.phone&&business.street&&business.locality);return {'@context':'https://schema.org','@type':local?'EmploymentAgency':'Organization','@id':orgId,name:'estaff.pk',alternateName:brand.alternateNames,slogan:brand.slogan,url:siteOrigin,logo:{'@type':'ImageObject',url:absolute('/brand/icon.png'),width:512,height:512},image:absolute('/images/hero-reference.webp'),description:brand.definition,knowsAbout:['Domestic staffing','Recruitment','HR outsourcing','Payroll management','Remote staffing','Staff screening','Hiring staff in Islamabad','Hiring staff in Rawalpindi'],hasOfferCatalog:{'@type':'OfferCatalog',name:'Staffing services',itemListElement:services.map(v=>({'@type':'Offer',itemOffered:{'@type':'Service',name:v.name,url:absolute('/services/'+v.slug)}}))},areaServed:[{'@type':'Country',name:'Pakistan'},{'@type':'City',name:'Islamabad',containedInPlace:{'@type':'AdministrativeArea',name:'Islamabad Capital Territory'}},{'@type':'City',name:'Rawalpindi',containedInPlace:{'@type':'AdministrativeArea',name:'Punjab'}}],...(business.phone?{telephone:business.phone}:{}),...(business.email?{email:business.email}:{}),...(local?{address:{'@type':'PostalAddress',streetAddress:business.street,addressLocality:business.locality,addressCountry:'PK',...(business.postalCode?{postalCode:business.postalCode}:{})}}:{}),...(business.sameAs.length?{sameAs:business.sameAs}:{})};}

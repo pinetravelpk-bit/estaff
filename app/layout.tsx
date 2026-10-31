@@ -2,6 +2,7 @@ import type {Metadata,Viewport} from 'next';
 import './globals.css';
 import './motion.css';
 import MotionLayer from '../components/motion';
+import {preload} from 'react-dom';
 import {siteOrigin,pageMetadata,organisationSchema,websiteSchema} from '../lib/seo';
 import {StructuredData,BusinessDetails} from '../components/seo';
 import {getSettings,publicSettings} from '../lib/settings';
@@ -21,6 +22,7 @@ export function generateMetadata():Metadata{
 export const viewport:Viewport={width:'device-width',initialScale:1,themeColor:'#00866c',colorScheme:'light'};
 
 export default function RootLayout({children}:{children:React.ReactNode}){
+  for(const f of ['manrope-800','dm-sans-400'])preload('/fonts/'+f+'.woff2',{as:'font',type:'font/woff2',crossOrigin:'anonymous'});
   return <html lang="en-PK"><body><SiteSettingsProvider value={publicSettings()}>
     <MotionLayer/><a className="skip-link" href="#main-content">Skip to content</a>
     <div id="main-content" tabIndex={-1}>{children}</div>
