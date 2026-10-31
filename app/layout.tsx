@@ -1,0 +1,7 @@
+import type {Metadata,Viewport} from 'next';
+import './globals.css';
+import {siteOrigin,pageMetadata,organisationSchema,websiteSchema} from '../lib/seo';
+import {StructuredData,BusinessDetails} from '../components/seo';
+export const metadata:Metadata={...pageMetadata('Hire Staff in Islamabad & Rawalpindi','Explore domestic staffing, corporate recruitment, HR, payroll and remote staffing in Islamabad and Rawalpindi with estaff.pk.','/'),metadataBase:new URL(siteOrigin),title:{default:'Hire Staff in Islamabad & Rawalpindi | estaff.pk',template:'%s | estaff.pk'},applicationName:'estaff.pk',category:'Staffing and recruitment',icons:{icon:[{url:'/brand/favicon-48.png',sizes:'48x48',type:'image/png'},{url:'/brand/icon.png',sizes:'512x512',type:'image/png'}],apple:'/brand/apple-icon.png'},verification:{...(process.env.GOOGLE_SITE_VERIFICATION?{google:process.env.GOOGLE_SITE_VERIFICATION}:{}),...(process.env.BING_SITE_VERIFICATION?{other:{'msvalidate.01':process.env.BING_SITE_VERIFICATION}}:{})}};
+export const viewport:Viewport={width:'device-width',initialScale:1,themeColor:'#00866c',colorScheme:'light'};
+export default function RootLayout({children}:{children:React.ReactNode}){return <html lang="en-PK"><body><a className="skip-link" href="#main-content">Skip to content</a><div id="main-content" tabIndex={-1}>{children}</div><div className="container"><BusinessDetails/></div><StructuredData data={[organisationSchema(),websiteSchema()]}/></body></html>}

@@ -1,0 +1,2 @@
+import {pageMetadata} from '../../lib/seo';
+import {Header,Footer} from '../../components/ui';import Workspace from '../../components/workspace';export const metadata=pageMetadata('Employer Workspace | Jobs & CV Management Demo','Demonstration employer workspace for sample jobs, candidates, interviews, CV summaries and payroll previews. No live employer records.','/workspace',false);export default function Page(){return <><Header/><main className="dashboard"><div className="container"><Workspace/></div></main><Footer/></>}
