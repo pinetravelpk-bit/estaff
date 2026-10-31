@@ -6,7 +6,7 @@ import {hiringSteps,candidateSteps,quickAnswers} from '../../lib/answers';
 
 const title='How to Hire Domestic & Office Staff in Pakistan – Step by Step';
 const description='A simple five-step process to hire a maid, cook, driver, nanny or office staff in Islamabad and Rawalpindi, plus a checklist for job seekers.';
-export const metadata=pageMetadata(title,description,'/how-it-works');
+export const generateMetadata=()=>pageMetadata(title,description,'/how-it-works');
 const faq=[quickAnswers[1],quickAnswers[3],quickAnswers[4],quickAnswers[5],quickAnswers[7]];
 
 export default function Page(){return <><Header/><main>

@@ -302,3 +302,22 @@ ul.check-list:not(:has(svg)) li::before{content:"";flex:0 0 9px;height:9px;margi
 .admin-row-actions{display:flex;gap:8px;align-items:center}
 .admin-details{max-width:340px;white-space:pre-wrap}
 @media (max-width:900px){.admin-grid{grid-template-columns:1fr}.admin-table{display:block;overflow-x:auto}}
+
+/* Dashboard-controlled site pieces */
+.announce-bar{background:linear-gradient(90deg,#ff6f61,#ffb21e);text-align:center;font-weight:700;font-size:14.5px;padding:8px 16px;color:#3b1a00}
+.announce-bar a{color:#3b1a00;text-decoration:underline;text-underline-offset:3px}
+.footer-contact{display:grid;gap:6px;margin:14px 0;font-size:15px}
+.footer-contact a,.footer-contact span{color:#d9e8e3}
+.footer-contact a:hover{color:#fff}
+.wa-float{position:fixed;right:18px;bottom:22px;z-index:90;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:#25d366;color:#fff;box-shadow:0 12px 28px #0b5a2a55;animation:pulse-ring 2.4s ease-out infinite;transition:transform .2s}
+.wa-float:hover{transform:scale(1.08)}
+@media (max-width:900px){.wa-float{bottom:84px;right:14px;width:52px;height:52px}}
+.blog-cover{width:100%;max-height:440px;object-fit:cover;border-radius:18px;margin:10px 0 24px}
+.qa-card-img{width:calc(100% + 44px);margin:-24px -22px 8px;height:170px;object-fit:cover;border-radius:16px 16px 0 0}
+.post-body h2{margin:34px 0 10px;scroll-margin-top:120px}
+.post-body h3{margin:24px 0 8px}
+.post-body p,.post-body li{font-size:17.5px;color:#3d5550}
+.post-body ul,.post-body ol{padding-left:22px;display:grid;gap:6px}
+.post-body img{max-width:100%;border-radius:14px;margin:16px 0}
+.post-body a{color:var(--green);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.post-body blockquote{margin:18px 0;padding:14px 18px;border-left:4px solid var(--green);background:#f3faf6;border-radius:0 12px 12px 0;font-size:17px}

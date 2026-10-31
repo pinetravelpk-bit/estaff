@@ -8,7 +8,7 @@ import {allCities,anyCity} from '../../lib/pakistan';
 import {jobTypes} from '../../lib/jobs';
 
 export const dynamic='force-dynamic';
-export const metadata=pageMetadata('Jobs in Pakistan – Household, Office & Remote Jobs by City','Current cook, driver, maid, nanny, home nurse, receptionist, accountant and virtual assistant jobs across Pakistan. Apply online or submit your CV.','/jobs');
+export const generateMetadata=()=>pageMetadata('Jobs in Pakistan – Household, Office & Remote Jobs by City','Current cook, driver, maid, nanny, home nurse, receptionist, accountant and virtual assistant jobs across Pakistan. Apply online or submit your CV.','/jobs');
 const faqs:[string,string][]=[
   ['How do I apply for a job through estaff.pk?','Open a job, fill in the short form and upload your CV. If there is no suitable opening right now, submit your CV once and the team will contact you when a matching job opens in your city.'],
   ['Which jobs are covered?','Household jobs (cook, driver, maid, nanny, home nurse, housekeeper, babysitter, care attendant, gardener, watchman), office jobs (receptionist, accountant, office boy, sales executive, IT support) and remote jobs (virtual assistant, customer support, developer).'],

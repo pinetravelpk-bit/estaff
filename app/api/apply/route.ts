@@ -1,5 +1,5 @@
 import {NextResponse} from 'next/server';
-import {addApplication,getJob,isJobOpen,newId,now,saveCv} from '../../../lib/store';
+import {upsertCandidateFromApplication,addApplication,getJob,isJobOpen,newId,now,saveCv} from '../../../lib/store';
 import {rateLimited,clientIp} from '../../../lib/auth';
 
 export const dynamic='force-dynamic';
@@ -17,6 +17,7 @@ export async function POST(req:Request){
   if(jobId){const job=await getJob(jobId);if(!job||!isJobOpen(job))return NextResponse.json({ok:false,error:'This vacancy is no longer open.'},{status:410});jobTitle=job.title;}
   let cvFile:string|null=null,cvName:string|null=null;const cv=f.get('cv');
   if(cv&&typeof cv!=='string'&&cv.size>0){try{cvFile=await saveCv(cv);cvName=clean(cv.name,120);}catch(e){return NextResponse.json({ok:false,error:(e as Error).message==='size'?'Your CV is larger than 5 MB.':'Please upload your CV as PDF, Word, JPG or PNG.'},{status:400});}}
-  await addApplication({id:newId('app-'),jobId,jobTitle,name,phone,email,city:clean(f.get('city'),60),role:clean(f.get('role'),80),experience:clean(f.get('experience'),40),message:clean(f.get('message'),2000),cvFile,cvName,status:'new',createdAt:now()});
+  const app=await addApplication({id:newId('app-'),jobId,jobTitle,name,phone,email,city:clean(f.get('city'),60),role:clean(f.get('role'),80),experience:clean(f.get('experience'),40),message:clean(f.get('message'),2000),cvFile,cvName,status:'new',createdAt:now()});
+  await upsertCandidateFromApplication(app);
   return NextResponse.json({ok:true});
 }

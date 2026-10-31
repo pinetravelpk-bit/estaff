@@ -5,7 +5,7 @@ import {glossary} from '../../lib/answers';
 
 const title='Staffing & Recruitment Glossary – Hiring Terms Explained';
 const description='Plain-English definitions of hiring terms used in Pakistan: live-in and live-out staff, placement fee, police character certificate, CNIC, EOBI, probation and more.';
-export const metadata=pageMetadata(title,description,'/glossary');
+export const generateMetadata=()=>pageMetadata(title,description,'/glossary');
 
 export default function Page(){const sorted=[...glossary].sort((a,b)=>a.term.localeCompare(b.term));return <><Header/><main>
   <PageHero eyebrow="Glossary" title="Staffing terms, explained simply." text="Quick definitions for the words you will meet when hiring household, office or remote staff in Pakistan."/>

@@ -1,13 +1,13 @@
 import {Header,Footer,PageHero} from '../../components/ui';
 import {Breadcrumbs,StructuredData} from '../../components/seo';
-import {pageMetadata,typedPageSchema,business} from '../../lib/seo';
+import {pageMetadata,typedPageSchema,getBusiness} from '../../lib/seo';
 import {locations} from '../../lib/content';
 
 const title='Contact estaff.pk – Domestic Staff & Recruitment Agency in Pakistan';
 const description='Contact estaff.pk to hire domestic staff, office teams or remote staff in Islamabad and Rawalpindi. Share your requirement and get the next step.';
-export const metadata=pageMetadata(title,description,'/contact');
+export const generateMetadata=()=>pageMetadata(title,description,'/contact');
 
-export default function Page(){const hasDirect=Boolean(business.phone||business.email||business.street);return <><Header/><main>
+export default function Page(){const business=getBusiness();const hasDirect=Boolean(business.phone||business.email||business.street||business.whatsapp);return <><Header/><main>
   <PageHero eyebrow="Contact" title="Let’s talk about your next hire." text="Tell us the role, the area and the schedule. We will help you work out the next step."/>
   <section className="container page-content">
     <Breadcrumbs items={[{name:'Home',path:'/'},{name:'Contact',path:'/contact'}]}/>
@@ -22,7 +22,7 @@ export default function Page(){const hasDirect=Boolean(business.phone||business.
       </div>
       <aside className="contact-card">
         <h3>estaff.pk</h3>
-        {hasDirect?<ul>{business.phone&&<li>Phone: <a href={'tel:'+business.phone}>{business.phone}</a></li>}{business.email&&<li>Email: <a href={'mailto:'+business.email}>{business.email}</a></li>}{business.street&&<li>Office: {business.street}, {business.locality}{business.postalCode?' '+business.postalCode:''}, Pakistan</li>}</ul>:<p>Direct phone, WhatsApp and email details are being added to this page.</p>}
+        {hasDirect?<ul>{business.phone&&<li>Phone: <a href={'tel:'+business.phone}>{business.phone}</a></li>}{business.whatsapp&&<li>WhatsApp: <a href={"https://wa.me/"+business.whatsapp.replace(/[^0-9]/g,"").replace(/^0/,"92")}>{business.whatsapp}</a></li>}{business.hours&&<li>Hours: {business.hours}</li>}{business.email&&<li>Email: <a href={'mailto:'+business.email}>{business.email}</a></li>}{business.street&&<li>Office: {business.street}, {business.locality}{business.postalCode?' '+business.postalCode:''}, Pakistan</li>}</ul>:<p>Direct phone, WhatsApp and email details are being added to this page.</p>}
         <h4 style={{marginTop:22}}>Areas we serve</h4>
         {Object.entries(locations).map(([city,c])=><p key={city}><a href={'/areas/'+city}>{c.name}</a>: {c.areas.join(', ')}</p>)}
       </aside>

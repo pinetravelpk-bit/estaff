@@ -5,7 +5,7 @@ import {pageMetadata} from '../../../lib/seo';
 import {allCities,anyCity} from '../../../lib/pakistan';
 import {jobTypes,jobType} from '../../../lib/jobs';
 
-export const metadata=pageMetadata('Submit Your CV – Register for Jobs in Pakistan','Register your CV with estaff.pk for cook, driver, maid, nanny, nurse, office and remote jobs in any city of Pakistan. Free for job seekers.','/jobs/apply');
+export const generateMetadata=()=>pageMetadata('Submit Your CV – Register for Jobs in Pakistan','Register your CV with estaff.pk for cook, driver, maid, nanny, nurse, office and remote jobs in any city of Pakistan. Free for job seekers.','/jobs/apply');
 
 export default async function Page({searchParams}:{searchParams:Promise<Record<string,string|undefined>>}){
   const q=await searchParams;const city=q.city?anyCity(q.city)?.name:undefined;const role=q.role?jobType(q.role)?.title:undefined;

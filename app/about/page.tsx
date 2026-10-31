@@ -7,7 +7,7 @@ import {brand} from '../../lib/answers';
 
 const title='About estaff.pk – Staffing & Recruitment in Islamabad and Rawalpindi';
 const description='estaff.pk helps families and businesses in Islamabad and Rawalpindi hire domestic staff, office teams and remote staff, with HR and payroll support.';
-export const metadata=pageMetadata(title,description,'/about');
+export const generateMetadata=()=>pageMetadata(title,description,'/about');
 
 const pillars=[
   {icon:Home,title:'Staff for your home',text:'Cooks, drivers, maids, nannies, home nurses, care attendants, gardeners and domestic couples, live-in or live-out.'},

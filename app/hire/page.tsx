@@ -3,7 +3,7 @@ import {Header,Footer,PageHero,Check} from '../../components/ui';
 import HiringForm from '../../components/hiring-form';
 import {allCities} from '../../lib/pakistan';
 
-export const metadata=pageMetadata('Request Staff – Domestic, Office & Remote Staff in Pakistan','Send your staffing requirement to estaff.pk: cooks, drivers, maids, nannies, care staff, office teams and remote staff in any city of Pakistan.','/hire');
+export const generateMetadata=()=>pageMetadata('Request Staff – Domestic, Office & Remote Staff in Pakistan','Send your staffing requirement to estaff.pk: cooks, drivers, maids, nannies, care staff, office teams and remote staff in any city of Pakistan.','/hire');
 
 export default function Page(){return <><Header/><main>
   <PageHero eyebrow="Let’s find your people" title="Tell us who you need." text="Share the role, location and working arrangement. The estaff.pk team will call you to discuss candidates and terms."/>

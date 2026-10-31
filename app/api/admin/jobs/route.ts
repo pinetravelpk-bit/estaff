@@ -13,8 +13,8 @@ const num=(f:FormData,k:string)=>{const n=parseInt(s(f,k).replace(/[^0-9]/g,''),
 const TYPES:EmploymentType[]=['FULL_TIME','PART_TIME','CONTRACTOR','TEMPORARY'];
 
 export async function POST(req:Request){
-  const back=(q:string)=>go('/admin?tab=jobs'+q);
-  if(!(await isAdmin()))return go('/admin');
+  const back=(q:string)=>go('/admin/jobs'+(q?'?'+q.replace(/^&/,''):''));
+  if(!(await isAdmin()))return go('/admin/login');
   const f=await req.formData();const action=s(f,'_action');const id=s(f,'id');
   if(action==='delete'||action==='close'||action==='open'){
     const job=await getJob(id);if(!job)return back('&msg=notfound');
