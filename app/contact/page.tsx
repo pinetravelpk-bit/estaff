@@ -3,7 +3,7 @@ import {Breadcrumbs,StructuredData} from '../../components/seo';
 import {pageMetadata,typedPageSchema,business} from '../../lib/seo';
 import {locations} from '../../lib/content';
 
-const title='Contact estaff.pk – Hire Staff in Islamabad & Rawalpindi';
+const title='Contact estaff.pk – Domestic Staff & Recruitment Agency in Pakistan';
 const description='Contact estaff.pk to hire domestic staff, office teams or remote staff in Islamabad and Rawalpindi. Share your requirement and get the next step.';
 export const metadata=pageMetadata(title,description,'/contact');
 

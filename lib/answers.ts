@@ -8,7 +8,7 @@ export const brand={
   name:'estaff.pk',
   alternateNames:['eStaff','estaff','eStaff Pakistan','estaff Pakistan'],
   slogan:'People. Payroll. Possibilities.',
-  definition:'estaff.pk is a staffing and recruitment service for homes and businesses in Islamabad and Rawalpindi, Pakistan. It helps families hire domestic staff such as cooks, drivers, maids, nannies and care attendants, and helps businesses with office recruitment, HR outsourcing, payroll management and remote staff.',
+  definition:'estaff.pk is a staffing and recruitment service for homes and businesses across Pakistan, with its strongest local focus on Islamabad and Rawalpindi. It helps families hire domestic staff such as cooks, drivers, maids, nannies and care attendants, and helps businesses with office recruitment, HR outsourcing, payroll management and remote staff.',
 };
 
 const islamabadAreas=locations.islamabad.areas;
@@ -19,10 +19,10 @@ export type QuickAnswer={q:string;a:string;href:string;link:string};
 export const quickAnswers:QuickAnswer[]=[
   {q:'What is estaff.pk?',a:brand.definition,href:'/about',link:'About estaff.pk'},
   {q:'How do I hire a maid, cook or driver in Islamabad?',a:'Write down the duties, working hours, live-in or live-out arrangement, salary budget and your sector. Share that brief with estaff.pk, review the shortlisted candidates, interview them, check their CNIC and references, then agree the terms in writing before the start date.',href:'/how-it-works',link:'See the hiring process'},
-  {q:'Which areas does estaff.pk cover?',a:`estaff.pk focuses on Islamabad and Rawalpindi. In Islamabad that includes ${listAreas(islamabadAreas)}. In Rawalpindi it includes ${listAreas(rawalpindiAreas)}.`,href:'/areas',link:'Browse all areas'},
+  {q:'Which areas does estaff.pk cover?',a:`estaff.pk has guides for 106 cities across Pakistan, including Lahore, Karachi, Faisalabad, Multan, Peshawar and Quetta, with its most detailed local focus on Islamabad and Rawalpindi. In Islamabad that includes ${listAreas(islamabadAreas)}. In Rawalpindi it includes ${listAreas(rawalpindiAreas)}.`,href:'/areas',link:'Browse all areas'},
   {q:'What should I check before hiring household staff?',a:'Check the original CNIC against the copy you keep, call at least two previous employers, and ask for a police character certificate where the role involves access to your home, children or vehicle. Drivers should show a valid driving licence for the vehicle they will drive.',href:'/services/staff-screening',link:'Staff screening guide'},
   {q:'What is the difference between live-in and live-out staff?',a:'Live-in staff stay at your home and usually need a private room, meals and agreed rest hours and days off. Live-out staff travel in for fixed hours each day. Live-in suits early, late or childcare duties; live-out suits set daytime routines.',href:'/glossary',link:'Staffing terms explained'},
-  {q:'How long does it take to hire staff?',a:'It depends on the role, salary, location and how quickly you can interview. A complete brief with duties, hours, budget and area is the biggest factor in a faster hire. estaff.pk does not promise a fixed timeline because availability changes for every requirement.',href:'/hire',link:'Start a hiring brief'},
+  {q:'How long does it take to hire domestic or office staff?',a:'It depends on the role, salary, location and how quickly you can interview. A complete brief with duties, hours, budget and area is the biggest factor in a faster hire. estaff.pk does not promise a fixed timeline because availability changes for every requirement.',href:'/hire',link:'Start a hiring brief'},
   {q:'Can businesses hire office or remote staff through estaff.pk?',a:'Yes. Businesses can recruit administration, accounts, sales, customer support and IT staff in Islamabad and Rawalpindi, or remote staff such as virtual assistants, bookkeepers and developers. Overlap hours, tools and contract terms are agreed for each role.',href:'/services/corporate-recruitment',link:'Corporate recruitment'},
   {q:'How much does estaff.pk charge?',a:'Fees depend on the role, the screening included and any replacement support. estaff.pk confirms the fee, payment timing and replacement terms in writing for your requirement before you proceed, so there are no assumed or hidden charges.',href:'/faqs',link:'Read all questions'},
 ];
@@ -69,7 +69,7 @@ export const extraFaqs:[string,string][]=[
   ['Which areas of Islamabad and Rawalpindi do you cover?',quickAnswers[2].a],
   ['What is the difference between live-in and live-out domestic staff?',quickAnswers[4].a],
   ['What documents should I check before hiring a maid or driver?',quickAnswers[3].a],
-  ['How long does it take to hire staff?',quickAnswers[5].a],
+  ['How long does it take to hire domestic or office staff?',quickAnswers[5].a],
   ['Do you place staff in Lahore, Karachi or other cities?','estaff.pk currently focuses on Islamabad and Rawalpindi for household and office hiring. Remote roles such as virtual assistants, bookkeeping and customer support can be filled with people working from other cities.'],
   ['Can overseas businesses hire remote staff from Pakistan?','Yes, you can discuss remote roles with estaff.pk. Agree the working hours overlap with your time zone, the tools and access the person needs, and how the contract and payments will work before the hire.'],
 ];

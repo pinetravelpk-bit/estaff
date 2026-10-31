@@ -33,7 +33,7 @@ export function ProcessTimeline(){
 
 export function LocalCoverage(){
   return <section className="container local-coverage" aria-labelledby="coverage-title">
-    <div className="fx-head"><span className="fx-eyebrow"><MapPin size={15}/> Local coverage</span><h2 id="coverage-title">Hire staff near you in <span className="fx-gradient">Islamabad and Rawalpindi.</span></h2><p>Choose your sector or society to see local guides for cooks, drivers, maids, nannies, nurses and more.</p></div>
+    <div className="fx-head"><span className="fx-eyebrow"><MapPin size={15}/> Local coverage</span><h2 id="coverage-title">Find staff near you in <span className="fx-gradient">Islamabad and Rawalpindi.</span></h2><p>Choose your sector or society to see local guides for cooks, drivers, maids, nannies, nurses and more.</p></div>
     <div className="coverage-grid">{Object.entries(locations).map(([city,c])=><div className={'coverage-city '+city} key={city}><h3><MapPin size={20}/> Staff in {c.name}</h3><p>{c.description}</p><ul>{c.areas.map(a=><li key={a}><a href={`/areas/${city}/${areaSlug(a)}`}>{a}</a></li>)}</ul><a className="qa-link" href={'/areas/'+city}>All {c.name} areas <ArrowRight size={15}/></a></div>)}</div>
   </section>;
 }
