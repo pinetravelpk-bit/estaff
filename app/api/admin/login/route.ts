@@ -1,9 +1,10 @@
 import {NextResponse} from 'next/server';
+import {go} from '../../../../lib/http';
 import {COOKIE,checkPassword,sessionValue,rateLimited,clientIp} from '../../../../lib/auth';
 
 export const dynamic='force-dynamic';
 export async function POST(req:Request){
-  const back=(q:string)=>NextResponse.redirect(new URL('/admin'+q,req.url),303);
+  const back=(q:string)=>go('/admin'+q);
   if(rateLimited('login:'+clientIp(req),10,15*60*1000))return back('?error=locked');
   const f=await req.formData();
   if(!checkPassword(String(f.get('password')||'')))return back('?error=1');

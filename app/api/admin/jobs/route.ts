@@ -1,4 +1,5 @@
 import {NextResponse} from 'next/server';
+import {go} from '../../../../lib/http';
 import {isAdmin} from '../../../../lib/auth';
 import {getJob,saveJob,deleteJob,newId,now,type Job,type EmploymentType} from '../../../../lib/store';
 import {revalidateJob} from '../../../../lib/revalidate';
@@ -12,8 +13,8 @@ const num=(f:FormData,k:string)=>{const n=parseInt(s(f,k).replace(/[^0-9]/g,''),
 const TYPES:EmploymentType[]=['FULL_TIME','PART_TIME','CONTRACTOR','TEMPORARY'];
 
 export async function POST(req:Request){
-  const back=(q:string)=>NextResponse.redirect(new URL('/admin?tab=jobs'+q,req.url),303);
-  if(!(await isAdmin()))return NextResponse.redirect(new URL('/admin',req.url),303);
+  const back=(q:string)=>go('/admin?tab=jobs'+q);
+  if(!(await isAdmin()))return go('/admin');
   const f=await req.formData();const action=s(f,'_action');const id=s(f,'id');
   if(action==='delete'||action==='close'||action==='open'){
     const job=await getJob(id);if(!job)return back('&msg=notfound');
