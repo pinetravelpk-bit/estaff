@@ -28,6 +28,7 @@ export default async function Agencies({searchParams}:{searchParams:Promise<Reco
         <label>Service<select name="service" defaultValue={q.service||''}><option value="">All services</option>{AGENCY_SERVICES.map(([s,n])=><option key={s} value={s}>{n}</option>)}</select></label>
         <button className="btn">Search</button>{(q.city||q.service)&&<a className="qa-link" href="/agencies">Clear</a>}
       </form>
+      <h2>{rows.length} {rows.length===1?"agency":"agencies"}{city?` in ${city}`:""}</h2>
       {rows.length===0?<div className="empty-jobs"><h3>{all.length?'No agencies match this search yet.':'The directory is opening.'}</h3><p>Are you a staffing or recruitment agency? List your agency for free and receive enquiries and job applications.</p><a className="btn glow" href="/account/register?type=agency">List your agency</a></div>:
       <div className="agency-grid">{rows.map(a=><a key={a.userId} className="agency-card" href={'/agencies/'+a.slug}>
         <div className="agency-card-top">{a.logo?<img src={a.logo} alt={a.name+' logo'} loading="lazy"/>:<span className="agency-ph"><Building2 size={22}/></span>}<div><h3>{a.name} <BadgeCheck size={17} className="agency-check" aria-label="Reviewed by estaff.pk"/></h3>{a.city&&<small><MapPin size={13}/> {anyCity(a.city)?.name}</small>}</div></div>

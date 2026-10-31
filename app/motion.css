@@ -352,3 +352,6 @@ ul.check-list:not(:has(svg)) li::before{content:"";flex:0 0 9px;height:9px;margi
 .mega-title{display:block;font-family:Manrope,Arial,sans-serif;font-weight:750;color:var(--ink);margin:0}
 .mega-col-title{display:block}
 .footer-h{display:block;color:#fff}
+
+.h3,h2.h3{font-size:21px;font-weight:750}
+.payroll-mini-title{display:block;font-family:Manrope,Arial,sans-serif;font-weight:750;font-size:17px;color:var(--ink)}

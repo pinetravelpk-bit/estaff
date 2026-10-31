@@ -10,9 +10,9 @@ export default function Page(){return <><Header/><main>
   <section className="container page-content two-col">
     <div className="panel"><HiringForm cities={allCities.map(c=>({slug:c.slug,name:c.name}))}/></div>
     <aside className="stack">
-      <div className="panel tint"><h3>A clear brief. A better fit.</h3><ul className="bullet-list">{['Define the role and daily duties','Choose your area and schedule','Set a realistic salary budget','Discuss the checks you need','Review written placement terms'].map(x=><li key={x}><Check size={17}/>{x}</li>)}</ul></div>
-      <div className="panel"><h3>Hiring more than one person?</h3><p>Include your total headcount, role priorities and preferred joining dates in the details field.</p></div>
-      <div className="panel"><h3>Looking for a job instead?</h3><p>See <a className="qa-link" href="/jobs">current jobs</a> or <a className="qa-link" href="/jobs/apply">submit your CV</a>.</p></div>
+      <div className="panel tint"><h2 className="h3">A clear brief. A better fit.</h2><ul className="bullet-list">{['Define the role and daily duties','Choose your area and schedule','Set a realistic salary budget','Discuss the checks you need','Review written placement terms'].map(x=><li key={x}><Check size={17}/>{x}</li>)}</ul></div>
+      <div className="panel"><h2 className="h3">Hiring more than one person?</h2><p>Include your total headcount, role priorities and preferred joining dates in the details field.</p></div>
+      <div className="panel"><h2 className="h3">Looking for a job instead?</h2><p>See <a className="qa-link" href="/jobs">current jobs</a> or <a className="qa-link" href="/jobs/apply">submit your CV</a>.</p></div>
     </aside>
   </section>
 </main><Footer/></>}

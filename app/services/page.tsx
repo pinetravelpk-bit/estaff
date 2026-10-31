@@ -19,6 +19,7 @@ export default function Page(){return <><Header/><main>
   <section className="container page-content">
     <Breadcrumbs items={[{name:'Home',path:'/'},{name:'Services',path:'/services'}]}/>
     <p className="answer-box lead-answer">{answer}</p>
+    <h2>All services</h2>
     <ServiceGrid/>
     <h2 style={{marginTop:56}}>Popular services by city</h2>
     <div className="area-chips">{cityServices.slice(0,6).flatMap(s=>['lahore','karachi','islamabad'].map(c=><a key={s.slug+c} href={serviceCityPath(s.slug,c)}>{s.phrase} in {c[0].toUpperCase()+c.slice(1)}</a>))}</div>
