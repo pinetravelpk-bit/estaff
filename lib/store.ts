@@ -9,8 +9,8 @@ export const DATA_DIR=process.env.DATA_DIR||path.join(/*turbopackIgnore: true*/ 
 const CV_DIR=path.join(/*turbopackIgnore: true*/ DATA_DIR,'cvs');
 
 export type EmploymentType='FULL_TIME'|'PART_TIME'|'CONTRACTOR'|'TEMPORARY';
-export type Job={id:string;title:string;jobType:string;city:string;area:string;employmentType:EmploymentType;remote:boolean;liveIn:boolean;salaryMin:number|null;salaryMax:number|null;employer:string;description:string;duties:string[];requirements:string[];benefits:string[];datePosted:string;validThrough:string;status:'open'|'closed';createdAt:string;updatedAt:string};
-export type Application={notes?:string;id:string;jobId:string|null;jobTitle:string;name:string;phone:string;email:string;city:string;role:string;experience:string;message:string;cvFile:string|null;cvName:string|null;status:'new'|'reviewed'|'shortlisted'|'rejected';createdAt:string};
+export type Job={ownerId?:string;id:string;title:string;jobType:string;city:string;area:string;employmentType:EmploymentType;remote:boolean;liveIn:boolean;salaryMin:number|null;salaryMax:number|null;employer:string;description:string;duties:string[];requirements:string[];benefits:string[];datePosted:string;validThrough:string;status:'open'|'closed';createdAt:string;updatedAt:string};
+export type Application={userId?:string;notes?:string;id:string;jobId:string|null;jobTitle:string;name:string;phone:string;email:string;city:string;role:string;experience:string;message:string;cvFile:string|null;cvName:string|null;status:'new'|'reviewed'|'shortlisted'|'rejected';createdAt:string};
 export type Enquiry={notes?:string;id:string;name:string;company:string;email:string;phone:string;role:string;city:string;area:string;schedule:string;budget:string;start:string;details:string;status:'new'|'contacted'|'closed';createdAt:string};
 
 let queue:Promise<unknown>=Promise.resolve();

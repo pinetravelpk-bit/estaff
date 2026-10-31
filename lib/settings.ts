@@ -14,6 +14,7 @@ export type Settings={
   seo:{googleVerification:string;bingVerification:string;defaultImage:string;titleSuffix:string};
   footer:{tagline:string};
   whatsappButton:boolean;
+  notify:{email:string;applications:boolean;enquiries:boolean;agencies:boolean};
 };
 export type SeoOverride={title:string;description:string;noindex:boolean;image:string};
 
@@ -26,6 +27,7 @@ export const defaultSettings:Settings={
   seo:{googleVerification:process.env.GOOGLE_SITE_VERIFICATION||'',bingVerification:process.env.BING_SITE_VERIFICATION||'',defaultImage:'/images/hero-reference.webp',titleSuffix:'estaff.pk'},
   footer:{tagline:'Thoughtful hiring. Local focus.'},
   whatsappButton:true,
+  notify:{email:'',applications:true,enquiries:true,agencies:true},
 };
 
 const cache=new Map<string,{mtime:number;value:unknown}>();

@@ -10,13 +10,14 @@ import {jobTypes,jobCityPath,jobRolePath} from '../lib/jobs';
 import {allArticles} from '../lib/blog-store';
 import {cityServices,serviceCityPath} from '../lib/service-city';
 import {listJobs} from '../lib/store';
+import {listAgencies} from '../lib/users';
 
 export const revalidate=3600;
 
 export default async function sitemap():Promise<MetadataRoute.Sitemap>{
-  const openJobs=await listJobs();const articles=await allArticles();
+  const openJobs=await listJobs();const articles=await allArticles();const agencies=await listAgencies('approved');
   const paths=[
-    '/','/about','/how-it-works','/glossary','/contact','/services','/areas','/resources','/faqs','/site-map','/jobs','/jobs/apply','/hire','/blog',
+    '/','/about','/how-it-works','/glossary','/contact','/services','/areas','/resources','/faqs','/site-map','/jobs','/jobs/apply','/hire','/blog','/agencies',...agencies.map(a=>'/agencies/'+a.slug),
     ...openJobs.map(j=>'/jobs/'+j.id),
     '/industries',...industries.map(i=>'/industries/'+i.slug),
     ...services.map(s=>'/services/'+s.slug),

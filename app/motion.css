@@ -321,3 +321,29 @@ ul.check-list:not(:has(svg)) li::before{content:"";flex:0 0 9px;height:9px;margi
 .post-body img{max-width:100%;border-radius:14px;margin:16px 0}
 .post-body a{color:var(--green);font-weight:600;text-decoration:underline;text-underline-offset:3px}
 .post-body blockquote{margin:18px 0;padding:14px 18px;border-left:4px solid var(--green);background:#f3faf6;border-radius:0 12px 12px 0;font-size:17px}
+
+/* Agency directory */
+.agency-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-top:10px}
+.agency-card{display:flex;flex-direction:column;gap:10px;padding:20px;border:1px solid var(--line);border-radius:18px;background:#fff;transition:transform .2s,box-shadow .2s,border-color .2s}
+.agency-card:hover{transform:translateY(-4px);box-shadow:0 16px 34px #10304014;border-color:#9fd4bd}
+.agency-card-top{display:flex;gap:12px;align-items:center}
+.agency-card-top img,.agency-ph{width:56px;height:56px;border-radius:14px;object-fit:contain;background:#f3f6f5;border:1px solid var(--line);display:grid;place-items:center;color:var(--green);flex-shrink:0}
+.agency-ph.lg{width:96px;height:96px;border-radius:22px}
+.agency-card h3{font-size:18px;display:flex;align-items:center;gap:6px}
+.agency-card small{display:flex;align-items:center;gap:4px;color:var(--muted)}
+.agency-card p{font-size:15px;margin:0;flex:1}
+.agency-check{color:#1d9bf0}
+.agency-tags{display:flex;flex-wrap:wrap;gap:6px}
+.agency-tags span{font-size:12.5px;font-weight:700;padding:4px 10px;border-radius:999px;background:#e3f7ee;color:#006751}
+.agency-tags.big span{font-size:14px;padding:7px 13px}
+.agency-cta{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;margin-top:40px;padding:26px;border-radius:20px;background:linear-gradient(135deg,#0d2730,#0f4a45);color:#fff}
+.agency-cta h2{color:#fff}.agency-cta p{color:#c5dbd3;margin:6px 0 0}
+.agency-hero-row{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.agency-logo-lg{width:96px;height:96px;border-radius:22px;object-fit:contain;background:#fff;border:1px solid var(--line)}
+.agency-badge{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-weight:600;margin:8px 0 0}
+.agency-badge svg{color:#1d9bf0}
+.agency-contact{list-style:none;padding:0;margin:0 0 16px;display:grid;gap:12px}
+.agency-contact li{display:flex;gap:10px;align-items:flex-start;font-size:15px}
+.agency-contact svg{color:var(--green);flex-shrink:0;margin-top:3px}
+.agency-contact a{color:var(--green);font-weight:700}
+.utility-account{font-weight:700}

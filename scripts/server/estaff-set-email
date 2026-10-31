@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Connect a mailbox so estaff.pk can send emails (account confirmations, job alerts, notices).
+# Run on the server:  ssh -t inventiveclicks-vps estaff-set-email
+set -euo pipefail
+ENV=/etc/estaff/estaff.env
+echo "Connect a mailbox for estaff.pk emails."
+echo "Examples  Zoho: smtp.zoho.com port 587 · Gmail/Google Workspace: smtp.gmail.com port 587 (use an App Password) · Brevo: smtp-relay.brevo.com port 587"
+read -r -p "SMTP server: " HOST
+read -r -p "Port [587]: " PORT; PORT=${PORT:-587}
+read -r -p "Username (usually the full email address): " USERNAME
+read -r -s -p "Password / app password (hidden): " PASS; echo
+read -r -p "Send emails as [estaff.pk <$USERNAME>]: " FROM; FROM=${FROM:-"estaff.pk <$USERNAME>"}
+[ -n "$HOST" ] && [ -n "$USERNAME" ] && [ -n "$PASS" ] || { echo "Server, username and password are required. Nothing changed."; exit 1; }
+case "$HOST$PORT$USERNAME$PASS$FROM" in *$'\n'*) echo "Invalid input. Nothing changed."; exit 1;; esac
+TMP=$(mktemp)
+grep -v -E "^(SMTP_HOST|SMTP_PORT|SMTP_USER|SMTP_PASS|MAIL_FROM)=" "$ENV" > "$TMP"
+{ printf "SMTP_HOST=%s\n" "$HOST"; printf "SMTP_PORT=%s\n" "$PORT"; printf "SMTP_USER=%s\n" "$USERNAME"; printf "SMTP_PASS=%s\n" "$PASS"; printf "MAIL_FROM=%s\n" "$FROM"; } >> "$TMP"
+install -o root -g estaff -m 640 "$TMP" "$ENV"; rm -f "$TMP"
+install -o estaff -g estaff -m 640 "$ENV" /var/www/estaff/current/.env.production.local
+systemctl restart estaff
+echo "Done. Open https://estaff.pk/admin/email and send a test email."

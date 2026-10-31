@@ -1,11 +1,12 @@
 import Link from 'next/link';
 import AdminClient from './admin-client';
-import {LayoutDashboard,Briefcase,Users,Building2,FileText,Inbox,Newspaper,Image as ImageIcon,PanelsTopLeft,SearchCheck,ExternalLink,LogOut,UserSearch} from 'lucide-react';
+import {LayoutDashboard,Briefcase,Users,Building2,FileText,Inbox,Newspaper,Image as ImageIcon,PanelsTopLeft,SearchCheck,ExternalLink,LogOut,UserSearch,Mail} from 'lucide-react';
 
 export const NAV=[
   {group:'Overview',items:[{href:'/admin',label:'Dashboard',icon:LayoutDashboard}]},
   {group:'Employers',items:[{href:'/admin/enquiries',label:'Staff requests',icon:Inbox,badge:'enquiries'},{href:'/admin/employers',label:'Employers',icon:Building2}]},
   {group:'Job seekers',items:[{href:'/admin/jobs',label:'Jobs',icon:Briefcase},{href:'/admin/applications',label:'Applications',icon:FileText,badge:'applications'},{href:'/admin/candidates',label:'Candidates',icon:UserSearch}]},
+  {group:'Accounts',items:[{href:'/admin/accounts',label:'Job seekers & agencies',icon:Users,badge:'agencies'},{href:'/admin/email',label:'Email',icon:Mail}]},
   {group:'Website',items:[{href:'/admin/content',label:'Content & sections',icon:PanelsTopLeft},{href:'/admin/blog',label:'Blog',icon:Newspaper},{href:'/admin/media',label:'Images',icon:ImageIcon},{href:'/admin/seo',label:'SEO',icon:SearchCheck}]},
 ] as const;
 

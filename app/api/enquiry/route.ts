@@ -1,6 +1,7 @@
 import {NextResponse} from 'next/server';
 import {addEnquiry,upsertEmployerFromEnquiry,newId,now} from '../../../lib/store';
 import {rateLimited,clientIp} from '../../../lib/auth';
+import {notifyNewEnquiry} from '../../../lib/notify';
 
 export const dynamic='force-dynamic';
 const clean=(v:FormDataEntryValue|null,max=200)=>String(v??'').replace(/[\u0000-\u001f]/g,' ').trim().slice(0,max);
@@ -15,5 +16,6 @@ export async function POST(req:Request){
   if(!role||details.length<10)return NextResponse.json({ok:false,error:'Please choose the staff you need and describe the work in a sentence or two.'},{status:400});
   const enq=await addEnquiry({id:newId('enq-'),name,company:clean(f.get('company'),120),email,phone,role,city:clean(f.get('city'),60),area:clean(f.get('area'),80),schedule:clean(f.get('schedule'),60),budget:clean(f.get('budget'),20),start:clean(f.get('start'),20),details,status:'new',createdAt:now()});
   await upsertEmployerFromEnquiry(enq);
+  await notifyNewEnquiry(enq);
   return NextResponse.json({ok:true});
 }

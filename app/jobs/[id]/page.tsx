@@ -3,6 +3,7 @@ import {MapPin,Clock,Wallet,Building2,CalendarDays,CheckCircle2} from 'lucide-re
 import {Header,Footer} from '../../../components/ui';
 import {Breadcrumbs,StructuredData} from '../../../components/seo';
 import ApplyForm from '../../../components/apply-form';
+import {currentUser} from '../../../lib/users';
 import {EMPLOYMENT,salaryText,jobPlace,JobCards} from '../../../components/job-cards';
 import {pageMetadata,jobPostingSchema} from '../../../lib/seo';
 import {getJob,isJobOpen,listJobs} from '../../../lib/store';
@@ -13,6 +14,7 @@ export const dynamic='force-dynamic';
 export async function generateMetadata({params}:{params:Promise<{id:string}>}){const {id}=await params;const j=await getJob(id);if(!j)return {title:'Job not found',robots:{index:false,follow:false}};const c=anyCity(j.city);const m=pageMetadata(`${j.title} – ${j.remote?'Remote':c?.name} | ${EMPLOYMENT[j.employmentType]} Job`,`${j.title} job ${j.remote?'(remote)':'in '+jobPlace(j)}. ${salaryText(j)}. ${j.description}`,'/jobs/'+j.id,isJobOpen(j));return m;}
 
 export default async function Page({params}:{params:Promise<{id:string}>}){
+  const cu=await currentUser();const me=cu?.role==='seeker'?{name:cu.name,phone:cu.phone,email:cu.email,cvName:cu.cvFile?(cu.cvName||'CV'):null}:null;
   const {id}=await params;const j=await getJob(id);if(!j)notFound();
   const c=anyCity(j.city);const t=jobType(j.jobType);const open=isJobOpen(j);
   const more=(await listJobs({city:j.city})).filter(x=>x.id!==j.id).slice(0,3);
@@ -32,7 +34,7 @@ export default async function Page({params}:{params:Promise<{id:string}>}){
           <p className="coverage-note">estaff.pk never asks job seekers for a fee to apply or to be placed.</p>
         </article>
         <aside className="apply-panel" id="apply">
-          {open?<><h2>Apply now</h2><ApplyForm jobId={j.id} jobTitle={j.title} cities={allCities.map(x=>({value:x.slug,label:x.name}))} roles={jobTypes.map(x=>({value:x.slug,label:x.title}))} defaultCity={c?.name} defaultRole={t?.title}/></>:<><h2>This job is closed</h2><p>You can still register your CV for similar roles.</p><a className="btn" href="/jobs/apply">Submit your CV</a></>}
+          {open?<><h2>Apply now</h2><ApplyForm me={me} jobId={j.id} jobTitle={j.title} cities={allCities.map(x=>({value:x.slug,label:x.name}))} roles={jobTypes.map(x=>({value:x.slug,label:x.title}))} defaultCity={c?.name} defaultRole={t?.title}/></>:<><h2>This job is closed</h2><p>You can still register your CV for similar roles.</p><a className="btn" href="/jobs/apply">Submit your CV</a></>}
         </aside>
       </div>
       {more.length>0&&<><h2 style={{marginTop:48}}>More jobs in {c?.name}</h2><JobCards jobs={more}/></>}

@@ -7,7 +7,7 @@ ${brand.definition} Also known as: ${brand.alternateNames.join(', ')}. Website: 
 - [About estaff.pk](${absolute('/about')})
 - [How hiring works](${absolute('/how-it-works')})
 - [Staffing glossary](${absolute('/glossary')})
-- [Contact](${absolute('/contact')})
+- [Contact](${absolute('/contact')})\n- [Staffing & recruitment agency directory](${absolute('/agencies')})\n- [Job seeker account and job alerts](${absolute('/account/register')})
 
 ## Quick answers
 
