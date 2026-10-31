@@ -20,6 +20,6 @@ export function JobTypeBlock({j,city}:{j:(typeof jobTypes)[number];city:string})
     <p><strong>Documents:</strong> {j.docs}.</p>
     <p><FileText size={16}/> <strong>CV tip:</strong> {j.cv}</p>
     <p><CheckCircle2 size={16}/> <strong>Interview tip:</strong> {j.interview}</p>
-    <p className="muted-line">Also searched as “{j.roman} {city}”. <a className="qa-link" href={jobRolePath(j.slug)}>{j.title} jobs in other cities <ArrowRight size={14}/></a></p>
+    <p className="muted-line"><a className="qa-link" href={'/jobs?type='+j.slug}>Open {j.title.toLowerCase()} jobs</a> · <a className="qa-link" href={'/jobs/apply?role='+j.slug}>Submit your CV</a> · Also searched as “{j.roman} {city}”. <a className="qa-link" href={jobRolePath(j.slug)}>{j.title} jobs in other cities <ArrowRight size={14}/></a></p>
   </article>;
 }

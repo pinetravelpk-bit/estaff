@@ -1,2 +1,0 @@
-import {pageMetadata} from '../../lib/seo';
-import {Header,Footer} from '../../components/ui';import Candidate from '../../components/candidate';export const metadata=pageMetadata('Career Dashboard | CV & Application Demo','Manage a browser-local profile, CV, saved jobs and sample applications. This career workspace is a demonstration, not a live recruitment account.','/candidate',false);export default function Page(){return <><Header/><main className="dashboard"><div className="container"><Candidate/></div></main><Footer/></>}

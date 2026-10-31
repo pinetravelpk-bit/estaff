@@ -1,3 +1,18 @@
 import {pageMetadata} from '../../lib/seo';
-import {Header,Footer,PageHero,Check} from '../../components/ui';import HiringForm from '../../components/hiring-form';export const metadata=pageMetadata('Share Your Staffing Requirement','Prepare a household, corporate or remote staffing brief with your role, working location, hours and salary budget. Theme demonstration form.','/hire',false);
-export default function Page(){return <><Header/><main><PageHero eyebrow="Let’s find your people" title="Tell us who you need." text="A little detail helps build a better hiring brief. Start with your role, location and working arrangement."/><section className="container page-content two-col"><div className="panel"><div className="notice">Theme demo · This form prepares a browser-session brief. It does not send an enquiry.</div><HiringForm/></div><aside className="stack"><div className="panel tint"><h3>A clear brief. A better fit.</h3><ul className="bullet-list">{['Define the role and daily duties','Choose your area and schedule','Set a realistic salary budget','Discuss the checks you need','Review written placement terms'].map(x=><li key={x}><Check size={17}/>{x}</li>)}</ul></div><div className="panel"><h3>Hiring more than one person?</h3><p>Include your total headcount, role priorities and preferred joining dates in the details field.</p></div></aside></section></main><Footer/></>}
+import {Header,Footer,PageHero,Check} from '../../components/ui';
+import HiringForm from '../../components/hiring-form';
+import {allCities} from '../../lib/pakistan';
+
+export const metadata=pageMetadata('Request Staff – Domestic, Office & Remote Staff in Pakistan','Send your staffing requirement to estaff.pk: cooks, drivers, maids, nannies, care staff, office teams and remote staff in any city of Pakistan.','/hire');
+
+export default function Page(){return <><Header/><main>
+  <PageHero eyebrow="Let’s find your people" title="Tell us who you need." text="Share the role, location and working arrangement. The estaff.pk team will call you to discuss candidates and terms."/>
+  <section className="container page-content two-col">
+    <div className="panel"><HiringForm cities={allCities.map(c=>({slug:c.slug,name:c.name}))}/></div>
+    <aside className="stack">
+      <div className="panel tint"><h3>A clear brief. A better fit.</h3><ul className="bullet-list">{['Define the role and daily duties','Choose your area and schedule','Set a realistic salary budget','Discuss the checks you need','Review written placement terms'].map(x=><li key={x}><Check size={17}/>{x}</li>)}</ul></div>
+      <div className="panel"><h3>Hiring more than one person?</h3><p>Include your total headcount, role priorities and preferred joining dates in the details field.</p></div>
+      <div className="panel"><h3>Looking for a job instead?</h3><p>See <a className="qa-link" href="/jobs">current jobs</a> or <a className="qa-link" href="/jobs/apply">submit your CV</a>.</p></div>
+    </aside>
+  </section>
+</main><Footer/></>}

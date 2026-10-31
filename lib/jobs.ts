@@ -40,9 +40,9 @@ export function jobCityContent(c:City){
   ]);
   const faqs:[string,string][]=[
     [`How can I find a job in ${c.name}?`,answer],
-    [`How do I register my CV in ${c.name}?`,`Write a one-page CV with your name, phone number, the city and area you can work in, your past jobs with dates, and two references. Keep a copy of your CNIC ready. Share it only with employers or agencies you can verify.`],
+    [`How do I register my CV in ${c.name}?`,`Use the “Submit your CV” form on estaff.pk: add your name, phone number, city, the kind of work you want and upload your CV. Keep your CNIC ready for the interview.`],
     [`Which documents do employers in ${c.name} ask for?`,`Most ask for your CNIC and references. Drivers need a valid licence, home nurses need their nursing qualification, and household roles may ask for a police character certificate from the police in ${p}.`],
-    [`Are there live vacancies on this page?`,`No. estaff.pk lists a vacancy only when an employer has a real, active opening. This page helps you prepare for the jobs most often searched for in ${c.name}.`],
+    [`How do I apply for a job in ${c.name}?`,`Open any job listed for ${c.name} on this page and fill in the short apply form with your CV. If nothing suitable is open, submit your CV once and estaff.pk will contact you when a matching job opens.`],
     [`${c.name} mein naukri kaise milegi?`,`Apna CV tayyar karein: naam, phone number, ilaqa, pichli naukriyan aur do references. CNIC ki copy sath rakhein. Sirf un employers ya agencies ko apply karein jin ki tasdeeq aap kar sakein, aur naukri ke liye kabhi paisay na dein.`],
   ];
   return {answer,intro,faqs};
