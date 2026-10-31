@@ -3,6 +3,8 @@
 import {services,locations} from './content';
 import {roles} from './roles';
 import {careServices} from './home-care';
+import {allCities,nationalCities} from './pakistan';
+import {cityServices} from './service-city';
 
 export const brand={
   name:'estaff.pk',
@@ -77,11 +79,11 @@ export const extraFaqs:[string,string][]=[
 // Real counts from the site's own content, used for the stats band.
 const areaCount=islamabadAreas.length+rawalpindiAreas.length;
 export const siteStats=[
-  {value:2,suffix:'',label:'Cities served',note:'Islamabad & Rawalpindi'},
-  {value:areaCount,suffix:'',label:'Local areas',note:'Sectors and societies'},
+  {value:allCities.length,suffix:'',label:'Cities served',note:'Across every province'},
+  {value:areaCount+nationalCities.reduce((n,c)=>n+c.areas.length,0),suffix:'+',label:'Local areas',note:'Sectors, towns and societies'},
   {value:services.length,suffix:'',label:'Staffing services',note:'Home, business & remote'},
-  {value:roles.length,suffix:'',label:'Role guides',note:'Cooks to IT staff'},
-  {value:areaCount*careServices.length,suffix:'+',label:'Local hiring guides',note:'Role by neighbourhood'},
+  {value:cityServices.length*allCities.length,suffix:'+',label:'City service pages',note:'Recruitment, HR, payroll & more'},
+  {value:areaCount*careServices.length+nationalCities.length*careServices.length+nationalCities.reduce((n,c)=>n+c.areas.length,0),suffix:'+',label:'Local hiring guides',note:'Role by city and area'},
 ];
 
 export const marqueeRoles=roles.map(r=>r.name);

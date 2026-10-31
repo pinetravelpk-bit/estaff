@@ -30,7 +30,7 @@ export function NationalCityHub({city:c}:{city:City}){
 
       <h2 style={{marginTop:56}}>Business staffing services in {c.name}</h2>
       <p>For employers in {c.name}, estaff.pk’s business services are delivered nationally and scoped for each requirement.</p>
-      <div className="biz-list">{businessKeywords.map(b=><a key={b.slug} href={'/services/'+b.slug}><strong>{b.phrase} in {c.name}</strong><span>{b.text}</span></a>)}</div>
+      <div className="biz-list">{businessKeywords.map(b=><a key={b.slug} href={'/services/'+b.slug+'/'+c.slug}><strong>{b.phrase} in {c.name}</strong><span>{b.text}</span></a>)}</div>
 
       <h2 style={{marginTop:56}}>Jobs in {c.name}</h2>
       <p>Looking for work as a cook, driver, maid, nanny, home nurse, receptionist, accountant or virtual assistant in {c.name}? See <a className="qa-link" href={jobCityPath(c.slug)}>jobs in {c.name} <ArrowRight size={15}/></a></p>

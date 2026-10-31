@@ -7,7 +7,7 @@ export function JobDirectory(){
   return <>
     <h2>Jobs by type</h2>
     <div className="qa-grid">{jobTypes.map(j=><a className="qa-card" key={j.slug} href={jobRolePath(j.slug)}><span className="qa-icon"><Briefcase size={20}/></span><h3>{j.plural} in Pakistan</h3><p>{j.duties[0].charAt(0).toUpperCase()+j.duties[0].slice(1)}.</p><span className="qa-link">See {j.title.toLowerCase()} jobs <ArrowRight size={15}/></span></a>)}</div>
-    <h2 style={{marginTop:56}}>Jobs by city</h2>
+    <h2 style={{marginTop:56}} id="jobs-by-city">Jobs by city</h2>
     {groups.map(g=>{const list=allCities.filter(c=>c.province===g);return list.length?<div key={g} className="province-block"><h3>{provinces[g].name}</h3><div className="area-chips">{list.map(c=><a key={c.slug} href={jobCityPath(c.slug)}><MapPin size={13}/> Jobs in {c.name}</a>)}</div></div>:null})}
   </>;
 }

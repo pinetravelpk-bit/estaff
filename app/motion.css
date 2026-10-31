@@ -199,3 +199,23 @@ ul.check-list:not(:has(svg)) li::before{content:"";flex:0 0 9px;height:9px;margi
 .blog-article h2{margin-top:36px}
 .area-chips{display:flex;flex-wrap:wrap;gap:9px}
 @media (max-width:900px){.city-facts,.biz-list{grid-template-columns:1fr}}
+
+/* Cities and Jobs mega menus use the four-column layout */
+@media (min-width:901px){
+.mega-panel-areas .mega-panel-inner,.mega-panel-jobs .mega-panel-inner{grid-template-columns:220px minmax(0,1fr)}
+.mega-panel-areas .mega-columns,.mega-panel-jobs .mega-columns{grid-template-columns:repeat(4,minmax(0,1fr));gap:22px;padding:32px 24px}
+.mega-panel-areas .mega-intro,.mega-panel-jobs .mega-intro{padding:35px 24px}
+.mega-panel-areas .mega-columns li a,.mega-panel-jobs .mega-columns li a{padding:10px 4px}
+.mega-panel-areas .mega-columns li a strong,.mega-panel-jobs .mega-columns li a strong{font-size:15px}
+}
+@media (min-width:901px) and (max-width:1150px){
+.mega-panel-areas .mega-panel-inner,.mega-panel-jobs .mega-panel-inner{grid-template-columns:180px minmax(0,1fr)}
+.mega-panel-areas .mega-columns,.mega-panel-jobs .mega-columns{gap:13px;padding:25px 16px}
+.mega-panel-areas .mega-columns li a strong,.mega-panel-jobs .mega-columns li a strong{font-size:14px}
+}
+.home-cities{margin-top:20px;margin-bottom:80px}
+
+.step-flow.page-steps-inline{grid-template-columns:repeat(4,1fr);margin:24px 0}
+.step-flow.page-steps-inline .step-card h3{font-size:17px}
+@media (max-width:900px){.step-flow.page-steps-inline{grid-template-columns:1fr 1fr}}
+@media (max-width:600px){.step-flow.page-steps-inline{grid-template-columns:1fr}}
