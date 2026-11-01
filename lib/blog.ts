@@ -123,5 +123,7 @@ const general:Article[]=[
     related:[{label:'Jobs in Pakistan',href:'/jobs'},{label:'Driver jobs',href:'/jobs/role/driver'},{label:'Cook jobs',href:'/jobs/role/cook'}]},
 ];
 
-export const articles:Article[]=[...roleSlugs.map(roleArticle),...general];
+import {blogGeneralExtra} from './longform/blog-general';
+import {blogRoleExtra} from './longform/blog-roles';
+export const articles:Article[]=[...roleSlugs.map(roleArticle),...general].map(a=>{const x=blogGeneralExtra[a.slug]||blogRoleExtra[a.slug];if(!x)return a;const words=[a.intro,...a.sections.flatMap(s=>[...s.p,...(s.list||[])]),...x.sections.flatMap(s=>[...s.p,...(s.list||[])])].join(' ').split(/s+/).length;return {...a,sections:[...a.sections,...x.sections],faqs:[...a.faqs,...x.faqs],readMins:Math.max(a.readMins,Math.round(words/220))};});
 export const article=(slug:string)=>articles.find(a=>a.slug===slug);
