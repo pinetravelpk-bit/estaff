@@ -25,7 +25,7 @@ export default async function Enquiries({searchParams}:{searchParams:Promise<Rec
         <p><Contact phone={e.phone} email={e.email}/></p>
         <p className="adm-meta"><strong>{e.role}</strong> · {anyCity(e.city)?.name||e.city}{e.area?', '+e.area:''} · {e.schedule}{e.budget?` · PKR ${Number(e.budget).toLocaleString('en-PK')}/month`:''}{e.start?` · from ${e.start}`:''} · {fmtDate(e.createdAt)}</p>
         <p className="adm-quote">{e.details}</p>
-        {emp&&<Link className="adm-btn small" href={'/admin/employers?edit='+emp.id}>Employer profile</Link>}
+        <div className="adm-row"><Link className="adm-btn small primary" href={'/admin/jobs?from='+e.id}>Post as job</Link>{emp&&<Link className="adm-btn small" href={'/admin/employers?edit='+emp.id}>Employer profile</Link>}</div>
       </div>
       <form className="adm-item-side" method="post" action="/api/admin/records"><Back path={here}/><input type="hidden" name="kind" value="enquiry"/><input type="hidden" name="id" value={e.id}/>
         <label>Status<select name="status" defaultValue={e.status}>{STATUSES.map(s=><option key={s}>{s}</option>)}</select></label>

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import {Clock,CheckCircle2,ShieldAlert,Plus} from 'lucide-react';
 import type {User,Agency} from '../lib/users';
 import {isJobOpen,type Application,type Job} from '../lib/store';
-import {jobTypes,jobType} from '../lib/jobs';
+import {allTypeOptions,typeTitle} from '../lib/pool';
 import {allCities,anyCity,provinces} from '../lib/pakistan';
 import {cityServices} from '../lib/service-city';
 
@@ -53,7 +53,7 @@ function JobForm({job}:{job:Job|null}){
     {job&&<input type="hidden" name="id" value={job.id}/>}
     <h2 className="full">{job?'Edit job':'Post a job'}</h2>
     <label className="full">Job title<input name="title" required defaultValue={v('title')}/></label>
-    <label>Job type<select name="jobType" required defaultValue={v('jobType')}><option value="">Choose…</option>{jobTypes.map(j=><option key={j.slug} value={j.slug}>{j.title}</option>)}</select></label>
+    <label>Job type<select name="jobType" required defaultValue={v('jobType')}><option value="">Choose…</option>{allTypeOptions().map(o=><option key={o.value} value={o.value}>{o.label}</option>)}</select></label>
     <label>City<select name="city" required defaultValue={v('city')}><option value="">Choose…</option>{allCities.map(c=><option key={c.slug} value={c.slug}>{c.name}</option>)}</select></label>
     <label>Area<input name="area" defaultValue={v('area')}/></label>
     <label>Employment type<select name="employmentType" defaultValue={v('employmentType')||'FULL_TIME'}><option value="FULL_TIME">Full-time</option><option value="PART_TIME">Part-time</option><option value="CONTRACTOR">Contract</option><option value="TEMPORARY">Temporary</option></select></label>
@@ -76,7 +76,7 @@ export function AgencyJobs({a,jobs,apps,editing,showForm}:{a:Agency;jobs:Job[];a
     {showForm?<JobForm job={editing}/>:<p><Link className="btn glow" href="/account?tab=jobs&new=1"><Plus size={16}/> Post a job</Link></p>}
     <section className="acc-card"><h2>Your jobs ({jobs.length})</h2>
       {jobs.length===0?<p>No jobs yet.</p>:<div className="acc-table"><table><thead><tr><th>Job</th><th>City</th><th>Closes</th><th>Status</th><th>Applicants</th><th/></tr></thead><tbody>
-        {jobs.map(j=><tr key={j.id}><td><a href={'/jobs/'+j.id} target="_blank"><strong>{j.title}</strong></a><small>{jobType(j.jobType)?.title}</small></td><td>{j.remote?'Remote':anyCity(j.city)?.name}</td><td>{day(j.validThrough)}</td><td><span className={'acc-pill p-'+(isJobOpen(j)?'open':'closed')}>{isJobOpen(j)?'Open':'Closed'}</span></td><td>{apps.filter(x=>x.jobId===j.id).length}</td>
+        {jobs.map(j=><tr key={j.id}><td><a href={'/jobs/'+j.id} target="_blank"><strong>{j.title}</strong></a><small>{typeTitle(j.jobType)}</small></td><td>{j.remote?'Remote':anyCity(j.city)?.name}</td><td>{day(j.validThrough)}</td><td><span className={'acc-pill p-'+(isJobOpen(j)?'open':'closed')}>{isJobOpen(j)?'Open':'Closed'}</span></td><td>{apps.filter(x=>x.jobId===j.id).length}</td>
           <td className="acc-actions"><Link href={'/account?tab=jobs&edit='+j.id}>Edit</Link><form method="post" action="/api/account/jobs"><input type="hidden" name="id" value={j.id}/><button name="_action" value={j.status==='open'?'close':'open'}>{j.status==='open'?'Close':'Reopen'}</button><button name="_action" value="delete" className="danger">Delete</button></form></td></tr>)}
       </tbody></table></div>}
     </section>

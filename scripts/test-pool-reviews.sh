@@ -19,7 +19,7 @@ ok "$(echo "$P" | grep -o 'Ongoing recruitment' | head -1)" "Ongoing recruitment
 ok "$(echo "$P" | grep -o '2,760 roles' | head -1)" "2,760 roles" "2,760 listings (26 roles x 106 cities + 4 remote)"
 ok "$(echo "$P" | grep -c 'Page 1 of 115')" "1" "paginated, 24 per page"
 ok "$(code $B/jobs?page=2)" "200" "page 2"
-ok "$(curl -s "$B/jobs?city=rahim-yar-khan&type=security-guard" | grep -c 'Security Guard – Rahim Yar Khan')" "1" "filter by city and new role"
+ok "$(curl -s "$B/jobs?city=rahim-yar-khan&type=security-guard" | grep -c 'Security Guard Jobs in Rahim Yar Khan')" "1" "filter by city and new role"
 J=$(curl -s $B/jobs/hiring-cook-lahore)
 ok "$(code $B/jobs/hiring-cook-lahore)" "200" "pool job page"
 ok "$(echo "$J" | grep -c 'noindex')" "1" "pool job is noindex"
@@ -38,7 +38,7 @@ ok "$(curl -s -X POST -F jobId=hiring-cook-lahore -F name='Pool Tester' -F phone
 ok "$(curl -s -X POST -F jobId=hiring-cook-lahore -F name='No Consent' -F phone='0300 1234568' $B/api/apply | grep -c 'share your profile')" "1" "consent required"
 APP=$(node -e 'const a=JSON.parse(require("fs").readFileSync(".data/applications.json","utf8")).filter(x=>x.name==="Pool Tester").pop();console.log(a.id+" "+a.shareConsent+" "+a.jobTitle)')
 ok "$(echo $APP | cut -d' ' -f2)" "true" "share consent stored"
-ok "$(echo $APP | cut -d' ' -f3-)" "Cook – Lahore" "job title stored"
+ok "$(echo $APP | cut -d' ' -f3-)" "Cook Jobs in Lahore" "job title stored"
 ID=$(echo $APP | cut -d' ' -f1)
 AP=$(get -b $A "$B/admin/applications?job=pool&city=Lahore")
 ok "$(echo "$AP" | grep -o '<h3>Pool Tester' | wc -l)" "1" "admin filter: ongoing + city"

@@ -8,6 +8,7 @@ import {allCities,anyCity,provinces,type City} from './pakistan';
 import {jobTypes} from './jobs';
 import {pick} from './national';
 import {getSettings} from './settings';
+import {locations} from './content';
 
 export type PoolRole={slug:string;title:string;sector:'home'|'business'|'remote';employmentType:EmploymentType;liveIn?:boolean;clients:string;menu:string;menuHref:string;duties:string[];requirements:string[];benefits:string[]};
 
@@ -47,6 +48,42 @@ export const poolRoles:PoolRole[]=[
   {slug:'remote-digital-marketing',title:'Remote Digital Marketer',sector:'remote',employmentType:'FULL_TIME',clients:'Local and international clients',menu:'Remote Teams',menuHref:'/services/remote-staff/remote-digital-marketing',duties:['Run social media, SEO or paid campaigns','Create and schedule content','Report results each week'],requirements:['Portfolio of past campaigns','Knowledge of Meta, Google or SEO tools','Good written English'],benefits:['Work from home','Project or monthly pay']},
   {slug:'remote-developer',title:'Remote Developer',sector:'remote',employmentType:'FULL_TIME',clients:'Local and international clients',menu:'Remote Teams',menuHref:'/services/remote-staff/remote-developers',duties:['Build and maintain software','Work in a distributed team with Git','Write clear progress updates'],requirements:['A main stack (for example JavaScript, Python, PHP or mobile)','Code portfolio or GitHub','Good written communication'],benefits:['Work from home','Salary based on skill and stack']},
 ];
+
+// Search-friendly names: "Cook Jobs in Islamabad", plus the Roman Urdu phrase people type.
+export const ROLE_NAMES:Record<string,{name:string;urdu:string;person:string}>={
+  cook:{name:'Cook',urdu:'cook / khansama ki naukri',person:'household cook'},
+  driver:{name:'Driver',urdu:'driver ki naukri',person:'family or office driver'},
+  maid:{name:'Maid & Housekeeper',urdu:'maid / kaam wali ki naukri',person:'maid or housekeeper'},
+  nanny:{name:'Nanny & Babysitter',urdu:'nanny / aya ki naukri',person:'nanny or babysitter'},
+  'care-attendant':{name:'Elderly Care Attendant',urdu:'attendant / care giver ki naukri',person:'elderly care attendant'},
+  'home-nurse':{name:'Home Nurse',urdu:'home nurse ki naukri',person:'home nurse'},
+  gardener:{name:'Gardener (Mali)',urdu:'mali ki naukri',person:'gardener (mali)'},
+  watchman:{name:'Watchman & Chowkidar',urdu:'chowkidar ki naukri',person:'watchman or caretaker'},
+  'domestic-couple':{name:'Domestic Couple',urdu:'miyan biwi ke liye ghar ki naukri',person:'live-in domestic couple'},
+  'personal-attendant':{name:'Personal Attendant',urdu:'personal attendant ki naukri',person:'personal attendant'},
+  'office-boy':{name:'Office Boy',urdu:'office boy ki naukri',person:'office boy or helper'},
+  receptionist:{name:'Receptionist & Admin',urdu:'receptionist ki naukri',person:'receptionist or admin assistant'},
+  accountant:{name:'Accountant',urdu:'accountant ki naukri',person:'accountant or accounts officer'},
+  'sales-executive':{name:'Sales Executive',urdu:'sales ki naukri',person:'sales executive'},
+  'it-support':{name:'IT Support',urdu:'IT ki naukri',person:'IT support officer'},
+  'operations-manager':{name:'Manager',urdu:'manager ki naukri',person:'manager or senior professional'},
+  technician:{name:'Technician & Electrician',urdu:'electrician / technician ki naukri',person:'technician or electrician'},
+  'factory-worker':{name:'Factory Worker',urdu:'factory ki naukri',person:'factory worker or machine operator'},
+  'retail-sales-staff':{name:'Salesman & Shop Staff',urdu:'shop / salesman ki naukri',person:'salesperson or shop staff'},
+  'hr-officer':{name:'HR & Payroll Officer',urdu:'HR ki naukri',person:'HR and payroll officer'},
+  cleaner:{name:'Cleaner & Janitor',urdu:'safai / janitor ki naukri',person:'cleaner or janitorial staff'},
+  'security-guard':{name:'Security Guard',urdu:'security guard ki naukri',person:'security guard'},
+  'call-centre-agent':{name:'Call Centre (CSR)',urdu:'call center ki naukri',person:'call centre agent'},
+  'hotel-staff':{name:'Hotel & Restaurant',urdu:'hotel / waiter ki naukri',person:'hotel or restaurant staff'},
+  'delivery-rider':{name:'Delivery Rider',urdu:'rider ki naukri',person:'delivery rider'},
+  'teacher-tutor':{name:'Teacher & Home Tutor',urdu:'teacher / tutor ki naukri',person:'teacher or home tutor'},
+  'virtual-assistant':{name:'Virtual Assistant',urdu:'online / ghar baith kar naukri',person:'virtual assistant'},
+  'remote-customer-support':{name:'Customer Support',urdu:'ghar baith kar customer support ki naukri',person:'remote customer support agent'},
+  'remote-digital-marketing':{name:'Digital Marketing',urdu:'online digital marketing ki naukri',person:'remote digital marketer'},
+  'remote-developer':{name:'Developer',urdu:'online developer ki naukri',person:'remote developer'},
+};
+export const roleName=(r:PoolRole)=>ROLE_NAMES[r.slug]||{name:r.title,urdu:r.title.toLowerCase()+' ki naukri',person:r.title.toLowerCase()};
+export const poolTitle=(r:PoolRole,c:City|null)=>c?`${roleName(r).name} Jobs in ${c.name}`:`Remote ${roleName(r).name} Jobs in Pakistan`;
 export const poolRole=(slug:string)=>poolRoles.find(r=>r.slug===slug);
 // Labels for any job type slug (core job guides plus the extra recruitment roles).
 export const typeTitle=(slug:string)=>jobTypes.find(j=>j.slug===slug)?.title||poolRole(slug)?.title||slug;
@@ -61,20 +98,44 @@ export const POOL_SINCE='2026-11-01';
 export const poolId=(role:string,city:string)=>`hiring-${role}-${city}`;
 export const isPoolId=(id:string)=>id.startsWith('hiring-');
 
+// Areas used for local wording: detailed sector lists for Islamabad and Rawalpindi, main areas elsewhere.
+export const cityAreas=(c:City)=>[...new Set([...(locations[c.slug]?.areas||[]),...c.areas])];
+const a_an=(w:string)=>/^[aeiou]/i.test(w)?'an':'a';
+
 function description(r:PoolRole,c:City|null){
-  if(!c)return `estaff.pk is recruiting ${r.title.toLowerCase()}s who can work remotely from anywhere in Pakistan, for ${r.clients.toLowerCase()} who send us requirements. This is ongoing recruitment, not a single vacancy: applicants join our shortlist, and when a client needs this role we share matching profiles (only with your permission, given on the form) and call you before any interview. Pay, hours and duties are confirmed with you before you accept anything.`;
-  const p=provinces[c.province].name;const areas=c.areas.slice(0,4).join(', ');
-  const local=pick(c.slug+r.slug,[
-    `Work is usually in and around ${areas}.`,
-    `Clients in ${c.name} are spread across areas such as ${areas}.`,
-    `Most requirements in ${c.name} come from areas like ${areas}.`,
-  ]);
-  const why=r.sector==='home'?pick(r.slug+c.slug,[`Families in ${c.name} regularly ask us for reliable, checked ${r.title.toLowerCase()} staff.`,`Households across ${c.name}, ${p} need trustworthy ${r.title.toLowerCase()} staff throughout the year.`,`Demand for ${r.title.toLowerCase()} staff in ${c.name} comes from busy families, elderly parents and working couples.`]):pick(r.slug+c.slug,[`Businesses in ${c.name}, where the local economy is driven by ${c.economy}, hire for this role through us.`,`Employers in ${c.name} (${c.economy}) send us requirements for this role.`,`With a local economy built on ${c.economy}, ${c.name} has steady demand for this role.`]);
-  return `estaff.pk is recruiting ${r.title} candidates in ${c.name}, ${p} for ${r.clients.toLowerCase()} who send us requirements. ${why} ${local} This is ongoing recruitment, not a single vacancy: applicants join our ${c.name} shortlist, and when a client needs this role we share matching profiles (only with your permission, given on the form) and call you before any interview. Pay, hours and duties are confirmed with you before you accept anything.`;
+  const n=roleName(r);
+  if(!c)return `estaff.pk is recruiting ${n.person}s who work from home anywhere in Pakistan, for ${r.clients.toLowerCase()}. You need a laptop, reliable internet and the skills listed below. This is ongoing recruitment rather than a single vacancy: you apply once and join our shortlist, and when a client needs this role we share your profile (only with your permission) and call you to confirm pay, hours and duties before any interview. Applying is free.`;
+  const p=provinces[c.province].name;const areas=cityAreas(c).slice(0,5).join(', ');
+  const why=r.sector==='home'?pick(r.slug+c.slug,[`Families in ${c.name} regularly ask us for a reliable, checked ${n.person}.`,`Households across ${c.name}, ${p} need a trustworthy ${n.person} throughout the year.`,`Busy families, working couples and elderly parents in ${c.name} ask us for ${a_an(n.person)} ${n.person}.`]):pick(r.slug+c.slug,[`Employers in ${c.name}, where the local economy is driven by ${c.economy}, hire ${n.person}s through us.`,`${c.name}'s economy (${c.economy}) creates steady demand for ${n.person}s.`,`Businesses in ${c.name} (${c.economy}) send us requirements for ${n.person}s.`]);
+  const local=pick(c.slug+r.slug,[`Work is usually in and around ${areas}.`,`Clients in ${c.name} are spread across areas such as ${areas}.`,`Most requirements in ${c.name} come from ${areas}.`]);
+  return `estaff.pk is recruiting ${n.person}s in ${c.name}, ${p} for ${r.clients.toLowerCase()}. ${why} ${local} This is ongoing recruitment rather than a single vacancy: you apply once and join our ${c.name} shortlist, and when a client needs ${a_an(n.person)} ${n.person} we share your profile (only with your permission) and call you to confirm pay, hours and duties before any interview. Applying is free.`;
+}
+
+// Extra page content for a listing: the short answer, documents, steps and FAQs.
+export function poolContent(r:PoolRole,c:City|null){
+  const n=roleName(r);const where=c?`in ${c.name}`:'from home in Pakistan';
+  const jt=jobTypes.find(j=>j.slug===typeOf(r));
+  const docs=jt?.docs||(r.requirements.find(x=>/CNIC/.test(x))?r.requirements.find(x=>/CNIC/.test(x))!:'CNIC and references from previous employers');
+  const answer=`To get ${a_an(n.name)} ${n.name.toLowerCase()} job ${where}, apply on this page with your name, phone number and CV. Keep your ${docs.replace(/[.]$/,'')} ready. estaff.pk adds you to the shortlist for ${c?c.name:'remote work'} and calls you when a ${r.sector==='home'?'family':'client'} needs ${a_an(n.person)} ${n.person}. It is free: estaff.pk never charges job seekers.`;
+  const steps=[
+    {title:'Apply online',text:'Fill in the short form on this page with your phone number, experience and CV (PDF, Word or a photo). It takes about two minutes.'},
+    {title:'Short call from estaff.pk',text:`We call or WhatsApp you to check your experience, ${c?'the areas of '+c.name+' you can work in':'your working hours and equipment'} and your expected pay.`},
+    {title:'Your profile goes to a client',text:'When a client needs this role, we share your profile with them, only with the permission you give on the form.'},
+    {title:'Interview and joining',text:'Pay, hours, duties and days off are confirmed with you before the interview. Keep your documents ready.'},
+  ];
+  const faqs:[string,string][]=[
+    [`How can I get ${a_an(n.name)} ${n.name.toLowerCase()} job ${where}?`,answer],
+    [`What does ${a_an(n.person)} ${n.person} do?`,`The work usually includes: ${r.duties.map(d=>d.charAt(0).toLowerCase()+d.slice(1)).join('; ')}.`],
+    [`What do I need to apply for ${n.name.toLowerCase()} jobs ${where}?`,`${r.requirements.join('. ')}. Keep ${docs.replace(/[.]$/,'')} ready for the interview.`],
+    [`What is the salary for ${n.name.toLowerCase()} jobs ${where}?`,`Pay depends on the client, the duties, the hours${r.sector==='home'?', live-in or live-out arrangement':''} and your experience. It is agreed with you before the interview, and you are never asked to pay anything to estaff.pk.`],
+    [`Is this a single vacancy?`,`No. It is ongoing recruitment: estaff.pk recruits ${n.person}s ${where} all year. Your application stays on our shortlist and is shared with clients who need this role.`],
+    ...(c?[[`${c.name} mein ${n.urdu} kaise milegi?`,`Is page par apna naam, phone number aur CV bhej dein. CNIC aur references tayyar rakhein. Jab ${c.name} mein kisi ${r.sector==='home'?'ghar':'company'} ko ${n.name.toLowerCase()} chahiye hoga, estaff.pk aap ko call karega. Apply karna bilkul muft hai.`] as [string,string]]:[[`${n.urdu} kaise milegi?`,`Is page par apna naam, phone number aur CV bhej dein. Jab kisi client ko yeh kaam chahiye hoga, estaff.pk aap ko call karega. Apply karna muft hai.`] as [string,string]]),
+  ];
+  return {answer,steps,faqs,docs,areas:c?cityAreas(c):[],name:n};
 }
 
 function build(r:PoolRole,c:City|null):Job{
-  return {id:poolId(r.slug,c?c.slug:'pakistan'),pool:true,title:c?`${r.title} – ${c.name}`:r.title,jobType:typeOf(r),city:c?c.slug:'',area:'',employmentType:r.employmentType,remote:!c,liveIn:Boolean(r.liveIn),salaryMin:null,salaryMax:null,employer:`estaff.pk clients (${r.clients})`,description:description(r,c),duties:r.duties,requirements:r.requirements,benefits:[...r.benefits,'Free for job seekers: estaff.pk never charges a fee'],datePosted:POOL_SINCE,validThrough:'2099-12-31',status:'open',createdAt:POOL_SINCE,updatedAt:POOL_SINCE};
+  return {id:poolId(r.slug,c?c.slug:'pakistan'),pool:true,title:poolTitle(r,c),jobType:typeOf(r),city:c?c.slug:'',area:'',employmentType:r.employmentType,remote:!c,liveIn:Boolean(r.liveIn),salaryMin:null,salaryMax:null,employer:`estaff.pk clients (${r.clients})`,description:description(r,c),duties:r.duties,requirements:r.requirements,benefits:[...r.benefits,'Free for job seekers: estaff.pk never charges a fee'],datePosted:POOL_SINCE,validThrough:'2099-12-31',status:'open',createdAt:POOL_SINCE,updatedAt:POOL_SINCE};
 }
 
 export function poolEnabled(){return getSettings().pool.enabled;}

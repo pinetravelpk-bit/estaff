@@ -90,3 +90,6 @@ footer .logo .logo-img{height:42px}
 .review-write{margin:18px 0}.review-write>summary{list-style:none;display:inline-flex}.review-write>summary::-webkit-details-marker{display:none}.review-write[open]>summary{margin-bottom:16px}
 .agency-rating{display:flex!important;align-items:center;gap:5px}
 @media (max-width:640px){.review-summary{grid-template-columns:1fr;gap:16px}}
+.job-sub{max-width:760px;font-size:18px;margin:10px 0 0}
+.steps-list{padding-left:22px;display:grid;gap:10px}.steps-list li{color:var(--muted)}.steps-list strong{color:var(--ink)}
+.area-chips span{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:6px 13px;font-size:15px;background:#fff}

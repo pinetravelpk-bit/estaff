@@ -2,6 +2,7 @@
 import {newId,now,type Job,type EmploymentType} from './store';
 import {anyCity,slugify} from './pakistan';
 import {jobType} from './jobs';
+import {poolRole} from './pool';
 
 const s=(f:FormData,k:string,max=200)=>String(f.get(k)??'').trim().slice(0,max);
 const lines=(f:FormData,k:string)=>s(f,k,4000).split(/\r?\n/).map(x=>x.replace(/^[-•*]\s*/,'').trim()).filter(Boolean).slice(0,20);
@@ -10,7 +11,7 @@ const TYPES:EmploymentType[]=['FULL_TIME','PART_TIME','CONTRACTOR','TEMPORARY'];
 
 export function jobFromForm(f:FormData,existing:Job|null,extra:Partial<Job>={}):Job|null{
   const title=s(f,'title',120),type=s(f,'jobType'),city=s(f,'city'),description=s(f,'description',5000),validThrough=s(f,'validThrough',10);
-  if(title.length<3||!jobType(type)||!anyCity(city)||description.length<30||!/^\d{4}-\d{2}-\d{2}$/.test(validThrough))return null;
+  if(title.length<3||!(jobType(type)||poolRole(type))||!anyCity(city)||description.length<30||!/^\d{4}-\d{2}-\d{2}$/.test(validThrough))return null;
   const et=s(f,'employmentType') as EmploymentType;
   return {
     id:existing?.id||`${slugify(title).slice(0,50)}-${city}-${newId()}`,
