@@ -84,6 +84,52 @@ export const ROLE_NAMES:Record<string,{name:string;urdu:string;person:string}>={
   'remote-developer':{name:'Developer',urdu:'online developer ki naukri',person:'remote developer'},
 };
 export const roleName=(r:PoolRole)=>ROLE_NAMES[r.slug]||{name:r.title,urdu:r.title.toLowerCase()+' ki naukri',person:r.title.toLowerCase()};
+// Other names people search for each role (used to vary page titles).
+export const ROLE_ALT:Record<string,string[]>={
+  cook:['Khansama','Household Cook','Home Chef','Family Cook'],driver:['Family Driver','Car Driver','LTV Driver','Personal Driver'],
+  maid:['Housemaid','Housekeeper','Domestic Helper','Cleaning Maid'],nanny:['Babysitter','Aya','Child Carer','Governess'],
+  'care-attendant':['Elderly Caregiver','Patient Attendant','Caregiver','Old Age Carer'],'home-nurse':['Staff Nurse (Home)','Nursing Attendant','Private Nurse','Home Care Nurse'],
+  gardener:['Mali','Garden Helper','Lawn Keeper','Landscaping Helper'],watchman:['Chowkidar','Caretaker','Night Watchman','Gatekeeper'],
+  'domestic-couple':['Live-in Couple','Husband & Wife Staff','Couple Housekeeper','Household Couple'],'personal-attendant':['Personal Assistant (Home)','Attendant','Personal Helper','Companion Carer'],
+  'office-boy':['Office Helper','Peon','Tea Boy','Office Assistant'],receptionist:['Front Desk Officer','Admin Assistant','Office Receptionist','Front Office Executive'],
+  accountant:['Accounts Officer','Bookkeeper','Accounts Assistant','Finance Officer'],'sales-executive':['Sales Officer','Field Sales','Sales Representative','Marketing Executive'],
+  'it-support':['IT Officer','Computer Operator','Network Support','Helpdesk Technician'],'operations-manager':['Branch Manager','Operations Manager','Team Manager','Senior Manager'],
+  technician:['Electrician','Maintenance Technician','AC Technician','Electrical Technician'],'factory-worker':['Machine Operator','Production Worker','Factory Helper','Packing Staff'],
+  'retail-sales-staff':['Salesman','Shop Assistant','Store Staff','Sales Boy / Girl'],'hr-officer':['HR Assistant','Payroll Officer','HR Executive','Admin & HR Officer'],
+  cleaner:['Janitor','Sweeper','Housekeeping Staff','Cleaning Staff'],'security-guard':['Guard','Security Officer','Gunman','Armed Guard'],
+  'call-centre-agent':['CSR','Call Center Agent','Telesales Agent','Customer Service Rep'],'hotel-staff':['Waiter','Restaurant Staff','Hotel Steward','Kitchen Helper'],
+  'delivery-rider':['Bike Rider','Courier Rider','Delivery Boy','Food Delivery Rider'],'teacher-tutor':['Home Tutor','School Teacher','Tuition Teacher','Subject Teacher'],
+  'virtual-assistant':['Online Assistant','VA','Remote Admin Assistant','Online Admin'],'remote-customer-support':['Work From Home CSR','Chat Support','Online Support Agent','Remote CSR'],
+  'remote-digital-marketing':['Social Media Manager','SEO Specialist','Online Marketer','Digital Marketer'],'remote-developer':['Web Developer','Software Developer','App Developer','Programmer'],
+};
+const PROV_SHORT:Record<string,string>={ict:'ICT',punjab:'Punjab',sindh:'Sindh',kp:'KP',balochistan:'Balochistan',ajk:'AJK',gb:'GB'};
+// A distinct, keyword-rich page title for every listing (kept within ~65 characters).
+export function poolMetaTitle(r:PoolRole,c:City|null,j:Job){
+  const n=roleName(r).name;const alt=ROLE_ALT[r.slug]||[n];const y=new Date().getFullYear();
+  // Rotate styles: neighbouring cities for one role, and roles within one city, get different patterns.
+  const ci=c?Math.max(0,allCities.findIndex(x=>x.slug===c.slug)):0,ri=Math.max(0,poolRoles.indexOf(r));const h=ci+ri*3;
+  const a1=alt[(ci+ri)%alt.length],a2=alt[(ci+ri+1)%alt.length];
+  const et=({FULL_TIME:'Full-Time',PART_TIME:'Part-Time',CONTRACTOR:'Contract',TEMPORARY:'Temporary'} as Record<string,string>)[r.employmentType];
+  if(j.hiringNow){const pay=`PKR ${(j.salaryMin||0).toLocaleString('en-PK')}–${(j.salaryMax||0).toLocaleString('en-PK')}`;
+    const opts=c?[`${n} Jobs in ${c.name} – Hiring Now, ${pay}`,`Hiring Now: ${a1} in ${c.name} (${pay})`,`${c.name} ${a1} Jobs ${y} – ${pay} a Month`]:[`Remote ${n} Jobs – Hiring Now, ${pay}`,`Hiring Now: Remote ${a1} (${pay})`];
+    for(let i=0;i<opts.length;i++){const t=opts[(h+i)%opts.length];if(t.length<=65)return t;}return opts[0];}
+  if(!c){const opts=[`Remote ${n} Jobs in Pakistan ${y} – Work From Home`,`Work From Home ${a1} Jobs Pakistan – Apply Online`,`Online ${a1} Jobs in Pakistan (Remote, ${et})`];
+    for(let i=0;i<opts.length;i++){const t=opts[(h+i)%opts.length];if(t.length<=65)return t;}return opts[0];}
+  const areas=cityAreas(c);const ar1=areas[h%Math.max(1,areas.length)]||c.name,ar2=areas[(h+2)%Math.max(1,areas.length)]||'';const pv=PROV_SHORT[c.province]||'';
+  const live=r.liveIn?'Live-in':r.sector==='home'?'Live-in & Day':et;
+  const opts=[
+    `${n} Jobs in ${c.name} ${y} – Apply Online Free`,
+    `${a1} Jobs in ${c.name} – ${ar1}${ar2&&ar2!==ar1?' & '+ar2:''}`,
+    `${c.name} ${n} Jobs – ${live} Vacancies, No Fee`,
+    `${a1} & ${a2} Jobs in ${c.name}, ${pv}`,
+    `Latest ${n} Jobs in ${c.name} – Apply Today (${y})`,
+    `${n} Vacancies in ${c.name} – ${live} Work, Free to Apply`,
+    `${a2} Jobs ${c.name} ${y} | ${et} Positions`,
+    `New ${a1} Jobs in ${c.name}, ${pv} – Apply in 2 Minutes`,
+  ];
+  for(let i=0;i<opts.length;i++){const t=opts[(h+i)%opts.length];if(t.length<=65&&t.length>=30)return t;}
+  return opts[0];
+}
 export const poolTitle=(r:PoolRole,c:City|null)=>c?`${roleName(r).name} Jobs in ${c.name}`:`Remote ${roleName(r).name} Jobs in Pakistan`;
 
 // Experience and education asked for each role (shown on listings and used for real job schema).

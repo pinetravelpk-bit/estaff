@@ -11,7 +11,7 @@ import {anyCity,allCities,provinces,nearbyCities} from '../../../lib/pakistan';
 import {pick} from '../../../lib/national';
 import {CITY_POSTAL,EDU_LABEL} from '../../../lib/job-form';
 import {jobType,jobCityPath,jobRolePath} from '../../../lib/jobs';
-import {getPoolJob,poolRoleOfId,listPoolJobs,allTypeOptions,typeTitle,poolContent,poolId,roleName,isIndexablePool,ROLE_REQ} from '../../../lib/pool';
+import {getPoolJob,poolRoleOfId,listPoolJobs,allTypeOptions,typeTitle,poolContent,poolId,roleName,isIndexablePool,ROLE_REQ,poolMetaTitle} from '../../../lib/pool';
 
 // Pending (not yet approved) and queued jobs are not public yet.
 const findJob=async(id:string)=>{const p=getPoolJob(id);if(p)return p;const j=await getJob(id);return j&&j.status!=="pending"&&!isScheduled(j)?j:null;};
@@ -29,7 +29,7 @@ export async function generateMetadata({params}:{params:Promise<{id:string}>}){
       `${n.name} jobs in ${c.name} (${ar}). ${k.req.edu}; ${k.req.exp.charAt(0).toLowerCase()+k.req.exp.slice(1)}. Apply online in 2 minutes – no fee.`,
       `Looking for ${n.urdu} in ${c.name}? estaff.pk recruits ${n.person}s for ${r.clients.toLowerCase()} across ${ar}. Apply free online today.`,
     ]):`Remote ${n.name.toLowerCase()} jobs in Pakistan: work from home for ${r.clients.toLowerCase()}. ${k.req.exp}. Apply online free.`;
-    return pageMetadata(j.hiringNow?`${j.title} – Hiring Now, ${salaryText(j).replace(" / month","")}`:`${j.title} ${year()} – Apply Online Free`,j.hiringNow?`Hiring now: ${salaryText(j)}. `+desc:desc,'/jobs/'+j.id,isIndexablePool(j));}
+    return pageMetadata(poolMetaTitle(r,c||null,j),j.hiringNow?`Hiring now: ${salaryText(j)}. `+desc:desc,'/jobs/'+j.id,isIndexablePool(j));}
   return pageMetadata(`${j.title} – ${jobPlace(j)} | ${EMPLOYMENT[j.employmentType]} Job`,`${typeTitle(j.jobType)} job in ${jobPlace(j)}: ${salaryText(j)}. ${j.description}`,'/jobs/'+j.id,isJobOpen(j));
 }
 
