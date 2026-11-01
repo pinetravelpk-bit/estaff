@@ -23,13 +23,14 @@
 
 /* Scene 1: rotating 3D photo wall */
 .wall3d{position:absolute;inset:0;perspective:1300px;overflow:hidden;border-radius:28px;background:radial-gradient(circle at 60% 40%,#e3f4ee,#f3faf7 70%)}
-.wall3d-plane{position:absolute;left:50%;top:50%;width:640px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;transform-style:preserve-3d;transform:translate(-50%,-50%) rotateY(-26deg) rotateX(14deg) rotateZ(-5deg);animation:wallPan 16s ease-in-out infinite alternate}
+.wall3d-plane{position:absolute;left:50%;top:50%;width:520px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;transform-style:preserve-3d;transform:translate(-50%,-50%) rotateY(-26deg) rotateX(14deg) rotateZ(-5deg);animation:wallPan 16s ease-in-out infinite alternate}
 @keyframes wallPan{0%{transform:translate(-50%,-50%) rotateY(-30deg) rotateX(16deg) rotateZ(-6deg)}100%{transform:translate(-50%,-50%) rotateY(-10deg) rotateX(8deg) rotateZ(-2deg)}}
-.wall-tile{position:relative;aspect-ratio:3/4;border-radius:14px;overflow:hidden;box-shadow:0 18px 30px #0d3b3026;transform-style:preserve-3d;transform:translateZ(0);transition:transform .35s}
+.wall-tile{position:relative;aspect-ratio:1/1.05;border-radius:14px;overflow:hidden;box-shadow:0 18px 30px #0d3b3026;transform-style:preserve-3d;transform:translateZ(0);transition:transform .35s}
 .is-on .wall-tile{animation:tileFlip .9s cubic-bezier(.2,.8,.2,1) both,tileBob 6s ease-in-out infinite;animation-delay:calc(var(--k)*90ms),calc(1s + var(--k)*.4s)}
 @keyframes tileFlip{from{opacity:0;transform:rotateY(80deg) translateZ(-60px)}to{opacity:1;transform:none}}
 @keyframes tileBob{0%,100%{transform:translateZ(0)}50%{transform:translateZ(28px)}}
 .wall-tile:hover{transform:translateZ(60px) scale(1.04)!important;z-index:2}
+.wall-tile img{object-position:center 18%}
 .wall-tile span{position:absolute;left:8px;bottom:8px;background:#ffffffe8;color:#0c3b33;font-size:11px;font-weight:700;padding:4px 8px;border-radius:999px;opacity:0;transform:translateY(6px);transition:.3s}
 .wall-tile:hover span,.wall-tile:focus-visible span{opacity:1;transform:none}
 .wall-badge{position:absolute;right:22px;bottom:22px;display:inline-flex;align-items:center;gap:6px;background:#0c3b33;color:#fff!important;font-weight:700;font-size:14px;padding:10px 16px;border-radius:999px;box-shadow:0 14px 30px #0c3b3355;animation:labelFloat 6s ease-in-out infinite}
@@ -70,8 +71,8 @@
 .collage-centre{position:absolute;left:0;right:0;top:0;bottom:0;margin:auto;width:118px;height:118px;border-radius:50%;display:grid;place-items:center;text-align:center;padding:12px;background:#0c3b33;color:#fff!important;font-weight:800;font-size:14px;line-height:1.2;border:6px solid #f3faf7;box-shadow:0 16px 34px #0c3b3355;animation:corePulse 3.6s ease-in-out infinite}
 .collage-centre:hover{background:var(--green)}
 
-@media (max-width:1100px){.hero-stage{height:420px}.wall3d-plane{width:560px}}
-@media (max-width:800px){.hero-stage{height:380px;margin:4px 0 0}.wall3d-plane{width:480px;gap:10px}.presenter{grid-template-columns:.8fr 1.2fr;gap:10px;padding:8px}.pop-tile span,.presenter-person span{font-size:11px}.collage-centre{width:96px;height:96px;font-size:12px}.hero-slide-copy h2{min-height:0}}
-@media (max-width:520px){.hero-stage{height:340px}.presenter{grid-template-columns:.75fr 1.25fr}.pop-tile{aspect-ratio:1/1.15}.pop-tile span{right:auto;font-size:10px;padding:4px 7px;border-radius:7px}.pop-tile span svg{display:none}.presenter-person span{font-size:10px;padding:6px}.wall3d-plane{width:400px}.presenter-grid{gap:8px}.collage-tile span{font-size:11px;padding:5px 8px}}
+@media (max-width:1100px){.hero-stage{height:420px}.wall3d-plane{width:450px}}
+@media (max-width:800px){.hero-stage{height:380px;margin:4px 0 0}.wall3d-plane{width:400px;gap:10px}.presenter{grid-template-columns:.8fr 1.2fr;gap:10px;padding:8px}.pop-tile span,.presenter-person span{font-size:11px}.collage-centre{width:96px;height:96px;font-size:12px}.hero-slide-copy h2{min-height:0}}
+@media (max-width:520px){.hero-stage{height:340px}.wall3d-plane{width:340px;gap:8px}.presenter{grid-template-columns:.75fr 1.25fr}.pop-tile{aspect-ratio:1/1.15}.pop-tile span{right:auto;font-size:10px;padding:4px 7px;border-radius:7px}.pop-tile span svg{display:none}.presenter-person span{font-size:10px;padding:6px}.presenter-grid{gap:8px}.collage-tile span{font-size:11px;padding:5px 8px}}
 .hero-slider.is-reduced *,.hero-slider.is-reduced *::before{animation:none!important}
 @media (prefers-reduced-motion:reduce){.hero-slider *{animation:none!important}.hero-scene{transition:none}}
