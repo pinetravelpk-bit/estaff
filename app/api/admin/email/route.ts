@@ -12,6 +12,6 @@ export async function POST(req:Request){
     const ok=await sendMail(to,'estaff.pk test email',emailHtml('Email is working',['This is a test email from your estaff.pk dashboard. Account emails, job alerts and notices will be delivered like this.']));
     return go('/admin/email?msg='+(ok?'sent':'failed'));}
   const email=String(f.get('email')||'').trim();if(email&&!valid(email))return go('/admin/email?msg=invalid');
-  const s=getSettings();s.notify={email,applications:f.get('applications')==='on',enquiries:f.get('enquiries')==='on',agencies:f.get('agencies')==='on'};saveSettings(s);
+  const s=getSettings();s.notify={email,applications:f.get('applications')==='on',enquiries:f.get('enquiries')==='on',agencies:f.get('agencies')==='on',reviews:f.get('reviews')==='on'};saveSettings(s);
   return go('/admin/email?msg=saved');
 }

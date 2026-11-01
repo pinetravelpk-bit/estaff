@@ -8,6 +8,9 @@ import {getAgencyBySlug,listAgencies} from '../../../lib/users';
 import {listJobs} from '../../../lib/store';
 import {anyCity} from '../../../lib/pakistan';
 import {AGENCY_SERVICES} from '../../../components/account-agency';
+import ReviewForm from '../../../components/review-form';
+import {ReviewSummary,ReviewList,reviewSchemaParts,Stars} from '../../../components/reviews';
+import {listReviews,summary} from '../../../lib/reviews';
 
 export const revalidate=600;
 export async function generateStaticParams(){return (await listAgencies('approved')).map(a=>({slug:a.slug}));}
@@ -19,10 +22,11 @@ const wa=(p:string)=>{const d=p.replace(/[^0-9]/g,'');return 'https://wa.me/'+(d
 export default async function AgencyPage({params}:{params:Promise<{slug:string}>}){
   const {slug}=await params;const a=await getAgencyBySlug(slug);if(!a||a.status!=='approved')notFound();
   const jobs=(await listJobs()).filter(j=>j.ownerId===a.userId);
+  const reviews=await listReviews({status:'approved',agencyId:a.userId});const rs=summary(reviews);
   const cities=a.cities.map(c=>anyCity(c)).filter(Boolean);
-  const schema={'@context':'https://schema.org','@type':'EmploymentAgency','@id':absolute('/agencies/'+a.slug+'#agency'),name:a.name,url:absolute('/agencies/'+a.slug),description:a.about.slice(0,500),telephone:a.phone,email:a.email,...(a.logo?{logo:absolute(a.logo),image:absolute(a.logo)}:{}),...(a.founded?{foundingDate:a.founded}:{}),...(a.address||a.city?{address:{'@type':'PostalAddress',...(a.address?{streetAddress:a.address}:{}),...(a.city?{addressLocality:anyCity(a.city)?.name}:{}),addressCountry:'PK'}}:{}),areaServed:cities.map(c=>({'@type':'City',name:c!.name})),knowsAbout:a.services.map(svcName)};
+  const schema={'@context':'https://schema.org','@type':'EmploymentAgency','@id':absolute('/agencies/'+a.slug+'#agency'),name:a.name,url:absolute('/agencies/'+a.slug),description:a.about.slice(0,500),telephone:a.phone,email:a.email,...(a.logo?{logo:absolute(a.logo),image:absolute(a.logo)}:{}),...(a.founded?{foundingDate:a.founded}:{}),...(a.address||a.city?{address:{'@type':'PostalAddress',...(a.address?{streetAddress:a.address}:{}),...(a.city?{addressLocality:anyCity(a.city)?.name}:{}),addressCountry:'PK'}}:{}),areaServed:cities.map(c=>({'@type':'City',name:c!.name})),knowsAbout:a.services.map(svcName),...reviewSchemaParts(reviews)};
   return <><Header/><main>
-    <section className="page-hero agency-hero"><div className="container"><div className="agency-hero-row">{a.logo?<img src={a.logo} alt={a.name+' logo'} className="agency-logo-lg"/>:<span className="agency-ph lg"><Building2 size={34}/></span>}<div><span className="eyebrow">Staffing & recruitment agency</span><h1>{a.name}</h1><p className="agency-badge"><BadgeCheck size={17}/> Reviewed by estaff.pk{a.city&&<> · <MapPin size={15}/> {anyCity(a.city)?.name}</>}</p></div></div></div></section>
+    <section className="page-hero agency-hero"><div className="container"><div className="agency-hero-row">{a.logo?<img src={a.logo} alt={a.name+' logo'} className="agency-logo-lg"/>:<span className="agency-ph lg"><Building2 size={34}/></span>}<div><span className="eyebrow">Staffing & recruitment agency</span><h1>{a.name}</h1><p className="agency-badge"><BadgeCheck size={17}/> Reviewed by estaff.pk{rs.count>0&&<> · <Stars value={rs.average}/> {rs.average.toFixed(1)} ({rs.count})</>}{a.city&&<> · <MapPin size={15}/> {anyCity(a.city)?.name}</>}</p></div></div></div></section>
     <section className="container page-content">
       <Breadcrumbs items={[{name:'Home',path:'/'},{name:'Agency directory',path:'/agencies'},{name:a.name,path:'/agencies/'+a.slug}]}/>
       <div className="job-layout">
@@ -32,6 +36,9 @@ export default async function AgencyPage({params}:{params:Promise<{slug:string}>
           {cities.length>0&&<><h2>Cities served</h2><div className="area-chips">{cities.map(c=><a key={c!.slug} href={'/agencies?city='+c!.slug}><MapPin size={13}/> {c!.name}</a>)}</div></>}
           <h2 style={{marginTop:36}}>Open jobs from {a.name}</h2>
           <JobCards jobs={jobs} empty={<p>No open jobs right now. You can still <a className="qa-link" href="/jobs/apply">submit your CV</a> to estaff.pk.</p>}/>
+          <h2 style={{marginTop:36}} id="reviews">Reviews of {a.name}</h2>
+          {reviews.length?<><ReviewSummary rows={reviews}/><ReviewList rows={reviews}/></>:<p>No reviews yet. Worked with {a.name}? Share your experience below.</p>}
+          <details className="review-write"><summary className="btn">Write a review of {a.name}</summary><ReviewForm agency={a.slug} agencyName={a.name}/></details>
           <p className="coverage-note">Listing on estaff.pk is not an endorsement. Confirm fees, screening and terms in writing with the agency directly. Job seekers should never pay a fee to apply.</p>
         </article>
         <aside className="apply-panel"><h2>Contact {a.name}</h2>

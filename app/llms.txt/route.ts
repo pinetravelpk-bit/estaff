@@ -8,6 +8,8 @@ ${brand.definition} Also known as: ${brand.alternateNames.join(', ')}. Website: 
 - [How hiring works](${absolute('/how-it-works')})
 - [Staffing glossary](${absolute('/glossary')})
 - [Contact](${absolute('/contact')})\n- [Staffing & recruitment agency directory](${absolute('/agencies')})\n- [Job seeker account and job alerts](${absolute('/account/register')})
+- [Reviews of estaff.pk](${absolute('/reviews')})
+- [Jobs and ongoing recruitment in 106 cities](${absolute('/jobs')})
 
 ## Quick answers
 

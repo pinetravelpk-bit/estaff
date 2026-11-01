@@ -55,3 +55,7 @@ export async function notifyNewAgency(name:string,email:string){
 export async function sendAgencyApproved(email:string,name:string,slug:string){
   return sendMail(email,'Your agency is now listed on estaff.pk',emailHtml(`${name} is approved`,['Your agency profile is now live in the estaff.pk agency directory, and you can post jobs.'],{label:'View my listing',href:absolute('/agencies/'+slug)}));
 }
+export async function notifyNewReview(r:{name:string;rating:number;title:string;text:string;target:string},agencySlug:string){
+  const n=getSettings().notify;if(!n.email||!n.reviews)return;
+  await sendMail(n.email,`New ${r.rating}-star review waiting for approval`,emailHtml('New review',[`${r.name} gave ${r.rating} out of 5${r.target==='agency'?` to the agency ${agencySlug}`:' to estaff.pk'}.`,r.title,r.text.slice(0,500)],{label:'Review it',href:absolute('/admin/reviews')}));
+}

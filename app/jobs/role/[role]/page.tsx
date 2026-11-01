@@ -8,6 +8,8 @@ import {allCities} from '../../../../lib/pakistan';
 import {jobTypes,jobType,jobRolePath,jobCityPath,jobsForCity} from '../../../../lib/jobs';
 import {listJobs} from '../../../../lib/store';
 import {JobCards} from '../../../../components/job-cards';
+import {listPoolJobs} from '../../../../lib/pool';
+import {anyCity} from '../../../../lib/pakistan';
 export const revalidate=300;
 
 export function generateStaticParams(){return jobTypes.map(j=>({role:j.slug}));}
@@ -15,7 +17,7 @@ export async function generateMetadata({params}:{params:Promise<{role:string}>})
 
 export default async function Page({params}:{params:Promise<{role:string}>}){
   const {role}=await params;const j=jobType(role);if(!j)notFound();
-  const cities=allCities.filter(c=>jobsForCity(c).some(x=>x.slug===j.slug));const path=jobRolePath(j.slug);const open=await listJobs({jobType:j.slug});
+  const cities=allCities.filter(c=>jobsForCity(c).some(x=>x.slug===j.slug));const path=jobRolePath(j.slug);const open=await listJobs({jobType:j.slug});const pool=listPoolJobs({jobType:j.slug});
   const faqs:[string,string][]=[
     [`How do I get ${j.title.toLowerCase()} work in Pakistan?`,`Prepare a short CV that shows your experience, keep your documents ready (${j.docs}), and apply to employers or agencies you can verify. ${j.cv}`],
     [`What does ${/^[aeiou]/i.test(j.title)?'an':'a'} ${j.title.toLowerCase()} do?`,`The work usually includes ${j.duties.join(', ')}.`],
@@ -27,7 +29,8 @@ export default async function Page({params}:{params:Promise<{role:string}>}){
       <Breadcrumbs items={[{name:'Home',path:'/'},{name:'Jobs',path:'/jobs'},{name:j.plural,path}]}/>
       <p className="answer-box lead-answer">{faqs[0][1]}</p>
       <h2>Open {j.title.toLowerCase()} jobs</h2>
-      <JobCards jobs={open} empty={<div className="empty-jobs"><p>No open {j.title.toLowerCase()} jobs right now. Submit your CV and we will contact you when one opens.</p><a className="btn glow" href={'/jobs/apply?role='+j.slug}>Submit your CV</a></div>}/>
+      <JobCards jobs={open} empty={pool.length?undefined:<div className="empty-jobs"><p>No open {j.title.toLowerCase()} jobs right now. Submit your CV and we will contact you when one opens.</p><a className="btn glow" href={'/jobs/apply?role='+j.slug}>Submit your CV</a></div>}/>
+      {pool.length>0&&<><h3 style={{marginTop:28}}>Ongoing {j.title.toLowerCase()} recruitment: choose your city</h3><p className="pool-note">We recruit {j.title.toLowerCase()} staff all year. Pick your city and apply once; we share your profile with clients who need this role (only with your permission).</p><div className="area-chips">{pool.map(p=><a key={p.id} href={'/jobs/'+p.id}><MapPin size={13}/> {p.remote?'Remote (anywhere in Pakistan)':anyCity(p.city)?.name}</a>)}</div></>}
       <div style={{marginTop:40}}><JobTypeBlock j={j} city="Pakistan"/></div>
       <h2 style={{marginTop:40}}>{j.plural} by city</h2>
       <div className="area-chips">{cities.map(c=><a key={c.slug} href={jobCityPath(c.slug)+'#'+j.slug}><MapPin size={13}/> {j.plural} in {c.name}</a>)}</div>

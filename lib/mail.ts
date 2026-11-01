@@ -27,10 +27,11 @@ ${button?`<p style="margin:22px 0 6px"><a href="${esc(button.href)}" style="back
 
 async function log(entry:Record<string,unknown>){try{await fs.mkdir(DATA_DIR,{recursive:true});await fs.appendFile(path.join(/*turbopackIgnore: true*/ DATA_DIR,'mail.log'),JSON.stringify({at:new Date().toISOString(),...entry})+'\n');}catch{}}
 
-export async function sendMail(to:string,subject:string,html:string,text?:string){
+export type Attachment={filename:string;content:Buffer};
+export async function sendMail(to:string,subject:string,html:string,text?:string,attachments?:Attachment[],replyTo?:string){
   if(!to)return false;
   if(!mailConfigured()){await log({to,subject,sent:false,reason:'smtp-not-configured'});return false;}
-  try{await getTransport().sendMail({from:process.env.MAIL_FROM||process.env.SMTP_USER,to,subject,html,text:text||subject});await log({to,subject,sent:true});return true;}
+  try{await getTransport().sendMail({from:process.env.MAIL_FROM||process.env.SMTP_USER,to,subject,html,text:text||subject,...(attachments?.length?{attachments}:{}),...(replyTo?{replyTo}:{})});await log({to,subject,sent:true});return true;}
   catch(e){await log({to,subject,sent:false,reason:(e as Error).message.slice(0,200)});return false;}
 }
 export async function readMailLog(limit=50){try{const t=await fs.readFile(path.join(/*turbopackIgnore: true*/ DATA_DIR,'mail.log'),'utf8');return t.trim().split('\n').slice(-limit).reverse().map(l=>JSON.parse(l) as {at:string;to:string;subject:string;sent:boolean;reason?:string});}catch{return [];}}

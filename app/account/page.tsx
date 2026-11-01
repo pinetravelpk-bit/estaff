@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import {getPoolJob} from '../../lib/pool';
 import {LayoutDashboard,UserRound,Bell,Settings,Building2,Briefcase,Users,MailWarning} from 'lucide-react';
 import {requireUser} from '../../lib/account-guard';
 import {getAgencyByUser} from '../../lib/users';
@@ -20,7 +21,7 @@ export default async function Account({searchParams}:{searchParams:Promise<Recor
   const u=await requireUser();const q=await searchParams;const tab=q.tab||'overview';
   const msg=q.msg?MSG[q.msg]:undefined;
   const [apps,jobs]=await Promise.all([listApplications(),listJobs({status:'all'})]);
-  const jobMap=new Map<string,Job>(jobs.map(j=>[j.id,j]));
+  const jobMap=new Map<string,Job>(jobs.map(j=>[j.id,j]));for(const a of apps){if(a.jobId&&!jobMap.has(a.jobId)){const pj=getPoolJob(a.jobId);if(pj)jobMap.set(pj.id,pj);}}
   const isAgency=u.role==='agency';const agency=isAgency?await getAgencyByUser(u.id):null;
   const tabs=isAgency?[['overview','Overview',LayoutDashboard],['profile','Agency profile',Building2],['jobs','Jobs',Briefcase],['applicants','Applicants',Users],['settings','Settings',Settings]] as const:[['overview','My applications',LayoutDashboard],['profile','Profile & CV',UserRound],['alerts','Job alerts',Bell],['settings','Settings',Settings]] as const;
   let body:React.ReactNode=null;

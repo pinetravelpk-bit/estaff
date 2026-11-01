@@ -9,8 +9,9 @@ export const DATA_DIR=process.env.DATA_DIR||path.join(/*turbopackIgnore: true*/ 
 const CV_DIR=path.join(/*turbopackIgnore: true*/ DATA_DIR,'cvs');
 
 export type EmploymentType='FULL_TIME'|'PART_TIME'|'CONTRACTOR'|'TEMPORARY';
-export type Job={ownerId?:string;id:string;title:string;jobType:string;city:string;area:string;employmentType:EmploymentType;remote:boolean;liveIn:boolean;salaryMin:number|null;salaryMax:number|null;employer:string;description:string;duties:string[];requirements:string[];benefits:string[];datePosted:string;validThrough:string;status:'open'|'closed';createdAt:string;updatedAt:string};
-export type Application={userId?:string;notes?:string;id:string;jobId:string|null;jobTitle:string;name:string;phone:string;email:string;city:string;role:string;experience:string;message:string;cvFile:string|null;cvName:string|null;status:'new'|'reviewed'|'shortlisted'|'rejected';createdAt:string};
+export type Job={ownerId?:string;pool?:boolean;id:string;title:string;jobType:string;city:string;area:string;employmentType:EmploymentType;remote:boolean;liveIn:boolean;salaryMin:number|null;salaryMax:number|null;employer:string;description:string;duties:string[];requirements:string[];benefits:string[];datePosted:string;validThrough:string;status:'open'|'closed';createdAt:string;updatedAt:string};
+export type Share={to:string;client:string;at:string;phone:boolean;cv:boolean};
+export type Application={userId?:string;notes?:string;shareConsent?:boolean;shares?:Share[];id:string;jobId:string|null;jobTitle:string;name:string;phone:string;email:string;city:string;role:string;experience:string;message:string;cvFile:string|null;cvName:string|null;status:'new'|'reviewed'|'shortlisted'|'rejected';createdAt:string};
 export type Enquiry={notes?:string;id:string;name:string;company:string;email:string;phone:string;role:string;city:string;area:string;schedule:string;budget:string;start:string;details:string;status:'new'|'contacted'|'closed';createdAt:string};
 
 let queue:Promise<unknown>=Promise.resolve();
@@ -56,6 +57,7 @@ export const CV_MAX=5*1024*1024;
 export async function saveCv(file:File){const ext=CV_TYPES[file.type];if(!ext)throw new Error('type');if(file.size>CV_MAX)throw new Error('size');await fs.mkdir(CV_DIR,{recursive:true});const name=newId('cv-')+ext;await fs.writeFile(path.join(/*turbopackIgnore: true*/ CV_DIR,name),Buffer.from(await file.arrayBuffer()));return name;}
 export async function readCv(name:string){if(!/^cv-[a-f0-9]{8}\.(pdf|docx?|jpg|png)$/.test(name))return null;try{return await fs.readFile(path.join(/*turbopackIgnore: true*/ CV_DIR,name));}catch{return null;}}
 
+export async function addApplicationShare(id:string,share:Share){await update<Application>('applications.json',rows=>rows.map(r=>r.id===id?{...r,shares:[...(r.shares||[]),share]}:r));}
 export async function setApplicationNotes(id:string,notes:string){await update<Application>('applications.json',rows=>rows.map(r=>r.id===id?{...r,notes}:r));}
 export async function setEnquiryNotes(id:string,notes:string){await update<Enquiry>('enquiries.json',rows=>rows.map(r=>r.id===id?{...r,notes}:r));}
 export const normPhone=(p:string)=>{const d=p.replace(/[^0-9]/g,'');return d.startsWith('92')?'0'+d.slice(2):d;};

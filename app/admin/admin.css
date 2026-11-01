@@ -184,3 +184,6 @@ body:has(.adm) .site-only,body:has(.adm-plain) .site-only,body:has(.adm) .wa-flo
   .adm-picker-grid{width:280px;grid-template-columns:repeat(2,1fr)}
   .adm-quick-note{margin-left:0}
 }
+.p-pending{background:#fff4d6;color:#8a5a00}.p-approved{background:#e3f7ee;color:#067647}.p-rejected{background:#fde8e8;color:#b42318}
+.adm-share{margin-top:10px;border:1px dashed var(--a-line);border-radius:12px;padding:8px 12px}.adm-share summary{cursor:pointer;font-weight:700;color:var(--a-green)}.adm-share form{display:grid;gap:10px;margin-top:10px;max-width:520px}.adm-share label{display:grid;gap:4px;font-size:14px;font-weight:600}
+.adm-fieldset{border:1px solid var(--a-line);border-radius:12px;padding:10px 14px;margin:12px 0}.adm-fieldset legend{font-weight:700;padding:0 6px}.adm-checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:6px 14px}

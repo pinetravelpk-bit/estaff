@@ -24,6 +24,7 @@ export default async function EmailAdmin({searchParams}:{searchParams:Promise<Re
         <label className="adm-check"><input type="checkbox" name="applications" defaultChecked={n.applications}/> New job applications and CVs</label>
         <label className="adm-check"><input type="checkbox" name="enquiries" defaultChecked={n.enquiries}/> New staff requests from employers</label>
         <label className="adm-check"><input type="checkbox" name="agencies" defaultChecked={n.agencies}/> New agencies waiting for approval</label>
+        <label className="adm-check"><input type="checkbox" name="reviews" defaultChecked={n.reviews}/> New reviews waiting for approval</label>
         <footer><button className="adm-btn primary">Save</button></footer>
       </form>
     </div>

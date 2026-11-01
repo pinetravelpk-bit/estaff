@@ -26,7 +26,7 @@ export default function ApplyForm({jobId,jobTitle,cities,roles,defaultCity='',de
     <label>Experience<select name="experience" defaultValue=""><option value="">Choose…</option>{['Less than 1 year','1–2 years','3–5 years','6–10 years','More than 10 years'].map(x=><option key={x}>{x}</option>)}</select></label>
     <label className="full">Short message<textarea name="message" rows={3} placeholder="Your previous jobs, skills, live-in or live-out preference…"/></label>
     <label className="full file-drop"><Upload size={20}/><span>{file||(me?.cvName?`Your saved CV (${me.cvName}) will be attached. Upload a different one to replace it.`:'Upload your CV (PDF, Word, JPG or PNG · max 5 MB)')}</span><input type="file" name="cv" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png" onChange={e=>setFile(e.target.files?.[0]?.name||'')}/></label>
-    <label className="full check"><input type="checkbox" name="consent" value="yes" required/> I agree that estaff.pk may store my details and contact me about jobs.</label>
+    <label className="full check"><input type="checkbox" name="consent" value="yes" required/> I agree that estaff.pk may store my details, contact me about jobs, and share my profile and CV with employers who are hiring for this kind of work.</label>
     {error&&<p className="full form-error" role="alert">{error}</p>}
     <button className="btn glow full" type="submit" disabled={state==='sending'}>{state==='sending'?'Sending…':jobId?'Apply for this job':'Submit my CV'}</button>
   </form>;

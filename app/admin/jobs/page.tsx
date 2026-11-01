@@ -4,10 +4,12 @@ import {requireAdmin} from '../../../lib/admin-guard';
 import {listJobs,getJob,listApplications,isJobOpen,type Job} from '../../../lib/store';
 import {jobTypes,jobType} from '../../../lib/jobs';
 import {allCities,anyCity} from '../../../lib/pakistan';
+import {poolRoles,listPoolJobs,isPoolId} from '../../../lib/pool';
+import {getSettings} from '../../../lib/settings';
 import {PageHead,Flash,Pill,Empty,fmtDay} from '../../../components/admin-ui';
 
 export const metadata={title:'Jobs'};
-const MSG={created:'Job published. It is now live on the website.',updated:'Job updated.',close:'Job closed. It no longer accepts applications.',open:'Job reopened.',delete:'Job deleted.',invalid:'Please fill in the title, job type, city, a description of at least 30 characters and a closing date.',notfound:'Job not found.'};
+const MSG={pool:'Ongoing recruitment settings saved.',created:'Job published. It is now live on the website.',updated:'Job updated.',close:'Job closed. It no longer accepts applications.',open:'Job reopened.',delete:'Job deleted.',invalid:'Please fill in the title, job type, city, a description of at least 30 characters and a closing date.',notfound:'Job not found.'};
 
 function JobForm({job}:{job:Job|null}){
   const v=(k:keyof Job)=>job?(Array.isArray(job[k])?(job[k] as string[]).join('\n'):String(job[k]??'')):'';
@@ -51,5 +53,19 @@ export default async function JobsAdmin({searchParams}:{searchParams:Promise<Rec
           <td className="adm-actions"><Link href={'/admin/jobs?edit='+j.id}>Edit</Link><form method="post" action="/api/admin/jobs"><input type="hidden" name="id" value={j.id}/><button name="_action" value={j.status==='open'?'close':'open'}>{j.status==='open'?'Close':'Reopen'}</button><button name="_action" value="delete" className="danger" data-confirm="Delete this job permanently?">Delete</button></form></td></tr>)}
       </tbody></table></div>}
     </section>
+    <PoolSettings apps={apps.filter(a=>a.jobId&&isPoolId(a.jobId)).length}/>
   </>;
+}
+
+function PoolSettings({apps}:{apps:number}){
+  const s=getSettings().pool;const count=listPoolJobs().length;
+  const groups=[['home','Home & Care'],['business','Business Solutions'],['remote','Remote (one listing for all of Pakistan)']] as const;
+  return <form className="adm-card adm-form" method="post" action="/api/admin/settings" id="ongoing"><input type="hidden" name="_form" value="pool"/>
+    <header><h2>Ongoing recruitment ({count.toLocaleString('en-PK')} listings live)</h2><Link href="/admin/applications?job=pool">{apps} applicants</Link></header>
+    <p className="adm-muted">One listing per role in every city, so job seekers can apply any day and you can send their profiles to clients. They are clearly labelled “ongoing recruitment”, kept out of Google search results and Google Jobs (which do not allow talent-pool listings), and do not trigger job alert emails. Post a normal job above whenever a client gives you a specific vacancy.</p>
+    <label className="adm-check"><input type="checkbox" name="enabled" defaultChecked={s.enabled}/> Show ongoing recruitment listings on the website</label>
+    {groups.map(([g,label])=><fieldset key={g} className="adm-fieldset"><legend>{label}</legend><div className="adm-checks">{poolRoles.filter(r=>r.sector===g).map(r=><label key={r.slug} className="adm-check"><input type="checkbox" name="show" value={r.slug} defaultChecked={!s.hiddenRoles.includes(r.slug)}/> {r.title}</label>)}</div></fieldset>)}
+    <label>Hide these cities (hold Ctrl to choose several)<select name="hideCity" multiple size={8} defaultValue={s.hiddenCities}>{allCities.map(c=><option key={c.slug} value={c.slug}>{c.name}</option>)}</select></label>
+    <footer><button className="adm-btn primary">Save</button></footer>
+  </form>;
 }

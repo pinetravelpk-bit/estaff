@@ -1,5 +1,6 @@
 import {revalidatePath} from 'next/cache';
 import {denyIfNotAdmin,backTo} from '../../../../lib/admin-guard';
+import {deleteAgencyReviews} from '../../../../lib/reviews';
 import {getUser,saveUser,deleteUser,getAgencyByUser,saveAgency} from '../../../../lib/users';
 import {listJobs,saveJob,now} from '../../../../lib/store';
 import {revalidateJob} from '../../../../lib/revalidate';
@@ -20,6 +21,6 @@ export async function POST(req:Request){
   if(action==='approve'&&ag){await saveAgency({...ag,status:'approved',updatedAt:now()});if(u.status!=='active')await saveUser({...u,status:'active'});refreshAgency();await sendAgencyApproved(ag.email||u.email,ag.name,ag.slug);return backTo(f,'/admin/accounts','msg=approved');}
   if(action==='suspend'){await saveUser({...u,status:'suspended'});if(ag){await saveAgency({...ag,status:'suspended',updatedAt:now()});await closeAgencyJobs();refreshAgency();}return backTo(f,'/admin/accounts','msg=suspended');}
   if(action==='activate'){await saveUser({...u,status:'active'});return backTo(f,'/admin/accounts','msg=activated');}
-  if(action==='delete'){if(ag)await closeAgencyJobs();await deleteUser(id);refreshAgency();return backTo(f,'/admin/accounts','msg=deleted');}
+  if(action==='delete'){if(ag){await closeAgencyJobs();await deleteAgencyReviews(id);}await deleteUser(id);refreshAgency();return backTo(f,'/admin/accounts','msg=deleted');}
   return backTo(f,'/admin/accounts');
 }

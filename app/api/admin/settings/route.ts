@@ -1,6 +1,8 @@
 import {denyIfNotAdmin,refreshWholeSite} from '../../../../lib/admin-guard';
 import {go} from '../../../../lib/http';
 import {getSettings,saveSettings,type Settings} from '../../../../lib/settings';
+import {poolRoles} from '../../../../lib/pool';
+import {allCities} from '../../../../lib/pakistan';
 
 export const dynamic='force-dynamic';
 const txt=(f:FormData,k:string,max=300)=>String(f.get(k)??'').trim().slice(0,max);
@@ -13,6 +15,11 @@ export async function POST(req:Request){
   if(form==='seo'){
     s.seo={googleVerification:txt(f,'seo.googleVerification',120).replace(/^.*content="([^"]+)".*$/,'$1'),bingVerification:txt(f,'seo.bingVerification',120).replace(/^.*content="([^"]+)".*$/,'$1'),defaultImage:url(txt(f,'seo.defaultImage')),titleSuffix:txt(f,'seo.titleSuffix',40)||'estaff.pk'};
     saveSettings(s);refreshWholeSite();return go('/admin/seo?msg=saved');
+  }
+  if(form==='pool'){
+    const roles=new Set(f.getAll('show').map(String));
+    s.pool={enabled:f.get('enabled')==='on',hiddenRoles:poolRoles.filter(r=>!roles.has(r.slug)).map(r=>r.slug),hiddenCities:f.getAll('hideCity').map(String).filter(c=>allCities.some(x=>x.slug===c))};
+    saveSettings(s);refreshWholeSite();return go('/admin/jobs?msg=pool');
   }
   for(const k of Object.keys(s.contact) as (keyof Settings['contact'])[])s.contact[k]=txt(f,'contact.'+k,200);
   for(const k of ['gbp','facebook','instagram','linkedin'] as const)s.contact[k]=url(s.contact[k]);
