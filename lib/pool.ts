@@ -55,6 +55,8 @@ export const allTypeOptions=()=>{const seen=new Set(jobTypes.map(j=>j.slug));ret
 const TYPE_MAP:Record<string,string>={maid:'maid',nanny:'nanny'};
 const typeOf=(r:PoolRole)=>TYPE_MAP[r.slug]||r.slug;
 
+// Job guides without their own recruitment role share the closest one.
+const ALIAS:Record<string,string>={housekeeper:'maid',babysitter:'nanny'};
 export const POOL_SINCE='2026-11-01';
 export const poolId=(role:string,city:string)=>`hiring-${role}-${city}`;
 export const isPoolId=(id:string)=>id.startsWith('hiring-');
@@ -90,7 +92,7 @@ export function getPoolJob(id:string):Job|null{
 export function listPoolJobs(f:{city?:string;jobType?:string}={}):Job[]{
   const out:Job[]=[];
   for(const r of poolRoles){
-    if(f.jobType&&typeOf(r)!==f.jobType)continue;
+    if(f.jobType&&typeOf(r)!==(ALIAS[f.jobType]||f.jobType))continue;
     if(r.sector==='remote'){if(visible(r,''))out.push(build(r,null));continue;}
     for(const c of f.city?[anyCity(f.city)].filter(Boolean) as City[]:allCities)if(visible(r,c.slug))out.push(build(r,c));
   }

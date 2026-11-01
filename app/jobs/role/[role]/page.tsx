@@ -28,9 +28,14 @@ export default async function Page({params}:{params:Promise<{role:string}>}){
     <section className="container page-content">
       <Breadcrumbs items={[{name:'Home',path:'/'},{name:'Jobs',path:'/jobs'},{name:j.plural,path}]}/>
       <p className="answer-box lead-answer">{faqs[0][1]}</p>
-      <h2>Open {j.title.toLowerCase()} jobs</h2>
-      <JobCards jobs={open} empty={pool.length?undefined:<div className="empty-jobs"><p>No open {j.title.toLowerCase()} jobs right now. Submit your CV and we will contact you when one opens.</p><a className="btn glow" href={'/jobs/apply?role='+j.slug}>Submit your CV</a></div>}/>
-      {pool.length>0&&<><h3 style={{marginTop:28}}>Ongoing {j.title.toLowerCase()} recruitment: choose your city</h3><p className="pool-note">We recruit {j.title.toLowerCase()} staff all year. Pick your city and apply once; we share your profile with clients who need this role (only with your permission).</p><div className="area-chips">{pool.map(p=><a key={p.id} href={'/jobs/'+p.id}><MapPin size={13}/> {p.remote?'Remote (anywhere in Pakistan)':anyCity(p.city)?.name}</a>)}</div></>}
+      <h2>{j.title} jobs open now{pool.length?` in ${pool.length>1?pool.length+' cities':'Pakistan'}`:''}</h2>
+      {open.length>0&&<JobCards jobs={open}/>}
+      {pool.length>0&&<><p className="pool-note" style={{marginTop:open.length?28:undefined}}>We recruit {j.title.toLowerCase()} staff all year in every city below. Apply once for your city: when a client needs someone like you, we share your profile with them (only with your permission) and call you before any interview.</p>
+        <JobCards jobs={pool.slice(0,24)}/>
+        {pool.length>24&&<p style={{marginTop:20}}><a className="btn" href={'/jobs?type='+j.slug+'#ongoing'}>See all {pool.length} {j.title.toLowerCase()} jobs</a></p>}
+        <h3 style={{marginTop:28}}>{j.title} jobs in other cities</h3>
+        <div className="area-chips">{pool.slice(24).map(p=><a key={p.id} href={'/jobs/'+p.id}><MapPin size={13}/> {p.remote?'Remote (anywhere in Pakistan)':anyCity(p.city)?.name}</a>)}</div></>}
+      {!open.length&&!pool.length&&<div className="empty-jobs"><p>No open {j.title.toLowerCase()} jobs right now. Submit your CV and we will contact you when one opens.</p><a className="btn glow" href={'/jobs/apply?role='+j.slug}>Submit your CV</a></div>}
       <div style={{marginTop:40}}><JobTypeBlock j={j} city="Pakistan"/></div>
       <h2 style={{marginTop:40}}>{j.plural} by city</h2>
       <div className="area-chips">{cities.map(c=><a key={c.slug} href={jobCityPath(c.slug)+'#'+j.slug}><MapPin size={13}/> {j.plural} in {c.name}</a>)}</div>
