@@ -1,6 +1,7 @@
 import type {Metadata,Viewport} from 'next';
 import './globals.css';
 import './motion.css';
+import './visuals3d.css';
 import MotionLayer from '../components/motion';
 import {preload} from 'react-dom';
 import {siteOrigin,pageMetadata,organisationSchema,websiteSchema} from '../lib/seo';

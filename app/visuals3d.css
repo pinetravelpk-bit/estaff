@@ -1,0 +1,99 @@
+/* ===== 3D tilt visuals: payroll dashboard (home), workforce plan (business), hiring brief (services) ===== */
+.tilt3d{perspective:1100px;position:relative}
+.tilt3d-inner{position:relative;transform-style:preserve-3d;transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .6s cubic-bezier(.2,.8,.2,1);animation:tiltIdle 9s ease-in-out infinite}
+.tilt3d.is-tilting .tilt3d-inner{transition:transform .12s linear;animation-play-state:paused}
+@keyframes tiltIdle{0%,100%{rotate:x 0deg}25%{rotate:1 -1 0 5deg}50%{rotate:x 3deg}75%{rotate:1 1 0 4deg}}
+.tilt3d [data-depth]{transition:transform .5s cubic-bezier(.2,.8,.2,1),box-shadow .3s,background .2s,color .2s}
+.tilt3d-glare{position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(circle at var(--gx,50%) var(--gy,30%),#ffffff55,transparent 55%);opacity:0;transition:opacity .4s;mix-blend-mode:soft-light;transform:translateZ(80px)}
+.tilt3d.is-tilting .tilt3d-glare{opacity:1}
+
+/* Payroll dashboard */
+.payroll-3d{min-width:0}
+.payroll-3d .payroll-mini{position:relative;transform:none!important;overflow:visible;transform-style:preserve-3d;background:transparent;box-shadow:none;margin:0;max-width:none;border-radius:12px}
+.payroll-3d .payroll-mini::before{content:"";position:absolute;inset:0;background:#fff;border-radius:12px;box-shadow:0 30px 60px #00111e66,0 8px 18px #021e3030}
+.payroll-3d .payroll-mini{grid-template-columns:96px minmax(0,1fr)}
+.payroll-3d .payroll-mini>aside{padding:12px 7px;white-space:nowrap;position:relative;border-radius:12px 0 0 12px;transform:translateZ(14px);box-shadow:8px 0 20px #0003}
+.payroll-mini>aside a{display:flex;align-items:center;gap:5px;padding:4px 5px;color:#bcd3dc;border-radius:5px;font-size:12px;transition:background .2s,color .2s}
+.payroll-mini>aside a:hover{background:#ffffff1c;color:#fff}
+.payroll-mini>aside a.on{background:#307569;color:#fff}
+.payroll-mini>aside a svg{width:10px;height:10px}
+.payroll-mini>aside a.payroll-mini-logo{font-size:17px;white-space:nowrap;color:#70d7b6;font-family:Georgia,serif;padding:0 3px 4px;display:block}
+.payroll-mini-logo span{font-family:Arial,sans-serif;color:#fff;font-size:12px}
+.payroll-3d .payroll-mini-main{position:relative;transform-style:preserve-3d;padding:16px 14px 12px}
+.payroll-3d .payroll-mini-title{display:inline-flex;align-items:center;gap:5px;color:var(--ink);transform:translateZ(26px);margin-bottom:10px}
+.payroll-3d .payroll-mini-title:hover{color:var(--green)}
+.payroll-3d .mini-stats{transform-style:preserve-3d}
+.mini-stat{display:block;padding:8px 7px;background:#f0f8fa;border-radius:7px;color:#0e2a42;transform:translateZ(40px);box-shadow:0 10px 18px #0b2d4426;animation:statBob 5s ease-in-out infinite}
+.mini-stat.s1{animation-delay:-1.6s}
+.mini-stat.s2{animation-delay:-3.2s;background:#e7f6ed;color:#008c6b}
+.mini-stat:hover{transform:translateZ(62px) scale(1.04);box-shadow:0 18px 28px #0b2d4440}
+.mini-stat strong{font-size:15px;display:block}
+.mini-stat small{font-size:11px;color:#6d8296;display:block;line-height:1.3}
+@keyframes statBob{0%,100%{translate:0 0}50%{translate:0 -4px}}
+.pay-cycle{list-style:none;margin:14px 2px 8px;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;position:relative;transform:translateZ(22px)}
+.pay-cycle::before{content:"";position:absolute;top:10px;left:12%;right:12%;height:3px;border-radius:3px;background:#e2ecef}
+.pay-cycle::after{content:"";position:absolute;top:10px;left:12%;height:3px;border-radius:3px;background:linear-gradient(90deg,#1cae91,#4fd1b0);width:0;animation:cycleFill 6s ease-in-out infinite}
+@keyframes cycleFill{0%{width:0;opacity:1}70%,90%{width:76%;opacity:1}100%{width:76%;opacity:0}}
+.pay-cycle li{position:relative;z-index:1;display:grid;justify-items:center;text-align:center;gap:2px}
+.pay-dot{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:800;background:#fff;color:#1a8f78;border:2px solid #bfe6da;animation:dotOn 6s ease-in-out infinite;animation-delay:calc(var(--i)*1.05s)}
+@keyframes dotOn{0%,8%{background:#fff;color:#1a8f78;transform:scale(1)}14%,60%{background:#1cae91;color:#fff;border-color:#1cae91;transform:scale(1.15)}100%{background:#fff;color:#1a8f78;transform:scale(1)}}
+.pay-cycle strong{font-size:11.5px;color:#0e2a42}
+.pay-cycle small{font-size:10px;color:#8193a5;line-height:1.25}
+.payroll-mini-foot{display:block;font-size:12px;color:#5f7c8f;transform:translateZ(10px)}
+.payroll-mini-foot:hover{color:var(--green)}
+
+/* Workforce plan */
+.business-art{height:360px!important}
+.business-art .tilt3d-inner{position:absolute;inset:0;display:grid;place-items:center}
+.business-art .art-card{width:236px;padding:20px 22px}
+.business-art .art-card h3{font-size:28px;margin:10px 0 14px}
+.business-art .art-card>p{margin-top:10px}
+.business-art .art-orbit{transform:rotateX(64deg) rotateZ(0deg);animation:orbitSpin 26s linear infinite}
+.business-art .art-orbit.two{width:380px;height:380px;border-style:dashed;outline:none;opacity:.6;animation-duration:40s;animation-direction:reverse}
+@keyframes orbitSpin{to{transform:rotateX(64deg) rotateZ(360deg)}}
+.business-art .art-card{transform:translateZ(24px) rotate(-5deg);box-shadow:14px 18px 0 #bdceb1,0 30px 50px #163e3540}
+.business-art:hover .art-card{transform:translateZ(38px) rotate(-3deg)}
+.art-card h3 a{color:inherit}
+.art-card h3 a:hover{color:#cfe8bd}
+.art-stages{list-style:none;padding:0;margin:0;display:flex;align-items:flex-end;gap:7px;height:64px}
+.art-stages li{flex:1;height:100%;display:flex}
+.art-stages a{flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;color:#c0d2b5}
+.art-stages span{display:block;background:linear-gradient(#cfe5bc,#a9c394);border-radius:4px 4px 0 0;height:calc(25% + var(--i) * 17%);transform-origin:bottom;animation:stageGrow 4.8s ease-in-out infinite;animation-delay:calc(var(--i) * .35s)}
+.art-stages a:hover span{background:#e8f5dc}
+.art-stages small{font-size:10px;letter-spacing:.3px;text-align:center;color:#adc69e}
+@keyframes stageGrow{0%{transform:scaleY(.15)}35%,85%{transform:scaleY(1)}100%{transform:scaleY(.15)}}
+.art-card>p a{color:#d9e8cf;border-bottom:1px dashed #8fae7f}
+.art-card>p a:hover{color:#fff;border-bottom-style:solid}
+.business-art .art-label{transform:translateZ(55px) rotate(5deg);animation:labelFloat 6s ease-in-out infinite;color:#56764d;box-shadow:0 14px 26px #3e5b3326}
+.business-art .art-label:hover{color:#163e35;background:#fff}
+@keyframes labelFloat{0%,100%{translate:0 0}50%{translate:0 -8px}}
+
+/* Hiring brief */
+.hiring-blueprint .blueprint-orbit{transform-style:preserve-3d}
+.hiring-blueprint .blueprint-orbit-line{transform:rotateX(62deg) rotateZ(0deg);animation:orbitSpin2 24s linear infinite}
+.hiring-blueprint .blueprint-orbit-line.l2{height:300px;width:300px;opacity:.5;outline:none;animation-duration:38s;animation-direction:reverse}
+.hiring-blueprint.compact .blueprint-orbit-line.l2{height:240px;width:240px}
+@keyframes orbitSpin2{to{transform:rotateX(62deg) rotateZ(360deg)}}
+.hiring-blueprint .blueprint-core{transform:translateZ(45px);transition:transform .4s;animation:corePulse 3.6s ease-in-out infinite}
+.hiring-blueprint .blueprint-core:hover{transform:translateZ(65px) scale(1.04)}
+.hiring-blueprint a.blueprint-core,.hiring-blueprint a.blueprint-core strong,.hiring-blueprint a.blueprint-core svg{color:#eef7e6;text-decoration:none}
+.hiring-blueprint a.blueprint-core small{color:#cfe2c7;text-decoration:none}
+.hiring-blueprint a.blueprint-core:hover small{color:#fff}
+.tilt3d a{text-decoration:none}
+@keyframes corePulse{0%,100%{box-shadow:0 26px 45px #19413533,0 0 0 0 #2f795b66}50%{box-shadow:0 26px 45px #19413533,0 0 0 16px #2f795b00}}
+.hiring-blueprint a.blueprint-node{color:#4f6c45;animation:nodeFloat 5.5s ease-in-out infinite}
+.hiring-blueprint a.blueprint-node:hover{background:#fff;color:#194d3c;box-shadow:0 16px 28px #354e2c26}
+.hiring-blueprint .blueprint-node.n1{transform:translateZ(70px) rotate(-4deg)}
+.hiring-blueprint .blueprint-node.n2{transform:translateZ(55px) rotate(5deg);animation-delay:-1.4s}
+.hiring-blueprint .blueprint-node.n3{transform:translateZ(60px) rotate(3deg);animation-delay:-2.8s}
+.hiring-blueprint .blueprint-node.n4{transform:translateZ(75px) rotate(-4deg);animation-delay:-4.1s}
+@keyframes nodeFloat{0%,100%{translate:0 0}50%{translate:0 -7px}}
+.hiring-blueprint a.blueprint-foot{color:#6b845b;transform:translateZ(8px)}
+.hiring-blueprint a.blueprint-foot:hover{color:#194d3c}
+
+@media (prefers-reduced-motion:reduce){
+  .tilt3d-inner,.mini-stat,.pay-cycle::after,.pay-dot,.art-orbit,.art-stages span,.art-label,.blueprint-orbit-line,.blueprint-core,.blueprint-node{animation:none!important}
+  .pay-cycle::after{width:76%}
+}
+@media (max-width:700px){.business-art{height:340px!important}.business-art .art-orbit.two{width:320px;height:320px}.pay-cycle small{display:none}}
+@media (max-width:520px){.payroll-3d .payroll-mini{grid-template-columns:80px minmax(0,1fr)}.payroll-3d .payroll-mini-main{padding:14px 9px 10px}.payroll-3d .mini-stats{gap:4px}.mini-stat{padding:6px 5px}.mini-stat strong{font-size:13px}.mini-stat small{font-size:10px}.payroll-3d .payroll-mini-title{font-size:15px}.payroll-mini>aside a{font-size:11px}}
