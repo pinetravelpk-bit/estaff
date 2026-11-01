@@ -9,6 +9,7 @@ import {jobTypes} from './jobs';
 import {pick} from './national';
 import {getSettings} from './settings';
 import {locations} from './content';
+import {getActive,isLive} from './pool-active';
 
 export type PoolRole={slug:string;title:string;sector:'home'|'business'|'remote';employmentType:EmploymentType;liveIn?:boolean;clients:string;menu:string;menuHref:string;duties:string[];requirements:string[];benefits:string[]};
 
@@ -84,6 +85,49 @@ export const ROLE_NAMES:Record<string,{name:string;urdu:string;person:string}>={
 };
 export const roleName=(r:PoolRole)=>ROLE_NAMES[r.slug]||{name:r.title,urdu:r.title.toLowerCase()+' ki naukri',person:r.title.toLowerCase()};
 export const poolTitle=(r:PoolRole,c:City|null)=>c?`${roleName(r).name} Jobs in ${c.name}`:`Remote ${roleName(r).name} Jobs in Pakistan`;
+
+// Experience and education asked for each role (shown on listings and used for real job schema).
+export const ROLE_REQ:Record<string,{exp:string;months:number;edu:string;cred:string}>={
+  cook:{exp:'At least 1 year of cooking for a household, hotel or restaurant',months:12,edu:'No formal education required',cred:''},
+  driver:{exp:'At least 2 years of driving with a valid licence',months:24,edu:'No formal education required; able to read road signs',cred:''},
+  maid:{exp:'Experience preferred, freshers considered',months:0,edu:'No formal education required',cred:''},
+  nanny:{exp:'At least 1 year of childcare',months:12,edu:'Middle or matric preferred',cred:''},
+  'care-attendant':{exp:'At least 1 year of elderly or patient care',months:12,edu:'Matric preferred; caregiver course is a plus',cred:''},
+  'home-nurse':{exp:'At least 1 year of nursing after qualification',months:12,edu:'Nursing diploma or BSc Nursing; PNMC registration where needed',cred:'professional certificate'},
+  gardener:{exp:'Experience maintaining gardens',months:6,edu:'No formal education required',cred:''},
+  watchman:{exp:'Experience as a guard or watchman preferred',months:6,edu:'No formal education required',cred:''},
+  'domestic-couple':{exp:'Household work experience for both',months:12,edu:'No formal education required',cred:''},
+  'personal-attendant':{exp:'Experience as an attendant or helper',months:6,edu:'Middle or matric preferred',cred:''},
+  'office-boy':{exp:'Experience preferred, freshers considered',months:0,edu:'Primary or middle; able to read Urdu',cred:''},
+  receptionist:{exp:'At least 1 year at a front desk or in admin',months:12,edu:'Intermediate or bachelor’s degree',cred:'high school'},
+  accountant:{exp:'At least 1 year in accounts',months:12,edu:'B.Com, M.Com, ACCA or CA (part qualified)',cred:'bachelor degree'},
+  'sales-executive':{exp:'At least 1 year in sales preferred',months:12,edu:'Intermediate or bachelor’s degree',cred:'high school'},
+  'it-support':{exp:'At least 1 year in IT support',months:12,edu:'DAE, BS IT/CS or IT certifications',cred:'associate degree'},
+  'operations-manager':{exp:'At least 5 years, including team leadership',months:60,edu:'Bachelor’s or master’s degree in a relevant field',cred:'bachelor degree'},
+  technician:{exp:'At least 2 years of hands-on work',months:24,edu:'DAE or trade certificate (TEVTA / NAVTTC)',cred:'professional certificate'},
+  'factory-worker':{exp:'No experience needed for helper roles',months:0,edu:'No formal education required',cred:''},
+  'retail-sales-staff':{exp:'Experience preferred, freshers considered',months:0,edu:'Matric or intermediate',cred:'high school'},
+  'hr-officer':{exp:'At least 1 year in HR or payroll',months:12,edu:'BBA, MBA (HR) or a relevant degree',cred:'bachelor degree'},
+  cleaner:{exp:'Experience preferred, freshers considered',months:0,edu:'No formal education required',cred:''},
+  'security-guard':{exp:'At least 1 year as a guard, or armed forces service',months:12,edu:'Middle or matric; guard training certificate preferred',cred:''},
+  'call-centre-agent':{exp:'Freshers welcome; call centre experience is a plus',months:0,edu:'Intermediate or bachelor’s degree',cred:'high school'},
+  'hotel-staff':{exp:'Hospitality experience preferred',months:6,edu:'Matric preferred; hospitality course is a plus',cred:''},
+  'delivery-rider':{exp:'Riding experience with a valid licence',months:6,edu:'No formal education required; smartphone use needed',cred:''},
+  'teacher-tutor':{exp:'At least 1 year of teaching or tutoring',months:12,edu:'Bachelor’s or master’s degree in the subject',cred:'bachelor degree'},
+  'virtual-assistant':{exp:'At least 1 year of admin or VA work',months:12,edu:'Intermediate or bachelor’s degree',cred:'high school'},
+  'remote-customer-support':{exp:'Customer support experience preferred',months:6,edu:'Intermediate or bachelor’s degree',cred:'high school'},
+  'remote-digital-marketing':{exp:'At least 1 year with a portfolio',months:12,edu:'Bachelor’s degree or marketing certifications',cred:'bachelor degree'},
+  'remote-developer':{exp:'At least 2 years of professional development',months:24,edu:'BS CS/SE or equivalent skills',cred:'bachelor degree'},
+};
+const OUTDOOR=new Set(['driver','gardener','watchman','security-guard','delivery-rider','technician','factory-worker','cleaner']);
+const CLIMATE:Record<string,[string,string]>={
+  plains:['hot summers and cold winters','ask whether staff quarters have a fan in summer and heating in winter'],
+  south:['very hot, long summers','confirm cool quarters, drinking water and rest breaks in the hottest months'],
+  coastal:['a humid coastal climate','ask about ventilation in staff quarters and travel during monsoon rain'],
+  hills:['cool summers and cold winters with snow in places','ask about warm quarters and winter clothing'],
+  mountain:['long, cold winters','ask about heating and how work changes in winter'],
+  arid:['a dry climate with hot days','confirm shade, water and rest breaks'],
+};
 export const poolRole=(slug:string)=>poolRoles.find(r=>r.slug===slug);
 // Labels for any job type slug (core job guides plus the extra recruitment roles).
 export const typeTitle=(slug:string)=>jobTypes.find(j=>j.slug===slug)?.title||poolRole(slug)?.title||slug;
@@ -131,10 +175,31 @@ export function poolContent(r:PoolRole,c:City|null){
     [`Is this a single vacancy?`,`No. It is ongoing recruitment: estaff.pk recruits ${n.person}s ${where} all year. Your application stays on our shortlist and is shared with clients who need this role.`],
     ...(c?[[`${c.name} mein ${n.urdu} kaise milegi?`,`Is page par apna naam, phone number aur CV bhej dein. CNIC aur references tayyar rakhein. Jab ${c.name} mein kisi ${r.sector==='home'?'ghar':'company'} ko ${n.name.toLowerCase()} chahiye hoga, estaff.pk aap ko call karega. Apply karna bilkul muft hai.`] as [string,string]]:[[`${n.urdu} kaise milegi?`,`Is page par apna naam, phone number aur CV bhej dein. Jab kisi client ko yeh kaam chahiye hoga, estaff.pk aap ko call karega. Apply karna muft hai.`] as [string,string]]),
   ];
-  return {answer,steps,faqs,docs,areas:c?cityAreas(c):[],name:n};
+  const req=ROLE_REQ[r.slug]||{exp:'Experience preferred',months:0,edu:'No formal education required',cred:''};
+  let local='';
+  if(c){const [clim,tip]=CLIMATE[c.climate]||CLIMATE.plains;const p=provinces[c.province].name;const lc=c.local.charAt(0).toLowerCase()+c.local.slice(1);const care=OUTDOOR.has(r.slug)||r.sector==='home';
+    local=pick('L'+c.slug+r.slug,[
+      `${c.local} Most people here speak ${c.languages}, so speaking at least one of these helps at interview. ${c.name} has ${clim}; ${care?tip+'.':'office roles usually follow normal working hours.'} Candidates from ${c.near} can also apply if they can travel to or live in ${c.name}.`,
+      `About ${c.name}: ${lc} Employers here often look for staff who speak ${c.languages}. With ${clim} in ${c.name}, ${care?tip:'most offices work regular hours'}. People living near ${c.near} are welcome to apply too.`,
+      `${c.name}, ${p}: ${lc} Useful languages are ${c.languages}. Because ${c.name} has ${clim}, ${care?tip:'check the office timings when we call'}. You can also apply from nearby ${c.near}.`,
+    ]);}
+  const summary:[string,string][]=[
+    ['Job',n.name],['Location',c?`${c.name}, ${provinces[c.province].name}, Pakistan`:'Remote, anywhere in Pakistan'],['Region',c?provinces[c.province].name:'Pakistan'],
+    ['Employment',({FULL_TIME:'Full-time',PART_TIME:'Part-time',CONTRACTOR:'Contract',TEMPORARY:'Temporary'} as Record<string,string>)[r.employmentType]+(r.liveIn?', live-in':'')],
+    ['Experience',req.exp],['Education',req.edu],['Who hires',r.clients],['Pay','Agreed with the client before interview'],['Fee for job seekers','None, applying is free'],
+    ...(c?[['Languages',c.languages] as [string,string]]:[]),
+  ];
+  return {answer,steps,faqs,docs,areas:c?cityAreas(c):[],name:n,req,local,summary};
 }
 
 function build(r:PoolRole,c:City|null):Job{
+  const base=buildBase(r,c);const a=getActive(base.id);
+  if(!a||!isLive(a))return base;
+  const n=roleName(r);
+  return {...base,hiringNow:true,salaryMin:a.salaryMin,salaryMax:a.salaryMax,datePosted:a.datePosted,validThrough:a.validThrough,updatedAt:a.publishAt,employer:'estaff.pk (employer details shared once you are shortlisted)',
+    description:`estaff.pk is hiring now for ${n.person} positions ${c?'in '+c.name+', '+provinces[c.province].name:'working from home anywhere in Pakistan'} on behalf of ${r.clients.toLowerCase()}. Pay is PKR ${a.salaryMin.toLocaleString('en-PK')}–${a.salaryMax.toLocaleString('en-PK')} a month depending on experience and duties. The employer’s name and exact location are shared with you once your application is shortlisted. `+base.description.replace(/^estaff\.pk is recruiting[^.]*\.\s*/,'')};
+}
+function buildBase(r:PoolRole,c:City|null):Job{
   return {id:poolId(r.slug,c?c.slug:'pakistan'),pool:true,title:poolTitle(r,c),jobType:typeOf(r),city:c?c.slug:'',area:'',employmentType:r.employmentType,remote:!c,liveIn:Boolean(r.liveIn),salaryMin:null,salaryMax:null,employer:`estaff.pk clients (${r.clients})`,description:description(r,c),duties:r.duties,requirements:r.requirements,benefits:[...r.benefits,'Free for job seekers: estaff.pk never charges a fee'],datePosted:POOL_SINCE,validThrough:'2099-12-31',status:'open',createdAt:POOL_SINCE,updatedAt:POOL_SINCE};
 }
 
@@ -159,9 +224,9 @@ export function listPoolJobs(f:{city?:string;jobType?:string}={}):Job[]{
   }
   return out;
 }
-// Listings shown in Google search: the main cities chosen in Admin → Jobs, plus the remote listings.
+// Listings shown in Google search: every city (default) or the cities chosen in Admin → Jobs, plus remote.
 // They never carry JobPosting schema, so they stay out of Google Jobs.
-export const isIndexablePool=(j:Job)=>j.remote||getSettings().pool.indexCities.includes(j.city);
+export const isIndexablePool=(j:Job)=>{const s=getSettings().pool;return j.remote||s.indexAll||s.indexCities.includes(j.city);};
 export const indexablePoolJobs=()=>listPoolJobs().filter(isIndexablePool);
 export const poolCount=()=>listPoolJobs().length;
 export const poolCities=allCities;

@@ -3,6 +3,7 @@ import {Clock,CheckCircle2,ShieldAlert,Plus} from 'lucide-react';
 import type {User,Agency} from '../lib/users';
 import {isJobOpen,type Application,type Job} from '../lib/store';
 import {allTypeOptions,typeTitle} from '../lib/pool';
+import {EDU,EDU_LABEL} from '../lib/job-form';
 import {allCities,anyCity,provinces} from '../lib/pakistan';
 import {cityServices} from '../lib/service-city';
 
@@ -56,6 +57,11 @@ function JobForm({job}:{job:Job|null}){
     <label>Job type<select name="jobType" required defaultValue={v('jobType')}><option value="">Choose…</option>{allTypeOptions().map(o=><option key={o.value} value={o.value}>{o.label}</option>)}</select></label>
     <label>City<select name="city" required defaultValue={v('city')}><option value="">Choose…</option>{allCities.map(c=><option key={c.slug} value={c.slug}>{c.name}</option>)}</select></label>
     <label>Area<input name="area" defaultValue={v('area')}/></label>
+      <label>Experience required<input name="experience" defaultValue={v('experience')} placeholder="e.g. 2 years as a family driver"/></label>
+      <label>Experience in months<input name="expMonths" inputMode="numeric" defaultValue={v('expMonths')} placeholder="0 = freshers welcome"/></label>
+      <label>Education level<select name="eduLevel" defaultValue={v('eduLevel')}>{EDU.map(e=><option key={e} value={e}>{EDU_LABEL[e]}</option>)}</select></label>
+      <label>Education details<input name="education" defaultValue={v('education')} placeholder="e.g. Matric; driving licence LTV"/></label>
+      <label>Postal code<input name="postalCode" inputMode="numeric" maxLength={5} defaultValue={v('postalCode')} placeholder="e.g. 54000"/></label>
     <label>Employment type<select name="employmentType" defaultValue={v('employmentType')||'FULL_TIME'}><option value="FULL_TIME">Full-time</option><option value="PART_TIME">Part-time</option><option value="CONTRACTOR">Contract</option><option value="TEMPORARY">Temporary</option></select></label>
     <label>Salary from (PKR/month)<input name="salaryMin" inputMode="numeric" defaultValue={v('salaryMin')}/></label>
     <label>Salary to (PKR/month)<input name="salaryMax" inputMode="numeric" defaultValue={v('salaryMax')}/></label>

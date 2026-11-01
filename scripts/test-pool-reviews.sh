@@ -23,7 +23,7 @@ ok "$(curl -s "$B/jobs?city=rahim-yar-khan&type=security-guard" | grep -c 'Secur
 J=$(curl -s $B/jobs/hiring-cook-lahore)
 ok "$(code $B/jobs/hiring-cook-lahore)" "200" "pool job page"
 ok "$(echo "$J" | grep -c 'content="index')" "1" "main-city listing is indexable"
-ok "$(curl -s $B/jobs/hiring-cook-chakwal | grep -c 'noindex')" "1" "smaller-city listing is noindex"
+ok "$(curl -s $B/jobs/hiring-cook-chakwal | grep -c 'content="index')" "1" "smaller-city listing is indexable too"
 ok "$(echo "$J" | grep -c '"JobPosting"')" "0" "no JobPosting schema on pool job"
 ok "$(echo "$J" | grep -c 'How this listing works')" "1" "explains it is not a single vacancy"
 ok "$(code $B/jobs/hiring-security-guard-rahim-yar-khan)" "200" "multi-word city slug"
@@ -32,8 +32,8 @@ ok "$(code $B/jobs/hiring-virtual-assistant-lahore)" "404" "remote role not per 
 ok "$(code $B/jobs/hiring-cook-atlantis)" "404" "unknown city 404"
 ok "$(get $B/jobs/city/multan | grep -c 'Ongoing recruitment in Multan')" "1" "city job page lists ongoing roles"
 ok "$(curl -s $B/jobs/role/driver | grep -c 'hiring-driver-quetta')" "1" "role page links every city"
-ok "$(curl -s $B/sitemap.xml | grep -o 'hiring-[a-z-]*' | wc -l | tr -d ' ')" "316" "316 main-city + remote listings in sitemap"
-ok "$(curl -s $B/sitemap.xml | grep -c 'hiring-cook-chakwal')" "0" "smaller cities not in sitemap"
+ok "$(curl -s $B/sitemap.xml | grep -o 'hiring-[a-z-]*' | wc -l | tr -d ' ')" "2760" "all 2,760 listings in sitemap"
+ok "$(curl -s $B/sitemap.xml | grep -c 'hiring-cook-chakwal')" "1" "smaller cities in sitemap"
 
 echo "== Applying"
 ok "$(curl -s -X POST -F jobId=hiring-cook-lahore -F name='Pool Tester' -F phone='0300 1234567' -F city=Lahore -F role=Cook -F consent=yes $B/api/apply | grep -o '"ok":true')" '"ok":true' "apply to pool listing"
@@ -57,7 +57,7 @@ ok "$(code $B/jobs/hiring-gardener-lahore)" "404" "hidden role gone"
 ok "$(code $B/jobs/hiring-cook-quetta)" "404" "hidden city gone"
 ALL=$(node -e 'const s=require("fs").readFileSync("lib/pool.ts","utf8");console.log([...s.matchAll(/\{slug:.([a-z-]+).,title/g)].map(m=>"-F show="+m[1]).join(" "))')
 IDX=$(for c in islamabad rawalpindi lahore karachi faisalabad multan peshawar gujranwala sialkot hyderabad quetta bahawalpur; do printf -- "-F indexCity=%s " $c; done)
-loc -b $A -X POST -F _form=pool -F enabled=on $ALL $IDX $B/api/admin/settings >/dev/null
+loc -b $A -X POST -F _form=pool -F enabled=on -F indexAll=on $ALL $IDX $B/api/admin/settings >/dev/null
 ok "$(code $B/jobs/hiring-cook-quetta)" "200" "restored"
 
 echo "== Reviews"

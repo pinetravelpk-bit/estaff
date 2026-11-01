@@ -59,3 +59,7 @@ export async function notifyNewReview(r:{name:string;rating:number;title:string;
   const n=getSettings().notify;if(!n.email||!n.reviews)return;
   await sendMail(n.email,`New ${r.rating}-star review waiting for approval`,emailHtml('New review',[`${r.name} gave ${r.rating} out of 5${r.target==='agency'?` to the agency ${agencySlug}`:' to estaff.pk'}.`,r.title,r.text.slice(0,500)],{label:'Review it',href:absolute('/admin/reviews')}));
 }
+export async function notifyNewEmployerJob(j:Job){
+  const n=getSettings().notify;if(!n.email||!n.enquiries)return;
+  await sendMail(n.email,`New job posted by an employer: ${j.title}`,emailHtml('Job waiting for approval',[`${j.contact?.company||j.employer} · ${j.contact?.name||''} · ${j.contact?.phone||''}${j.contact?.email?' · '+j.contact.email:''}`,`${j.title} · ${place(j)}`,j.description.slice(0,400)],{label:'Review the job',href:absolute('/admin/jobs?status=pending')}));
+}

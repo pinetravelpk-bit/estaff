@@ -4,12 +4,14 @@
 import {promises as fs} from 'fs';
 import path from 'path';
 import crypto from 'crypto';
+import {allocateSlots,listActive} from './pool-active';
 
 export const DATA_DIR=process.env.DATA_DIR||path.join(/*turbopackIgnore: true*/ process.cwd(),'.data');
 const CV_DIR=path.join(/*turbopackIgnore: true*/ DATA_DIR,'cvs');
 
 export type EmploymentType='FULL_TIME'|'PART_TIME'|'CONTRACTOR'|'TEMPORARY';
-export type Job={ownerId?:string;pool?:boolean;id:string;title:string;jobType:string;city:string;area:string;employmentType:EmploymentType;remote:boolean;liveIn:boolean;salaryMin:number|null;salaryMax:number|null;employer:string;description:string;duties:string[];requirements:string[];benefits:string[];datePosted:string;validThrough:string;status:'open'|'closed';createdAt:string;updatedAt:string};
+export type JobContact={company:string;name:string;phone:string;email:string};
+export type Job={ownerId?:string;pool?:boolean;hiringNow?:boolean;contact?:JobContact;experience?:string;expMonths?:number;education?:string;eduLevel?:string;postalCode?:string;publishAt?:string;announced?:boolean;source?:string;id:string;title:string;jobType:string;city:string;area:string;employmentType:EmploymentType;remote:boolean;liveIn:boolean;salaryMin:number|null;salaryMax:number|null;employer:string;description:string;duties:string[];requirements:string[];benefits:string[];datePosted:string;validThrough:string;status:'open'|'closed'|'pending';createdAt:string;updatedAt:string};
 export type Share={to:string;client:string;at:string;phone:boolean;cv:boolean};
 export type Application={userId?:string;notes?:string;shareConsent?:boolean;shares?:Share[];id:string;jobId:string|null;jobTitle:string;name:string;phone:string;email:string;city:string;role:string;experience:string;message:string;cvFile:string|null;cvName:string|null;status:'new'|'reviewed'|'shortlisted'|'rejected';createdAt:string};
 export type Enquiry={notes?:string;id:string;name:string;company:string;email:string;phone:string;role:string;city:string;area:string;schedule:string;budget:string;start:string;details:string;status:'new'|'contacted'|'closed';createdAt:string};
@@ -28,14 +30,19 @@ export const now=()=>new Date().toISOString();
 export async function listJobs(filter:{status?:'open'|'closed'|'all';city?:string;jobType?:string}={}){
   const today=new Date().toISOString().slice(0,10);
   let rows=await read<Job>('jobs.json');
-  if((filter.status||'open')==='open')rows=rows.filter(j=>j.status==='open'&&j.validThrough>=today);
+  const nowIso=new Date().toISOString();
+  if((filter.status||'open')==='open')rows=rows.filter(j=>j.status==='open'&&j.validThrough>=today&&(!j.publishAt||j.publishAt<=nowIso));
   else if(filter.status==='closed')rows=rows.filter(j=>j.status==='closed'||j.validThrough<today);
   if(filter.city)rows=rows.filter(j=>j.city===filter.city);
   if(filter.jobType)rows=rows.filter(j=>j.jobType===filter.jobType);
   return rows.sort((a,b)=>b.datePosted.localeCompare(a.datePosted));
 }
 export async function getJob(id:string){return (await read<Job>('jobs.json')).find(j=>j.id===id)||null;}
-export const isJobOpen=(j:Job)=>j.status==='open'&&j.validThrough>=new Date().toISOString().slice(0,10);
+export const isJobOpen=(j:Job)=>j.status==='open'&&j.validThrough>=new Date().toISOString().slice(0,10)&&(!j.publishAt||j.publishAt<=new Date().toISOString());
+export const isScheduled=(j:Job)=>j.status==='open'&&Boolean(j.publishAt&&j.publishAt>new Date().toISOString());
+
+// Publishing queue (3 per hour), shared with hiring-now listings.
+export async function nextQueueSlot(){const jobs=await read<Job>('jobs.json');return allocateSlots(1,[...jobs.map(j=>j.publishAt||''),...listActive().map(x=>x.publishAt)])[0];}
 export async function saveJob(job:Job){await update<Job>('jobs.json',rows=>{const i=rows.findIndex(r=>r.id===job.id);if(i>=0)rows[i]=job;else rows.push(job);return rows;});return job;}
 export async function deleteJob(id:string){await update<Job>('jobs.json',rows=>rows.filter(r=>r.id!==id));}
 

@@ -93,3 +93,7 @@ footer .logo .logo-img{height:42px}
 .job-sub{max-width:760px;font-size:18px;margin:10px 0 0}
 .steps-list{padding-left:22px;display:grid;gap:10px}.steps-list li{color:var(--muted)}.steps-list strong{color:var(--ink)}
 .area-chips span{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:6px 13px;font-size:15px;background:#fff}
+.job-summary{width:100%;border-collapse:collapse;font-size:16px;margin:8px 0 10px;border:1px solid var(--line);border-radius:14px;overflow:hidden}.job-summary th{text-align:left;width:34%;background:var(--cream);font-weight:700;color:var(--ink)}.job-summary th,.job-summary td{padding:9px 14px;border-bottom:1px solid var(--line);vertical-align:top}.job-summary td{color:#3d5550}
+@media (max-width:640px){.job-summary th{width:40%}}
+.post-job-panel{margin:8px 0 48px}.post-job-panel h2{margin-bottom:8px}.post-job-form h3{margin-top:10px;font-size:19px}.post-job-form h3 small{font-size:14px;color:var(--muted);font-weight:600}
+.post-job-info{max-width:860px}

@@ -12,6 +12,7 @@ export default function Page(){return <><Header/><main>
     <aside className="stack">
       <div className="panel tint"><h2 className="h3">A clear brief. A better fit.</h2><ul className="bullet-list">{['Define the role and daily duties','Choose your area and schedule','Set a realistic salary budget','Discuss the checks you need','Review written placement terms'].map(x=><li key={x}><Check size={17}/>{x}</li>)}</ul></div>
       <div className="panel"><h2 className="h3">Hiring more than one person?</h2><p>Include your total headcount, role priorities and preferred joining dates in the details field.</p></div>
+      <div className="panel"><h2 className="h3">Just want to advertise a vacancy?</h2><p><a className="qa-link" href="/post-a-job">Post a job for free</a>. Approved jobs appear on estaff.pk and in Google Jobs.</p></div>
       <div className="panel"><h2 className="h3">Looking for a job instead?</h2><p>See <a className="qa-link" href="/jobs">current jobs</a> or <a className="qa-link" href="/jobs/apply">submit your CV</a>.</p></div>
     </aside>
   </section>

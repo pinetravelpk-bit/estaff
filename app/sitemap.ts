@@ -21,7 +21,7 @@ const CONTENT_UPDATED='2026-11-02';
 export default async function sitemap():Promise<MetadataRoute.Sitemap>{
   const openJobs=await listJobs();const articles=await allArticles();const agencies=await listAgencies('approved');
   const paths=[
-    '/','/about','/how-it-works','/glossary','/contact','/services','/areas','/resources','/faqs','/site-map','/jobs','/jobs/apply','/hire','/blog','/agencies','/reviews',...agencies.map(a=>'/agencies/'+a.slug),
+    '/','/about','/how-it-works','/glossary','/contact','/services','/areas','/resources','/faqs','/site-map','/jobs','/jobs/apply','/hire','/blog','/agencies','/reviews','/post-a-job',...agencies.map(a=>'/agencies/'+a.slug),
     ...openJobs.map(j=>'/jobs/'+j.id),
     ...indexablePoolJobs().map(j=>'/jobs/'+j.id),
     '/industries',...industries.map(i=>'/industries/'+i.slug),
@@ -39,6 +39,7 @@ export default async function sitemap():Promise<MetadataRoute.Sitemap>{
   const newest=(d:string[])=>d.filter(Boolean).sort().pop()||CONTENT_UPDATED;
   const dates=new Map<string,string>();
   for(const j of openJobs)dates.set('/jobs/'+j.id,j.updatedAt);
+  for(const j of indexablePoolJobs())if(j.hiringNow)dates.set('/jobs/'+j.id,j.updatedAt);
   for(const a of articles)dates.set('/blog/'+a.slug,a.date);
   for(const a of agencies)dates.set('/agencies/'+a.slug,a.updatedAt);
   dates.set('/jobs',newest([CONTENT_UPDATED,...openJobs.map(j=>j.updatedAt)]));
