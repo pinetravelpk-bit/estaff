@@ -42,6 +42,10 @@ export default function HeroSlider({hero}:{hero:Hero}){
   useEffect(()=>{const m=window.matchMedia('(prefers-reduced-motion: reduce)');setReduced(m.matches);if(m.matches)setPaused(true);},[]);
   useEffect(()=>{if(paused||hold)return;const t=setTimeout(()=>setI(x=>(x+1)%slides.length),8000);return ()=>clearTimeout(t);},[i,paused,hold,slides.length]);
   const s=slides[i];
+  // Swipe left or right on phones to change scene.
+  const touch=useRef<{x:number;y:number}|null>(null);
+  const tStart=(e:React.TouchEvent)=>{touch.current={x:e.touches[0].clientX,y:e.touches[0].clientY};};
+  const tEnd=(e:React.TouchEvent)=>{const t=touch.current;touch.current=null;if(!t)return;const dx=e.changedTouches[0].clientX-t.x,dy=e.changedTouches[0].clientY-t.y;if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.4){setI(x=>(x+(dx<0?1:slides.length-1))%slides.length);}};
   return <div ref={root} className={'hero-slider'+(reduced?' is-reduced':'')} onMouseEnter={()=>setHold(true)} onMouseLeave={()=>setHold(false)} onFocusCapture={()=>setHold(true)} onBlurCapture={e=>{if(!root.current?.contains(e.relatedTarget as Node))setHold(false);}} aria-roledescription="carousel" aria-label="estaff.pk services">
     <div className="container reference-hero-grid">
       <div className="reference-hero-copy">
@@ -57,7 +61,7 @@ export default function HeroSlider({hero}:{hero:Hero}){
           <button type="button" className="hero-pause" onClick={()=>setPaused(p=>!p)} aria-label={paused?'Play slides':'Pause slides'}>{paused?<Play size={14}/>:<Pause size={14}/>}</button>
         </div>
       </div>
-      <div className="hero-stage">
+      <div className="hero-stage" onTouchStart={tStart} onTouchEnd={tEnd}>
         {slides.map((x,k)=><div key={x.key} className={'hero-scene scene-'+x.key+(k===i?' is-on':'')} aria-hidden={k!==i} inert={k!==i} role="group" aria-roledescription="slide" aria-label={`${k+1} of ${slides.length}: ${x.label}`}>
           {x.key==='all'&&<Wall eager={k===0}/>}
           {x.key==='business'&&<Presenter/>}
