@@ -29,7 +29,7 @@ export const defaultSettings:Settings={
   footer:{tagline:'Thoughtful hiring. Local focus.'},
   whatsappButton:true,
   notify:{email:'',applications:true,enquiries:true,agencies:true,reviews:true},
-  pool:{enabled:true,hiddenRoles:[],hiddenCities:[],indexAll:true,salaries:{},indexCities:['islamabad','rawalpindi','lahore','karachi','faisalabad','multan','peshawar','gujranwala','sialkot','hyderabad','quetta','bahawalpur']},
+  pool:{enabled:true,hiddenRoles:[],hiddenCities:[],indexAll:false,salaries:{},indexCities:['islamabad','rawalpindi','lahore','karachi','faisalabad','multan','peshawar','gujranwala','sialkot','hyderabad','quetta','bahawalpur']},
 };
 
 const cache=new Map<string,{mtime:number;value:unknown}>();

@@ -97,3 +97,9 @@ footer .logo .logo-img{height:42px}
 @media (max-width:640px){.job-summary th{width:40%}}
 .post-job-panel{margin:8px 0 48px}.post-job-panel h2{margin-bottom:8px}.post-job-form h3{margin-top:10px;font-size:19px}.post-job-form h3 small{font-size:14px;color:var(--muted);font-weight:600}
 .post-job-info{max-width:860px}
+.longform{margin:44px 0 10px;padding-top:32px;border-top:1px solid var(--line)}
+.longform>h2{margin-bottom:6px}
+.longform-section h3,.longform-table h3,.longform-checklist h3,.longform>h3{margin:30px 0 8px;font-size:22px}
+.longform-table table{width:100%;border-collapse:collapse;font-size:15px}.longform-table th,.longform-table td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.longform-table thead th{background:var(--mint);color:var(--ink)}.longform-table tbody th{font-weight:700;color:var(--ink)}
+.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:14px}
+.longform-checklist ol{padding-left:22px;display:grid;gap:8px;color:var(--muted)}
