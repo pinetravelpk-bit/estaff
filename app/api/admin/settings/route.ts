@@ -18,7 +18,7 @@ export async function POST(req:Request){
   }
   if(form==='pool'){
     const roles=new Set(f.getAll('show').map(String));
-    s.pool={enabled:f.get('enabled')==='on',hiddenRoles:poolRoles.filter(r=>!roles.has(r.slug)).map(r=>r.slug),hiddenCities:f.getAll('hideCity').map(String).filter(c=>allCities.some(x=>x.slug===c))};
+    s.pool={enabled:f.get('enabled')==='on',hiddenRoles:poolRoles.filter(r=>!roles.has(r.slug)).map(r=>r.slug),hiddenCities:f.getAll('hideCity').map(String).filter(c=>allCities.some(x=>x.slug===c)),indexCities:f.getAll('indexCity').map(String).filter(c=>allCities.some(x=>x.slug===c))};
     saveSettings(s);refreshWholeSite();return go('/admin/jobs?msg=pool');
   }
   for(const k of Object.keys(s.contact) as (keyof Settings['contact'])[])s.contact[k]=txt(f,'contact.'+k,200);

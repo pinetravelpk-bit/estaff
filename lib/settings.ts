@@ -15,7 +15,7 @@ export type Settings={
   footer:{tagline:string};
   whatsappButton:boolean;
   notify:{email:string;applications:boolean;enquiries:boolean;agencies:boolean;reviews:boolean};
-  pool:{enabled:boolean;hiddenRoles:string[];hiddenCities:string[]};
+  pool:{enabled:boolean;hiddenRoles:string[];hiddenCities:string[];indexCities:string[]};
 };
 export type SeoOverride={title:string;description:string;noindex:boolean;image:string};
 
@@ -29,7 +29,7 @@ export const defaultSettings:Settings={
   footer:{tagline:'Thoughtful hiring. Local focus.'},
   whatsappButton:true,
   notify:{email:'',applications:true,enquiries:true,agencies:true,reviews:true},
-  pool:{enabled:true,hiddenRoles:[],hiddenCities:[]},
+  pool:{enabled:true,hiddenRoles:[],hiddenCities:[],indexCities:['islamabad','rawalpindi','lahore','karachi','faisalabad','multan','peshawar','gujranwala','sialkot','hyderabad','quetta','bahawalpur']},
 };
 
 const cache=new Map<string,{mtime:number;value:unknown}>();

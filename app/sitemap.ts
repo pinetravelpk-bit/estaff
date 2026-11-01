@@ -11,6 +11,7 @@ import {allArticles} from '../lib/blog-store';
 import {cityServices,serviceCityPath} from '../lib/service-city';
 import {listJobs} from '../lib/store';
 import {listReviews} from '../lib/reviews';
+import {indexablePoolJobs} from '../lib/pool';
 import {listAgencies} from '../lib/users';
 
 export const revalidate=3600;
@@ -22,6 +23,7 @@ export default async function sitemap():Promise<MetadataRoute.Sitemap>{
   const paths=[
     '/','/about','/how-it-works','/glossary','/contact','/services','/areas','/resources','/faqs','/site-map','/jobs','/jobs/apply','/hire','/blog','/agencies','/reviews',...agencies.map(a=>'/agencies/'+a.slug),
     ...openJobs.map(j=>'/jobs/'+j.id),
+    ...indexablePoolJobs().map(j=>'/jobs/'+j.id),
     '/industries',...industries.map(i=>'/industries/'+i.slug),
     ...services.map(s=>'/services/'+s.slug),
     ...roles.map(r=>`/services/${r.parent}/${r.slug}`),

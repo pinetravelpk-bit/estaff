@@ -9,7 +9,7 @@ import {pageMetadata,jobPostingSchema,faqSchema,speakablePageSchema,howToSchema}
 import {getJob,isJobOpen,listJobs,type Job} from '../../../lib/store';
 import {anyCity,allCities,provinces,nearbyCities} from '../../../lib/pakistan';
 import {jobType,jobCityPath,jobRolePath} from '../../../lib/jobs';
-import {getPoolJob,poolRoleOfId,listPoolJobs,allTypeOptions,typeTitle,poolContent,poolId,roleName} from '../../../lib/pool';
+import {getPoolJob,poolRoleOfId,listPoolJobs,allTypeOptions,typeTitle,poolContent,poolId,roleName,isIndexablePool} from '../../../lib/pool';
 
 const findJob=async(id:string)=>getPoolJob(id)||await getJob(id);
 const year=()=>new Date().getFullYear();
@@ -20,7 +20,7 @@ export async function generateMetadata({params}:{params:Promise<{id:string}>}){
   const {id}=await params;const j=await findJob(id);if(!j)return {title:'Job not found',robots:{index:false,follow:false}};
   const c=anyCity(j.city);
   if(j.pool){const r=poolRoleOfId(id)!;const k=poolContent(r,c||null);const n=roleName(r);
-    return pageMetadata(`${j.title} ${year()} – Apply Online Free`,`Apply for ${n.name.toLowerCase()} jobs ${c?'in '+c.name:'from home in Pakistan'}: ${EMPLOYMENT[j.employmentType].toLowerCase()} work with ${r.clients.toLowerCase()}${k.areas.length?` in ${k.areas.slice(0,2).join(', ')} and ${k.areas[2]||'nearby areas'}`:''}. CNIC and references needed. Free for job seekers – apply in 2 minutes.`,'/jobs/'+j.id,false);}
+    return pageMetadata(`${j.title} ${year()} – Apply Online Free`,`Apply for ${n.name.toLowerCase()} jobs ${c?'in '+c.name:'from home in Pakistan'}: ${EMPLOYMENT[j.employmentType].toLowerCase()} work with ${r.clients.toLowerCase()}${k.areas.length?` in ${k.areas.slice(0,2).join(', ')} and ${k.areas[2]||'nearby areas'}`:''}. CNIC and references needed. Free for job seekers – apply in 2 minutes.`,'/jobs/'+j.id,isIndexablePool(j));}
   return pageMetadata(`${j.title} – ${jobPlace(j)} | ${EMPLOYMENT[j.employmentType]} Job`,`${typeTitle(j.jobType)} job in ${jobPlace(j)}: ${salaryText(j)}. ${j.description}`,'/jobs/'+j.id,isJobOpen(j));
 }
 

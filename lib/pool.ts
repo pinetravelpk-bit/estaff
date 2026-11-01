@@ -159,5 +159,9 @@ export function listPoolJobs(f:{city?:string;jobType?:string}={}):Job[]{
   }
   return out;
 }
+// Listings shown in Google search: the main cities chosen in Admin → Jobs, plus the remote listings.
+// They never carry JobPosting schema, so they stay out of Google Jobs.
+export const isIndexablePool=(j:Job)=>j.remote||getSettings().pool.indexCities.includes(j.city);
+export const indexablePoolJobs=()=>listPoolJobs().filter(isIndexablePool);
 export const poolCount=()=>listPoolJobs().length;
 export const poolCities=allCities;
