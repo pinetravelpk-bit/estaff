@@ -64,3 +64,28 @@ export function CityLocal({lf}:{lf:LF|null}){
   if(!lf)return null;
   return <section className="container page-content"><LongForm lf={lf}/></section>;
 }
+
+// ---------- Local notes for long-tail pages (city × role, service × city) ----------
+type Fields={homes:string;work:string;move:string;season:string;family:string;more?:string};
+// Profile for any city: the hand-written profile, or one built from a main city's full guide.
+export function localFields(c:City):Fields|null{
+  const k=profiles[c.slug];if(k)return {homes:k.homes,work:k.work,move:k.move,season:k.season,family:k.family,more:cpMore[c.slug]};
+  const g=cityGuides[c.slug];if(!g)return null;
+  const sec=(re:RegExp)=>g.sections.find(s=>re.test(s.h))?.p[0]||'';
+  const f={homes:sec(/^Households/),work:sec(/job market|Industry and jobs/),move:sec(/Getting around/),season:sec(/Seasons/),family:sec(/Tips for employers/),more:cityLiving[c.slug]};
+  return f.homes&&f.move?f:null;
+}
+// Which two local notes suit each household role.
+const roleFields:Record<string,(keyof Fields)[]>={
+  'cooks-chefs':['homes','season'],drivers:['move','season'],'maids-housekeepers':['homes','family'],
+  'nannies-babysitters':['family','homes'],'care-attendants':['family','season'],'home-nurses':['move','family'],
+  gardeners:['season','more'],'watchmen-caretakers':['more','family'],'domestic-couples':['homes','move'],'personal-attendants':['family','more'],
+};
+export function roleLocalNotes(c:City,role:string):string[]{
+  const f=localFields(c);if(!f)return [];
+  return (roleFields[role]||['homes','move']).map(k=>f[k]||'').filter(Boolean);
+}
+export function businessLocalNotes(c:City):string[]{
+  const f=localFields(c);if(!f)return [];
+  return [f.work,f.move].filter(Boolean);
+}

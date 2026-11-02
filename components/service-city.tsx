@@ -1,4 +1,5 @@
 import {ArrowRight,CheckCircle2,MapPin,Briefcase} from 'lucide-react';
+import {businessLocalNotes} from './city-local';
 import {Header,Footer} from './ui';
 import {Breadcrumbs,StructuredData} from './seo';
 import {type City,provinces,nearbyCities} from '../lib/pakistan';
@@ -22,6 +23,7 @@ export function ServiceCityPage({s,city:c}:{s:CityService;city:City}){
       {k.local.map((t,i)=><p key={i}>{t}</p>)}
       {k.variants.length>0&&<p>Businesses in {c.name} look for this as {k.variants.slice(0,-1).join(', ')}{k.variants.length>1?' or ':''}{k.variants[k.variants.length-1]}. Whatever the name, the work starts with an agreed scope.</p>}
 
+      {businessLocalNotes(c).length>0&&<><h2>Doing business and hiring in {c.name}</h2>{businessLocalNotes(c).map((t,i)=><p key={i}>{t}</p>)}</>}
       <h2>How it works</h2>
       <ol className="step-flow page-steps-inline">{s.steps.map((st,i)=><li className="step-card" key={st}><span className="step-badge"><Briefcase size={20}/><b>{i+1}</b></span><h3>{st}</h3></li>)}</ol>
 

@@ -7,7 +7,7 @@ import {type City,provinces,nearbyCities} from '../lib/pakistan';
 import {cityHubContent,cityRoleContent,cityAreaContent,roleInfo,roleSlugs,care,cityRolePath,cityAreaPath,businessKeywords,areaRoleLine} from '../lib/national';
 import {serviceSchema,faqSchema,listSchema,speakablePageSchema} from '../lib/seo';
 import {jobCityPath} from '../lib/jobs';
-import {hubLocalGuide,CityLocal} from './city-local';
+import {hubLocalGuide,CityLocal,roleLocalNotes} from './city-local';
 
 function Hero({eyebrow,title,text}:{eyebrow:string;title:string;text:string}){return <section className="page-hero"><div className="container"><span className="eyebrow">{eyebrow}</span><h1>{title}</h1><p>{text}</p></div></section>}
 function Faqs({items}:{items:[string,string][]}){return <div className="faqs">{items.map(([q,a],i)=><details key={q} open={i===0}><summary>{q}<span>+</span></summary><p>{a}</p></details>)}</div>}
@@ -63,6 +63,7 @@ export function NationalCityRole({city:c,role}:{city:City;role:string}){
       {k.local.map((t,i)=><p key={i}>{t}</p>)}
       <p>{k.areaPara}</p>
       <p>{k.econPara}</p>
+      {roleLocalNotes(c,role).length>0&&<><h2>{svc.name} in {c.name}: local notes</h2>{roleLocalNotes(c,role).map((t,i)=><p key={i}>{t}</p>)}</>}
 
       <h2>Live-in, part-time or full-time {r.one} in {c.name}</h2>
       <p>{k.variants}</p>

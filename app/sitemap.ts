@@ -1,5 +1,4 @@
 import {industries} from '../lib/business';
-import {careServices,areaServicePath} from '../lib/home-care';
 import type {MetadataRoute} from 'next';
 import {absolute} from '../lib/seo';
 import {services,locations,areaSlug} from '../lib/content';
@@ -27,7 +26,8 @@ export default async function sitemap():Promise<MetadataRoute.Sitemap>{
     '/industries',...industries.map(i=>'/industries/'+i.slug),
     ...services.map(s=>'/services/'+s.slug),
     ...roles.map(r=>`/services/${r.parent}/${r.slug}`),
-    ...Object.entries(locations).flatMap(([city,c])=>['/areas/'+city,...c.areas.flatMap(a=>[`/areas/${city}/${areaSlug(a)}`,...careServices.map(s=>areaServicePath(city,areaSlug(a),s.slug))])]),
+    // Area × role pages in Islamabad and Rawalpindi stay live for visitors but are not indexed (near-duplicates of each other).
+    ...Object.entries(locations).flatMap(([city,c])=>['/areas/'+city,...c.areas.map(a=>`/areas/${city}/${areaSlug(a)}`)]),
     ...nationalCities.flatMap(c=>['/areas/'+c.slug,...roleSlugs.map(r=>`/areas/${c.slug}/${r}`),...c.areas.map(a=>`/areas/${c.slug}/${slugify(a)}`)]),
     ...allCities.map(c=>jobCityPath(c.slug)),
     ...jobTypes.map(j=>jobRolePath(j.slug)),
