@@ -39,7 +39,6 @@ export function jobCityContent(c:City){
     `Whether you want a household job, an office role or remote work, this guide explains what employers in ${c.name} usually ask for and how to prepare.`,
   ]);
   const faqs:[string,string][]=[
-    [`How can I find a job in ${c.name}?`,answer],
     [`How do I register my CV in ${c.name}?`,`Use the “Submit your CV” form on estaff.pk: add your name, phone number, city, the kind of work you want and upload your CV. Keep your CNIC ready for the interview.`],
     [`Which documents do employers in ${c.name} ask for?`,`Most ask for your CNIC and references. Drivers need a valid licence, home nurses need their nursing qualification, and household roles may ask for a police character certificate from the police in ${p}.`],
     [`How do I apply for a job in ${c.name}?`,`Open any job listed for ${c.name} on this page and fill in the short apply form with your CV. If nothing suitable is open, submit your CV once and estaff.pk will contact you when a matching job opens.`],

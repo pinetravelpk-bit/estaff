@@ -7,6 +7,7 @@ import {type City,provinces,nearbyCities} from '../lib/pakistan';
 import {cityHubContent,cityRoleContent,cityAreaContent,roleInfo,roleSlugs,care,cityRolePath,cityAreaPath,businessKeywords,areaRoleLine} from '../lib/national';
 import {serviceSchema,faqSchema,listSchema,speakablePageSchema} from '../lib/seo';
 import {jobCityPath} from '../lib/jobs';
+import {hubLocalGuide,CityLocal} from './city-local';
 
 function Hero({eyebrow,title,text}:{eyebrow:string;title:string;text:string}){return <section className="page-hero"><div className="container"><span className="eyebrow">{eyebrow}</span><h1>{title}</h1><p>{text}</p></div></section>}
 function Faqs({items}:{items:[string,string][]}){return <div className="faqs">{items.map(([q,a],i)=><details key={q} open={i===0}><summary>{q}<span>+</span></summary><p>{a}</p></details>)}</div>}
@@ -24,7 +25,7 @@ export function NationalCityHub({city:c}:{city:City}){
       <div className="city-facts">{k.context.map((t,i)=><div className="about-card" key={i}>{[<Sparkles key="a"/>,<Languages key="b"/>,<Briefcase key="c"/>][i]}<p>{t}</p></div>)}</div>
 
       <h2>Household roles in {c.name}</h2>
-      <div className="qa-grid">{roleSlugs.map(s=>{const r=roleInfo[s];const svc=care(s);return <a className="qa-card" key={s} href={cityRolePath(c,s)}><span className="qa-icon"><Home size={20}/></span><h3>{r.agency} in {c.name}</h3><p>{svc.summary}</p><span className="qa-link">{svc.name} in {c.name} <ArrowRight size={15}/></span></a>})}</div>
+      <div className="qa-grid">{roleSlugs.map(s=>{const r=roleInfo[s];const svc=care(s);return <a className="qa-card" key={s} href={cityRolePath(c,s)}><span className="qa-icon"><Home size={20}/></span><h3>{r.agency} in {c.name}</h3><p>{areaRoleLine(c.name,c.areas[roleSlugs.indexOf(s)%c.areas.length],r.one,r.duties[0])}</p><span className="qa-link">{svc.name} in {c.name} <ArrowRight size={15}/></span></a>})}</div>
 
       <h2 style={{marginTop:56}}>Areas of {c.name}</h2>
       <p>Choose your locality to see household roles for that area.</p>
@@ -32,7 +33,7 @@ export function NationalCityHub({city:c}:{city:City}){
 
       <h2 style={{marginTop:56}}>Business staffing services in {c.name}</h2>
       <p>For employers in {c.name}, estaff.pk’s business services are delivered nationally and scoped for each requirement.</p>
-      <div className="biz-list">{businessKeywords.map(b=><a key={b.slug} href={'/services/'+b.slug+'/'+c.slug}><strong>{b.phrase} in {c.name}</strong><span>{b.text}</span></a>)}</div>
+      <div className="biz-list">{businessKeywords.map(b=><a key={b.slug} href={'/services/'+b.slug+'/'+c.slug}><strong>{b.phrase} in {c.name}</strong></a>)}</div>
 
       <h2 style={{marginTop:56}}>Jobs in {c.name}</h2>
       <p>Looking for work as a cook, driver, maid, nanny, home nurse, receptionist, accountant or virtual assistant in {c.name}? See <a className="qa-link" href={jobCityPath(c.slug)}>jobs in {c.name} <ArrowRight size={15}/></a></p>
@@ -43,8 +44,8 @@ export function NationalCityHub({city:c}:{city:City}){
       <div className="area-chips">{nearbyCities(c,8).map(n=><a key={n.slug} href={'/areas/'+n.slug}><MapPin size={13}/> {n.name}</a>)}</div>
       <Note/>
     </section>
-    <StructuredData data={[speakablePageSchema(`Domestic Staff Agency in ${c.name}`,k.answer,path,['.lead-answer']),serviceSchema(`Domestic staffing in ${c.name}`,k.answer,path,c.name),faqSchema([...k.faqs,...(cityGuides[c.slug]?.faqs||[])]),listSchema(`${c.name} household roles`,roleSlugs.map(s=>({name:`${care(s).name} in ${c.name}`,path:cityRolePath(c,s)})))]}/>
-  {cityGuides[c.slug]&&<section className="container page-content"><LongForm lf={cityGuides[c.slug]}/></section>}</main><Footer/></>;
+    <StructuredData data={[speakablePageSchema(`Domestic Staff Agency in ${c.name}`,k.answer,path,['.lead-answer']),serviceSchema(`Domestic staffing in ${c.name}`,k.answer,path,c.name),faqSchema([...k.faqs,...(cityGuides[c.slug]?.faqs||hubLocalGuide(c)?.faqs||[])]),listSchema(`${c.name} household roles`,roleSlugs.map(s=>({name:`${care(s).name} in ${c.name}`,path:cityRolePath(c,s)})))]}/>
+  {cityGuides[c.slug]?<section className="container page-content"><LongForm lf={cityGuides[c.slug]}/></section>:<CityLocal lf={hubLocalGuide(c)}/>}</main><Footer/></>;
 }
 
 export function NationalCityRole({city:c,role}:{city:City;role:string}){

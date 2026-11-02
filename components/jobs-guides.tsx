@@ -12,7 +12,12 @@ export function JobDirectory(){
   </>;
 }
 
-export function JobTypeBlock({j,city}:{j:(typeof jobTypes)[number];city:string}){
+export function JobTypeBlock({j,city,compact=false}:{j:(typeof jobTypes)[number];city:string;compact?:boolean}){
+  if(compact)return <article className="job-guide" id={j.slug}>
+    <h3>{j.plural} in {city}</h3>
+    <p><strong>Main duty:</strong> {j.duties[0]}.</p>
+    <p className="muted-line"><a className="qa-link" href={jobRolePath(j.slug)}>Full {j.title.toLowerCase()} job guide: skills, documents, CV and interview tips <ArrowRight size={14}/></a> · <a className="qa-link" href={'/jobs/apply?role='+j.slug}>Submit your CV</a> · Also searched as “{j.roman} {city}”.</p>
+  </article>;
   return <article className="job-guide" id={j.slug}>
     <h3>{j.plural} in {city}</h3>
     <p><strong>What the work involves:</strong> {j.duties.join('; ')}.</p>

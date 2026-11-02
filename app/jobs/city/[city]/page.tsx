@@ -2,13 +2,13 @@ import {notFound} from 'next/navigation';
 import {MapPin} from 'lucide-react';
 import {Header,Footer,PageHero} from '../../../../components/ui';
 import {Breadcrumbs,StructuredData} from '../../../../components/seo';
-import {JobTypeBlock} from '../../../../components/jobs-guides';
 import {pageMetadata,faqSchema,speakablePageSchema} from '../../../../lib/seo';
 import {anyCity,allCities,provinces,nearbyCities} from '../../../../lib/pakistan';
-import {jobCityContent,jobsForCity,jobCityPath} from '../../../../lib/jobs';
+import {jobCityContent,jobsForCity,jobCityPath,jobRolePath} from '../../../../lib/jobs';
 import {listJobs} from '../../../../lib/store';
 import {JobCards} from '../../../../components/job-cards';
 import {listPoolJobs} from '../../../../lib/pool';
+import {jobsLocalGuide,CityLocal} from '../../../../components/city-local';
 export const revalidate=300;
 
 export function generateStaticParams(){return allCities.map(c=>({city:c.slug}));}
@@ -24,17 +24,18 @@ export default async function Page({params}:{params:Promise<{city:string}>}){
       <p className="answer-box lead-answer">{k.answer}</p>
       <p>{k.intro}</p>
       {open.length>0&&<><h2>Vacancies from employers in {c.name}</h2><JobCards jobs={open}/></>}
-      {pool.length>0&&<><h2 style={{marginTop:open.length?40:undefined}}>Ongoing recruitment in {c.name}</h2><p className="pool-note">We recruit all year for these roles in {c.name}. Apply once: when a household or business needs someone like you, we share your profile with them (only with your permission) and call you before any interview.</p><JobCards jobs={pool}/></>}
+      {pool.length>0&&<><h2 style={{marginTop:open.length?40:undefined}}>Ongoing recruitment in {c.name}</h2><p className="pool-note">We recruit all year for these roles in {c.name}. Apply once: when a household or business needs someone like you, we share your profile with them (only with your permission) and call you before any interview. Pay for each role is agreed with the employer and shared with you before the interview.</p><JobCards jobs={pool}/></>}
       {!open.length&&!pool.length&&<div className="empty-jobs"><p>There are no open jobs in {c.name} right now. Submit your CV and we will contact you when one opens.</p><a className="btn glow" href={'/jobs/apply?city='+c.slug}>Submit your CV</a></div>}
       <h2 style={{marginTop:48}}>Job guides for {c.name}</h2>
-      <div className="area-chips">{list.map(j=><a key={j.slug} href={'#'+j.slug}>{j.plural}</a>)}</div>
-      <div className="job-guides">{list.map(j=><JobTypeBlock key={j.slug} j={j} city={c.name}/>)}</div>
+      <p>Each guide covers the duties, skills, documents, CV and interview tips for the role, and applies in {c.name} as anywhere in Pakistan.</p>
+      <div className="area-chips">{list.map(j=><a key={j.slug} href={jobRolePath(j.slug)}>{j.title} job guide</a>)}</div>
       <h2 style={{marginTop:48}}>Job questions in {c.name}</h2>
       <div className="faqs">{k.faqs.map(([q,a],i)=><details key={q} open={i===0}><summary>{q}<span>+</span></summary><p>{a}</p></details>)}</div>
       <h2 style={{marginTop:40}}>Jobs in nearby cities</h2>
       <div className="area-chips">{nearbyCities(c,8).map(n=><a key={n.slug} href={jobCityPath(n.slug)}><MapPin size={13}/> Jobs in {n.name}</a>)}</div>
       <p className="coverage-note">estaff.pk never charges job seekers to apply or to be placed. Never pay anyone who promises to guarantee a job.</p>
     </section>
-    <StructuredData data={[speakablePageSchema(`Jobs in ${c.name}`,k.answer,path,['.lead-answer']),faqSchema(k.faqs)]}/>
+    <CityLocal lf={jobsLocalGuide(c)}/>
+    <StructuredData data={[speakablePageSchema(`Jobs in ${c.name}`,k.answer,path,['.lead-answer']),faqSchema([...k.faqs,...(jobsLocalGuide(c)?.faqs||[])])]}/>
   </main><Footer/></>;
 }
