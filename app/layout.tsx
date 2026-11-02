@@ -21,7 +21,8 @@ export function generateMetadata():Metadata{
     keywords:['domestic staff agency Pakistan','domestic staff agency Lahore','domestic staff agency Karachi','domestic staff Islamabad','maid in Islamabad','driver in Rawalpindi','cook in Islamabad','recruitment agency Islamabad','HR outsourcing Pakistan','payroll services Islamabad','remote staff Pakistan'],
     other:{'geo.region':'PK-IS','geo.placename':'Islamabad, Rawalpindi','geo.position':'33.6844;73.0479','ICBM':'33.6844, 73.0479'},
     icons:{icon:[{url:'/brand/favicon-48.png',sizes:'48x48',type:'image/png'},{url:'/brand/icon.png',sizes:'512x512',type:'image/png'}],apple:'/brand/apple-icon.png'},
-    verification:{...(s.googleVerification?{google:s.googleVerification}:{}),...(s.bingVerification?{other:{'msvalidate.01':s.bingVerification}}:{})}};
+    // Google Search Console code (public). Admin → SEO can override it.
+    verification:{google:s.googleVerification||'xlu2ayg8_v5NErLqpG5nnL4n5-cl-KteRPuYULot_yg',...(s.bingVerification?{other:{'msvalidate.01':s.bingVerification}}:{})}};
 }
 export const viewport:Viewport={width:'device-width',initialScale:1,viewportFit:'cover',themeColor:'#00866c',colorScheme:'light'};
 
