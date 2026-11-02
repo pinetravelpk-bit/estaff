@@ -1,3 +1,5 @@
+import {LongForm} from './long-form';
+import {cityGuides} from '../lib/longform/cities';
 import {ArrowRight,MapPin,CheckCircle2,Languages,Briefcase,Home,Sparkles} from 'lucide-react';
 import {Header,Footer} from './ui';
 import {Breadcrumbs,StructuredData} from './seo';
@@ -41,8 +43,8 @@ export function NationalCityHub({city:c}:{city:City}){
       <div className="area-chips">{nearbyCities(c,8).map(n=><a key={n.slug} href={'/areas/'+n.slug}><MapPin size={13}/> {n.name}</a>)}</div>
       <Note/>
     </section>
-    <StructuredData data={[speakablePageSchema(`Domestic Staff Agency in ${c.name}`,k.answer,path,['.lead-answer']),serviceSchema(`Domestic staffing in ${c.name}`,k.answer,path,c.name),faqSchema(k.faqs),listSchema(`${c.name} household roles`,roleSlugs.map(s=>({name:`${care(s).name} in ${c.name}`,path:cityRolePath(c,s)})))]}/>
-  </main><Footer/></>;
+    <StructuredData data={[speakablePageSchema(`Domestic Staff Agency in ${c.name}`,k.answer,path,['.lead-answer']),serviceSchema(`Domestic staffing in ${c.name}`,k.answer,path,c.name),faqSchema([...k.faqs,...(cityGuides[c.slug]?.faqs||[])]),listSchema(`${c.name} household roles`,roleSlugs.map(s=>({name:`${care(s).name} in ${c.name}`,path:cityRolePath(c,s)})))]}/>
+  {cityGuides[c.slug]&&<section className="container page-content"><LongForm lf={cityGuides[c.slug]}/></section>}</main><Footer/></>;
 }
 
 export function NationalCityRole({city:c,role}:{city:City;role:string}){
