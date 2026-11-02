@@ -1,3 +1,4 @@
+import {CoreGuide} from '../../components/core-guide';
 import {Header,Footer,PageHero} from '../../components/ui';
 import {Breadcrumbs,StructuredData} from '../../components/seo';
 import {StepList} from '../../components/seo-sections';
@@ -24,4 +25,4 @@ export default function Page(){return <><Header/><main>
     <p style={{marginTop:30}}><a className="btn glow" href="/hire">Start your hiring brief</a></p>
   </section>
   <StructuredData data={[howToSchema('How to hire domestic staff in Pakistan',description,'/how-it-works',hiringSteps),faqSchema(faq.map(x=>[x.q,x.a]))]}/>
-</main><Footer/></>}
+<CoreGuide path="/how-it-works" schema={false}/></main><Footer/></>}

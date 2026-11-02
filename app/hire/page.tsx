@@ -1,3 +1,4 @@
+import {CoreGuide} from '../../components/core-guide';
 import {pageMetadata} from '../../lib/seo';
 import {Header,Footer,PageHero,Check} from '../../components/ui';
 import HiringForm from '../../components/hiring-form';
@@ -16,4 +17,4 @@ export default function Page(){return <><Header/><main>
       <div className="panel"><h2 className="h3">Looking for a job instead?</h2><p>See <a className="qa-link" href="/jobs">current jobs</a> or <a className="qa-link" href="/jobs/apply">submit your CV</a>.</p></div>
     </aside>
   </section>
-</main><Footer/></>}
+<CoreGuide path="/hire"/></main><Footer/></>}

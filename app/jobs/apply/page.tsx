@@ -1,3 +1,4 @@
+import {CoreGuide} from '../../../components/core-guide';
 import {Header,Footer,PageHero} from '../../../components/ui';
 import {Breadcrumbs} from '../../../components/seo';
 import ApplyForm from '../../../components/apply-form';
@@ -21,5 +22,5 @@ export default async function Page({searchParams}:{searchParams:Promise<Record<s
         <aside className="apply-panel"><h2>Your details</h2><ApplyForm me={me} cities={allCities.map(c=>({value:c.slug,label:c.name}))} roles={allTypeOptions()} defaultCity={city} defaultRole={role}/></aside>
       </div>
     </section>
-  </main><Footer/></>;
+  <CoreGuide path="/jobs/apply"/></main><Footer/></>;
 }

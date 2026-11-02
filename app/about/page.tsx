@@ -1,3 +1,4 @@
+import {CoreGuide} from '../../components/core-guide';
 import {Home,Building2,Laptop,ShieldCheck,MapPin,Handshake} from 'lucide-react';
 import {Header,Footer,PageHero} from '../../components/ui';
 import {Breadcrumbs,StructuredData} from '../../components/seo';
@@ -34,4 +35,4 @@ export default function Page(){return <><Header/><main>
   <StatsBand/>
   <LocalCoverage/>
   <StructuredData data={typedPageSchema('AboutPage',title,description,'/about')}/>
-</main><Footer/></>}
+<CoreGuide path="/about"/></main><Footer/></>}

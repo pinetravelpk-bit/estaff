@@ -1,3 +1,4 @@
+import {CoreGuide} from '../../components/core-guide';
 import {Header,Footer,PageHero} from '../../components/ui';
 import {Breadcrumbs,StructuredData} from '../../components/seo';
 import PostJobForm from '../../components/post-job-form';
@@ -36,5 +37,5 @@ export default function Page(){
       </div>
     </section>
     <StructuredData data={[speakablePageSchema('Post a job on estaff.pk',answer,'/post-a-job',['.lead-answer']),faqSchema(faqs)]}/>
-  </main><Footer/></>;
+  <CoreGuide path="/post-a-job" schema={false}/></main><Footer/></>;
 }

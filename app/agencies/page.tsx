@@ -1,3 +1,4 @@
+import {CoreGuide} from '../../components/core-guide';
 import {MapPin,BadgeCheck,ArrowRight,Building2} from 'lucide-react';
 import {Header,Footer,PageHero} from '../../components/ui';
 import {Breadcrumbs,StructuredData} from '../../components/seo';
@@ -43,5 +44,5 @@ export default async function Agencies({searchParams}:{searchParams:Promise<Reco
       <div className="faqs">{faqs.map(([qq,a],i)=><details key={qq} open={i===0}><summary>{qq}<span>+</span></summary><p>{a}</p></details>)}</div>
     </section>
     <StructuredData data={[faqSchema(faqs),...(rows.length?[listSchema('Staffing and recruitment agencies',rows.map(a=>({name:a.name,path:'/agencies/'+a.slug})))]:[])]}/>
-  </main><Footer/></>;
+  <CoreGuide path="/agencies" schema={false}/></main><Footer/></>;
 }

@@ -1,3 +1,4 @@
+import {CoreGuide} from '../../components/core-guide';
 import {Header,Footer,PageHero} from '../../components/ui';
 import {Breadcrumbs,StructuredData} from '../../components/seo';
 import {pageMetadata,typedPageSchema,getBusiness,faqSchema,absolute,orgId} from '../../lib/seo';
@@ -44,5 +45,5 @@ export default function Page(){
     <div className="faqs">{faqs.map(([q,a],i)=><details key={q} open={i===0}><summary>{q}<span>+</span></summary><p>{a}</p></details>)}</div>
   </section>
   <StructuredData data={[{...typedPageSchema('ContactPage',title,description,'/contact'),mainEntity:{'@id':orgId},url:absolute('/contact')},faqSchema(faqs)]}/>
-</main><Footer/></>;
+<CoreGuide path="/contact" schema={false}/></main><Footer/></>;
 }

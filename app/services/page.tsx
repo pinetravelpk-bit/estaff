@@ -1,3 +1,4 @@
+import {CoreGuide} from '../../components/core-guide';
 import {services} from '../../lib/content';
 import {Breadcrumbs,StructuredData} from '../../components/seo';
 import {listSchema,faqSchema,pageMetadata,speakablePageSchema} from '../../lib/seo';
@@ -27,4 +28,4 @@ export default function Page(){return <><Header/><main>
     <div className="faqs">{faqs.map(([q,a],i)=><details key={q} open={i===0}><summary>{q}<span>+</span></summary><p>{a}</p></details>)}</div>
   </section>
   <StructuredData data={[speakablePageSchema('Staffing, HR & Recruitment Services in Pakistan',answer,'/services',['.lead-answer']),listSchema('Staffing and HR services',services.map(s=>({name:s.name,path:'/services/'+s.slug}))),faqSchema(faqs)]}/>
-</main><Footer/></>}
+<CoreGuide path="/services" schema={false}/></main><Footer/></>}

@@ -1,3 +1,4 @@
+import {CoreGuide} from '../../components/core-guide';
 import {Header,Footer,PageHero} from '../../components/ui';
 import {Breadcrumbs,StructuredData} from '../../components/seo';
 import {pageMetadata,glossarySchema,termId,typedPageSchema} from '../../lib/seo';
@@ -15,4 +16,4 @@ export default function Page(){const sorted=[...glossary].sort((a,b)=>a.term.loc
     <p style={{marginTop:30}}>Ready to put these into practice? Read <a className="qa-link" href="/how-it-works">how hiring works</a> or browse <a className="qa-link" href="/faqs">common questions</a>.</p>
   </section>
   <StructuredData data={[typedPageSchema('CollectionPage',title,description,'/glossary'),glossarySchema('/glossary',glossary)]}/>
-</main><Footer/></>}
+<CoreGuide path="/glossary"/></main><Footer/></>}
