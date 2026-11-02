@@ -1,3 +1,11 @@
+import {LongForm} from '../../../../components/long-form';
+import {jobRoleGuidesA} from '../../../../lib/longform/jobroles-a';
+import {jobRoleGuidesB} from '../../../../lib/longform/jobroles-b';
+import {jobRoleMore} from '../../../../lib/longform/jobroles-c';
+import {jobRoleFinal} from '../../../../lib/longform/jobroles-d';
+import {jobRoleAsk,jobRoleFaqsMore,remoteMore} from '../../../../lib/longform/jobroles-e';
+import {jobRoleGrow,jobRoleFaqsLast,jobRoleFaqsTail} from '../../../../lib/longform/jobroles-f';
+const jobRoleGuide=(s:string)=>{const b=jobRoleGuidesA[s]||jobRoleGuidesB[s];if(!b)return null;return {...b,sections:[...b.sections,...(jobRoleMore[s]||[]),...(remoteMore[s]||[]),...(jobRoleAsk[s]?[{h:'Questions to ask the employer',p:['Before you accept, ask:'],list:jobRoleAsk[s]}]:[]),...(jobRoleGrow[s]||[]),...(jobRoleFinal[s]||[])],faqs:[...b.faqs,...(jobRoleFaqsMore[s]||[]),...(jobRoleFaqsLast[s]||[]),...(jobRoleFaqsTail[s]||[])]};};
 import {notFound} from 'next/navigation';
 import {MapPin,ArrowRight} from 'lucide-react';
 import {Header,Footer,PageHero} from '../../../../components/ui';
@@ -44,6 +52,6 @@ export default async function Page({params}:{params:Promise<{role:string}>}){
       <p style={{marginTop:24}}>Are you an employer? See <a className="qa-link" href={j.employer}>how to recruit {/^[aeiou]/i.test(j.title)?'an':'a'} {j.title.toLowerCase()} <ArrowRight size={14}/></a></p>
       <p className="coverage-note">estaff.pk never charges job seekers to apply or to be placed.</p>
     </section>
-    <StructuredData data={faqSchema(faqs)}/>
-  </main><Footer/></>;
+    <StructuredData data={faqSchema([...faqs,...(jobRoleGuide(j.slug)?.faqs||[])])}/>
+  {jobRoleGuide(j.slug)&&<section className="container page-content"><LongForm lf={jobRoleGuide(j.slug)!}/></section>}</main><Footer/></>;
 }
