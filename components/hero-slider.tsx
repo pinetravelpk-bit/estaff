@@ -4,8 +4,8 @@ import {ArrowRight,ArrowUpRight,Pause,Play} from 'lucide-react';
 
 // Home hero: three animated scenes in the style of short motion videos.
 // 1) a rotating 3D wall of staff photos, 2) a professional with workplace tiles popping in,
-// 3) a moving 2×2 collage of household staff. Copy and buttons change with each scene;
-// the page H1 stays the same. Auto-plays every 8 seconds, pauses on hover, focus or the
+// 3) a moving 2×2 collage of household staff. The headline, copy and buttons change with
+// each scene; the first scene's headline is the H1 crawlers see. Auto-plays every 8 seconds, pauses on hover, focus or the
 // pause button, and never auto-plays for visitors who prefer reduced motion.
 type Hero={eyebrow:string;title:string;subtitle:string;text:string};
 type Tile={img:string;label:string;href:string};
@@ -33,9 +33,9 @@ const lines=(t:string)=>t.split('\n').map((l,i,a)=><span key={i}>{l}{i<a.length-
 
 export default function HeroSlider({hero}:{hero:Hero}){
   const slides=[
-    {key:'all',eyebrow:hero.eyebrow,heading:hero.subtitle,text:hero.text,ctas:[['Find Staff','/hire'],['Find a Job','/jobs']] as [string,string][],label:'Staff for homes and businesses'},
-    {key:'business',eyebrow:'FOR BUSINESSES',heading:'Recruitment, HR and payroll that keep your team running.',text:'From one office hire to a whole production team: corporate and technical recruitment, bulk hiring, HR outsourcing and monthly payroll across Pakistan.',ctas:[['Business solutions','/services/corporate-recruitment'],['Payroll & HR','/services/payroll-management']] as [string,string][],label:'Recruitment and HR for businesses'},
-    {key:'home',eyebrow:'FOR YOUR HOME',heading:'Trusted cooks, drivers, maids, nannies and care staff.',text:'Tell us the duties, hours and area. We shortlist checked household staff and help you agree clear, written terms before anyone starts.',ctas:[['Hire household staff','/services/domestic-staff'],['Post a job free','/post-a-job']] as [string,string][],label:'Household staff for families'},
+    {key:'all',title:hero.title,eyebrow:hero.eyebrow,heading:hero.subtitle,text:hero.text,ctas:[['Find Staff','/hire'],['Find a Job','/jobs']] as [string,string][],label:'Staff for homes and businesses'},
+    {key:'business',title:'Hiring. HR.\nPayroll.',eyebrow:'FOR BUSINESSES',heading:'Recruitment, HR and payroll that keep your team running.',text:'From one office hire to a whole production team: corporate and technical recruitment, bulk hiring, HR outsourcing and monthly payroll across Pakistan.',ctas:[['Business solutions','/services/corporate-recruitment'],['Payroll & HR','/services/payroll-management']] as [string,string][],label:'Recruitment and HR for businesses'},
+    {key:'home',title:'Cooks. Drivers.\nCare.',eyebrow:'FOR YOUR HOME',heading:'Trusted cooks, drivers, maids, nannies and care staff.',text:'Tell us the duties, hours and area. We shortlist checked household staff and help you agree clear, written terms before anyone starts.',ctas:[['Hire household staff','/services/domestic-staff'],['Post a job free','/post-a-job']] as [string,string][],label:'Household staff for families'},
   ];
   const [i,setI]=useState(0);const [paused,setPaused]=useState(false);const [hold,setHold]=useState(false);const [reduced,setReduced]=useState(false);
   const root=useRef<HTMLDivElement>(null);
@@ -49,7 +49,7 @@ export default function HeroSlider({hero}:{hero:Hero}){
   return <div ref={root} className={'hero-slider'+(reduced?' is-reduced':'')} onMouseEnter={()=>setHold(true)} onMouseLeave={()=>setHold(false)} onFocusCapture={()=>setHold(true)} onBlurCapture={e=>{if(!root.current?.contains(e.relatedTarget as Node))setHold(false);}} aria-roledescription="carousel" aria-label="estaff.pk services">
     <div className="container reference-hero-grid">
       <div className="reference-hero-copy">
-        <h1>{lines(hero.title)}</h1>
+        <h1 key={'title-'+s.key} className="hero-title-swap">{lines(s.title)}</h1>
         <div className="hero-slide-copy" key={s.key} aria-live={paused?'polite':'off'}>
           <span className="eyebrow">{s.eyebrow}</span>
           <h2>{s.heading}</h2>

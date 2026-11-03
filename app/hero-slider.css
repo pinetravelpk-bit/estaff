@@ -3,6 +3,9 @@
 .hero-slider .reference-hero-grid{align-items:stretch}
 .hero-slider .reference-hero-copy{display:flex;flex-direction:column;justify-content:center}
 .hero-slide-copy{animation:copyIn .7s cubic-bezier(.2,.8,.2,1) both}
+.hero-title-swap{animation:titleIn .8s cubic-bezier(.2,.8,.2,1) both;min-height:2.1em}
+@keyframes titleIn{from{opacity:0;transform:translateY(18px);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+.is-reduced .hero-title-swap{animation:none}
 .hero-slide-copy .eyebrow{display:block;margin-top:18px}
 .hero-slide-copy h2{min-height:2.9em}
 @keyframes copyIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
