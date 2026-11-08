@@ -119,3 +119,47 @@ footer .logo .logo-img{height:42px}
 .side-form-done svg{color:var(--green)}
 .side-form-done h3{margin:0;font-size:18px}
 @media(max-width:900px){.side-sticky{position:static}}
+
+/* Trust section: company registration, fee policy, reviews */
+.trust-section{margin-top:72px;margin-bottom:24px;padding:44px;border-radius:28px;background:linear-gradient(160deg,#f2f8f5,#fff 60%);border:1px solid var(--line);scroll-margin-top:110px}
+.trust-head{max-width:760px}
+.trust-head h2{margin:8px 0 12px}
+.trust-head p{color:var(--muted);margin:0}
+.trust-docs{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:30px}
+.trust-doc{background:#fff;border:1px solid var(--line);border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:12px;box-shadow:0 10px 30px rgba(9,43,67,.05)}
+.trust-doc h3{margin:0;font-size:19px}
+.trust-icon{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:var(--mint,#eaf5ee);color:var(--green)}
+.trust-doc dl{margin:0;display:grid;gap:8px}
+.trust-doc dl div{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dashed var(--line);padding-bottom:7px}
+.trust-doc dt{color:var(--muted);font-size:14px}
+.trust-doc dd{margin:0;font-weight:600;font-size:14px;text-align:right;color:var(--ink)}
+.trust-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:auto}
+.trust-links a{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;border:1px solid var(--green);color:var(--green);font-weight:600;font-size:13.5px;text-decoration:none}
+.trust-links a:hover{background:var(--green);color:#fff}
+.trust-address{display:flex;gap:8px;align-items:flex-start;margin:0;font-weight:600;color:var(--ink)}
+.trust-address svg{flex:none;margin-top:3px;color:var(--green)}
+.trust-small{margin:0;color:var(--muted);font-size:14px}
+.trust-fees{margin-top:28px}
+.trust-fees h3,.trust-reviews h3{margin:0 0 14px;font-size:20px}
+.trust-fees ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.trust-fees li{display:flex;gap:10px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px}
+.trust-fees li svg{flex:none;color:var(--green);margin-top:2px}
+.trust-fees li strong{display:block;color:var(--ink);font-size:15px;margin-bottom:4px}
+.trust-fees li span{color:var(--muted);font-size:14px;line-height:1.5}
+.trust-reviews{margin-top:28px}
+.trust-reviews-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:12px;justify-content:space-between}
+.trust-rating{display:inline-flex;align-items:center;gap:6px;color:#b7791f;font-weight:700}
+.trust-review-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:12px}
+.trust-review{margin:0;background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:8px}
+.trust-review>svg{color:var(--green);opacity:.5}
+.trust-stars{color:#e2a400;letter-spacing:2px}
+.trust-review blockquote{margin:0;color:var(--ink);line-height:1.6}
+.trust-review figcaption{color:var(--muted);font-size:13.5px;margin-top:auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.trust-verified{display:inline-flex;align-items:center;gap:4px;color:var(--green);font-weight:600}
+.trust-empty{color:var(--muted);margin:0 0 10px;max-width:720px}
+.trust-mini{display:grid;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.trust-mini a{display:flex;align-items:center;gap:7px;font-size:13.5px;font-weight:600;color:var(--ink);text-decoration:none}
+.trust-mini a svg{color:var(--green)}
+.footer-bottom a{color:inherit;text-decoration:underline}
+@media(max-width:1000px){.trust-docs,.trust-review-grid{grid-template-columns:1fr 1fr}.trust-fees ul{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.trust-section{padding:26px 18px;border-radius:22px;margin-top:48px}.trust-docs,.trust-review-grid,.trust-fees ul{grid-template-columns:1fr}}

@@ -1,3 +1,4 @@
+import {TrustSection} from '../components/trust';
 import {BusinessExpansion} from '../components/business-expansion';
 import {HomeEditorial} from '../components/editorial-sections';
 import {Header,Footer} from '../components/ui';
@@ -16,7 +17,7 @@ export const generateMetadata=()=>pageMetadata('Domestic Staff Agency & Recruitm
 export default function Home(){
   const {hero,sections:on}=getSettings();
   return <><Header/><main>
-    <HomeContent hero={hero}/>
+    <HomeContent hero={hero} trust={<TrustSection/>}/>
     {on.marquee&&<RoleMarquee/>}
     {on.stats&&<StatsBand/>}
     {on.quickAnswers&&<QuickAnswers/>}

@@ -1,3 +1,4 @@
+import {TrustSection} from '../../components/trust';
 import {CoreGuide} from '../../components/core-guide';
 import {pageMetadata} from '../../lib/seo';
 import {Header,Footer,PageHero,Check} from '../../components/ui';
@@ -17,4 +18,5 @@ export default function Page(){return <><Header/><main>
       <div className="panel"><h2 className="h3">Looking for a job instead?</h2><p>See <a className="qa-link" href="/jobs">current jobs</a> or <a className="qa-link" href="/jobs/apply">submit your CV</a>.</p></div>
     </aside>
   </section>
+  <TrustSection id="hire-trust" heading="Who you are dealing with"/>
 <CoreGuide path="/hire"/></main><Footer/></>}

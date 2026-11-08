@@ -27,7 +27,7 @@ export const coreMore2:Record<string,{sections:Sec[];faqs?:[string,string][]}>={
   {h:'Directory guidelines for agencies',p:['Listed agencies agree to provide accurate information, respond to enquiries, follow fair recruitment practices and never charge job seekers. Agencies that break these guidelines may be removed from the directory.']},
 ]},
 '/services':{sections:[
-  {h:'What clients ask before choosing a service',p:['Clients most often ask how long a search takes, what checks are included, how fees work and what happens if a hire leaves early. Each service guide answers these for that service. In general: timelines depend on the role and market, checks are agreed for each role, fees are agreed in writing before work begins and replacement terms, where offered, are written into the agreement.']},
+  {h:'What clients ask before choosing a service',p:['Clients most often ask how long a search takes, what checks are included, how fees work and what happens if a hire leaves early. Each service guide answers these for that service. In general: timelines depend on the role and market, checks are agreed for each role, fees are agreed in writing before work begins, and household and office placements include a 6-month free replacement.']},
   {h:'Combining services',p:['Many clients use more than one service. A growing company might use corporate recruitment to build its team, HR outsourcing to organise records and policies, and payroll management to pay everyone correctly each month. A family might use domestic staffing for a cook and staff screening for a driver they found through relatives. Combining services means fewer handovers and more consistent information.']},
 ]},
 '/industries':{sections:[
