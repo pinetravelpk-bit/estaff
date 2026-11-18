@@ -179,3 +179,6 @@ footer .logo .logo-img{height:42px}
 .side-mode label{color:var(--ink);background:#f3f8f5;border:1px solid transparent;transition:background .2s,color .2s,border-color .2s}
 .side-mode label:hover{border-color:var(--green)}
 .side-mode label.on{background:var(--green);color:#fff;border-color:var(--green)}
+.side-form .side-mode{margin:0}
+.side-mode .req{color:#b42318}
+.side-mode.needs-choice [role=radiogroup]{border-color:#b42318;box-shadow:0 0 0 3px rgba(180,35,24,.12)}
