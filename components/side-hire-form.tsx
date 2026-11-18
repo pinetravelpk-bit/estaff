@@ -5,9 +5,9 @@ import {ArrowUpRight,Check} from './ui';
 // Sidebar form on role pages. Visitors first say whether they are hiring or looking for a job:
 // hiring requests go to /api/enquiry (Admin → Staff requests); job seekers go to /api/apply
 // (Admin → Applications only), so CVs never mix with client requests.
-type Mode='hire'|'job';
+type Mode='hire'|'job'|null;
 export default function SideHireForm({role,label}:{role:string;label:string}){
-  const [mode,setMode]=useState<Mode>('hire');
+  const [mode,setMode]=useState<Mode>(null);
   const [state,setState]=useState<'idle'|'sending'|'done'>('idle');const [error,setError]=useState('');
   const lower=label.toLowerCase();
   async function submit(e:React.FormEvent<HTMLFormElement>){
@@ -24,15 +24,15 @@ export default function SideHireForm({role,label}:{role:string;label:string}){
     :<><h3>Thank you, your application has been received.</h3><p>We will call you when a suitable job opens in this field. estaff.pk never charges job seekers.</p><a className="text-link" href="/jobs">See open jobs<ArrowUpRight size={15}/></a></>}
   </div>;
   return <div className="side-form-wrap">
-    <h3>{mode==='hire'?`Request ${lower}`:`Apply for ${lower} jobs`}</h3>
-    <p>{mode==='hire'?'Tell us what you need and we will call you back.':'Send your details once and we will call you when a suitable job opens.'}</p>
+    <h3>{mode==='hire'?`Request ${lower}`:mode==='job'?`Apply for jobs: ${label}`:`${label}: hire or apply`}</h3>
+    <p>{mode==='hire'?'Tell us what you need and we will call you back.':mode==='job'?'Send your details once and we will call you when a suitable job opens.':'Choose one option to see the right form.'}</p>
     <fieldset className="side-mode"><legend>Looking for a job or hiring?</legend>
       <div role="radiogroup">
         <label className={mode==='hire'?'on':''}><input type="radio" name="side-mode" checked={mode==='hire'} onChange={()=>{setMode('hire');setError('');}}/>I’m hiring</label>
         <label className={mode==='job'?'on':''}><input type="radio" name="side-mode" checked={mode==='job'} onChange={()=>{setMode('job');setError('');}}/>I need a job</label>
       </div>
     </fieldset>
-    <form className="side-form" onSubmit={submit} key={mode}>
+    {mode&&<form className="side-form" onSubmit={submit} key={mode}>
       <div className="hp" aria-hidden="true"><label>Website<input name="website" tabIndex={-1} autoComplete="off"/></label></div>
       <input type="hidden" name="role" value={role}/>
       <label>Your name<input required name="name" autoComplete="name" placeholder="Full name"/></label>
@@ -56,6 +56,6 @@ export default function SideHireForm({role,label}:{role:string;label:string}){
       {error&&<p className="form-error" role="alert">{error}</p>}
       <button className="btn" type="submit" disabled={state==='sending'}>{state==='sending'?'Sending…':mode==='hire'?'Request Staff':'Send my application'}<ArrowUpRight size={17}/></button>
       <p className="side-form-note">{mode==='hire'?'Free to request. No payment is taken online.':'Free for job seekers. Never pay anyone for a job.'}</p>
-    </form>
+    </form>}
   </div>;
 }
