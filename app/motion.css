@@ -355,3 +355,12 @@ ul.check-list:not(:has(svg)) li::before{content:"";flex:0 0 9px;height:9px;margi
 
 .h3,h2.h3{font-size:21px;font-weight:750}
 .payroll-mini-title{display:block;font-family:Manrope,Arial,sans-serif;font-weight:750;font-size:17px;color:var(--ink)}
+/* Floating "Call now" button (replaces the WhatsApp bubble) */
+.call-float{position:fixed;right:18px;bottom:22px;z-index:90;display:inline-flex;align-items:center;gap:8px;padding:13px 20px 13px 16px;border-radius:999px;background:var(--green,#00866c);color:#fff;font-weight:700;font-size:15px;text-decoration:none;box-shadow:0 12px 28px rgba(0,104,82,.35);animation:call-ring 2.4s ease-out infinite;transition:transform .2s}
+.call-float:hover{transform:translateY(-2px);color:#fff}
+.call-float svg{animation:call-shake 2.4s ease-in-out infinite;transform-origin:50% 50%}
+@keyframes call-ring{0%{box-shadow:0 12px 28px rgba(0,104,82,.35),0 0 0 0 rgba(0,134,108,.45)}70%{box-shadow:0 12px 28px rgba(0,104,82,.35),0 0 0 14px rgba(0,134,108,0)}100%{box-shadow:0 12px 28px rgba(0,104,82,.35),0 0 0 0 rgba(0,134,108,0)}}
+@keyframes call-shake{0%,70%,100%{transform:rotate(0)}75%{transform:rotate(-14deg)}80%{transform:rotate(14deg)}85%{transform:rotate(-10deg)}90%{transform:rotate(8deg)}}
+@media (prefers-reduced-motion:reduce){.call-float,.call-float svg{animation:none}}
+@media (max-width:900px){.call-float{bottom:calc(84px + env(safe-area-inset-bottom));right:14px;padding:11px 16px 11px 13px;font-size:14px}}
+html.sheet-open .call-float{opacity:0;pointer-events:none}
