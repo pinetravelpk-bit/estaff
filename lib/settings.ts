@@ -20,7 +20,7 @@ export type Settings={
 export type SeoOverride={title:string;description:string;noindex:boolean;image:string};
 
 export const defaultSettings:Settings={
-  contact:{phone:process.env.SITE_PHONE||'',whatsapp:'',email:process.env.SITE_EMAIL||'',street:process.env.SITE_STREET_ADDRESS||'',locality:process.env.SITE_ADDRESS_LOCALITY||'',postalCode:process.env.SITE_POSTAL_CODE||'',hours:'',gbp:process.env.SITE_GBP_URL||'',facebook:'',instagram:'',linkedin:''},
+  contact:{phone:process.env.SITE_PHONE||'0336 7759977',whatsapp:process.env.SITE_WHATSAPP||'0336 7759977',email:process.env.SITE_EMAIL||'',street:process.env.SITE_STREET_ADDRESS||'',locality:process.env.SITE_ADDRESS_LOCALITY||'',postalCode:process.env.SITE_POSTAL_CODE||'',hours:'',gbp:process.env.SITE_GBP_URL||'',facebook:'',instagram:'',linkedin:''},
   utility:{text:'Serving families & businesses across Pakistan',employersLabel:'For employers',employersHref:'/hire',seekersLabel:'For job seekers',seekersHref:'/jobs'},
   announcement:{enabled:false,text:'',href:''},
   hero:{eyebrow:'PEOPLE DRIVE PROGRESS',title:'People. Payroll.\nPossibilities.',subtitle:'Staffing, HR & remote teams in Islamabad and Rawalpindi.',text:'Find the right people for your home, office and growing business.\nFrom recruitment to payroll and remote teams — all in one place.',image:'/images/hero-reference.webp'},
